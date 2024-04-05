@@ -1,0 +1,8 @@
+- create context with a list of File objects
+- Create a multi-file input
+  - optional drag and drop
+  - when files change, check each one is an image
+  - set images to local state
+- when form submitted, set images to context and run coloring
+- display colored images on the page
+-
