@@ -1,13 +1,16 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
+import React from "react"
+import ReactDOM from "react-dom/client"
+import App from "./App"
 
-import { PrimeReactProvider } from "primereact/api";
+import { PrimeReactProvider } from "primereact/api"
+
+import "../node_modules/primeflex/primeflex.css"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <PrimeReactProvider>
-      <App />
-    </PrimeReactProvider>
-  </React.StrictMode>
-);
+   <React.StrictMode>
+      <PrimeReactProvider>
+         <App />
+      </PrimeReactProvider>
+   </React.StrictMode>
+)
+

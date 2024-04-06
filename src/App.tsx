@@ -1,20 +1,35 @@
 import "primereact/resources/themes/saga-orange/theme.css"
-import { FileInput } from "./components/FileInput/FileInput"
-import { ScrollPanel } from "primereact/scrollpanel"
-import { Colorer } from "./components/Colorer/Colorer"
-import { CustomGalleria } from "./components/Galleria/CustomGalleria"
-import { ColoringProcessor } from "./components/ColoringProcessor/ColoringProcessor"
+import { ImageProcessingPanel } from "./components/ImageProcessingPanel/ImageProcessingPanel"
+import { FileUploadPanel } from "./components/FileUploadPanel/FileUploadPanel"
+import { useMemo, useState } from "react"
+import { Sidebar } from "primereact/sidebar"
+import { Menubar } from "primereact/menubar"
 
 function App() {
+   const [showUploadPanel, setShowUploadPanel] = useState(false)
+
+   const menuBarItems = useMemo(() => {
+      return [
+         {
+            label: "Add files",
+            icon: "pi pi-file-plus",
+            command: () => setShowUploadPanel(true),
+         },
+      ]
+   }, [])
+
    return (
       <>
-         <Colorer />
-         <CustomGalleria />
-         <ColoringProcessor />
+         <Menubar model={menuBarItems} />
+         <ImageProcessingPanel />
 
-         <ScrollPanel style={{ width: "100%", height: "100vh" }}>
-            <FileInput />
-         </ScrollPanel>
+         <Sidebar
+            visible={showUploadPanel}
+            onHide={() => setShowUploadPanel(false)}
+            style={{ width: "80%", height: "100vh" }}
+         >
+            <FileUploadPanel />
+         </Sidebar>
       </>
    )
 }
