@@ -5,4 +5,6 @@ const uploadedFilesAtom = atom<Array<File>>([])
 
 const processedImagesAtom = atom<Array<Image>>([])
 
-export { uploadedFilesAtom, processedImagesAtom }
+const newestProcessedImageAtom = atom<Image | null>(null)
+
+export { uploadedFilesAtom, processedImagesAtom, newestProcessedImageAtom }

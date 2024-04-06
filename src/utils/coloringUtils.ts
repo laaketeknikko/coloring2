@@ -46,12 +46,11 @@ const paintAreaFrom = (
 }
 
 const colorImage = async (image: Image) => {
+   console.log("Starting image coloring with new image: ", image)
+
    const width = image.width
    const height = image.height
 
-   const borderPoints: Array<Array<number>> = []
-   //const areas: Array<Array<Array<number>>> = []
-   let numberOfAreas = 0
    const usedColors: Array<Array<number>> = []
 
    for (let x = 0; x < width; x++) {
@@ -76,29 +75,20 @@ const colorImage = async (image: Image) => {
          ) {
             usedColors.push(paintColor)
             const area = paintAreaFrom(image, x, y, paintColor)
-            numberOfAreas++
-            console.log("area: ", numberOfAreas)
-            console.log("x and y: ", x, y)
 
             if (area.length > 0) {
-               console.log("x, y: ", x, y)
-               console.log("painting area: ", numberOfAreas)
-
                //                  areas.push(area)
             }
             //borderPoints.push([x, y])
          }
       }
    }
-   console.log("borderpoints: ", borderPoints)
-   //image.paintPolygons(areas, { randomColors: true })
 }
 
 const processImage = async (image: Image) => {
    await colorImage(image)
-   const url = image.toDataURL("image/png")
 
-   return url
+   return image
 }
 
 export { processImage }
