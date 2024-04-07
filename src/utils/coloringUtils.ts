@@ -9,6 +9,38 @@ const colorsAreEqual = (color1: Array<number>, color2: Array<number>) => {
    )
 }
 
+const colorIsSmaller = (color1: Array<number>, color2: Array<number>) => {
+   return (
+      color1[0] < color2[0] && color1[1] < color2[1] && color1[2] < color2[2]
+   )
+}
+
+const colorIsLarger = (color1: Array<number>, color2: Array<number>) => {
+   return (
+      color1[0] > color2[0] && color1[1] > color2[1] && color1[2] > color2[2]
+   )
+}
+
+// TOOD: Fix this tolerance-thing.
+
+const colorIsWithinTolerance = (
+   color: Array<number>,
+   tolerance: Array<number>
+) => {
+   const minBound = [
+      color[0] - tolerance[0],
+      color[1] - tolerance[1],
+      color[2] - tolerance[2],
+   ].map((value) => (value < 0 ? 0 : value))
+   const maxBound = [
+      color[0] + tolerance[0],
+      color[1] + tolerance[1],
+      color[2] + tolerance[2],
+   ].map((value) => (value > 255 ? 255 : value))
+
+   return colorIsLarger(color, minBound) && colorIsSmaller(color, maxBound)
+}
+
 const paintAreaFrom = (
    image: Image,
    x: number,
@@ -61,8 +93,6 @@ const colorImage = async (image: Image, settings: ColoringSettings) => {
       settings.borderColor.g,
       settings.borderColor.b,
    ]
-
-   console.log("bordercolor is: ", borderColor)
 
    for (let x = 0; x < width; x++) {
       for (let y = 0; y < height; y++) {
