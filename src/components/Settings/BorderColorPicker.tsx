@@ -3,6 +3,8 @@ import { useState } from "react"
 import { CustomInputNumber } from "./CustomInputNumber"
 import { InputText } from "primereact/inputtext"
 import { HexToRGB, RGBToHex } from "../../utils/imageUtils"
+import { useSetAtom } from "jotai"
+import { globalBorderColorAtom } from "../../atoms/atoms"
 
 const BorderColorPicker = () => {
    const [borderColor, setBorderColor] = useState<{
@@ -13,19 +15,32 @@ const BorderColorPicker = () => {
 
    const [borderHexColor, setBorderHexColor] = useState("#000000")
 
-   const handleRGBColorChange = (color: {
+   const setGlobalBorderColor = useSetAtom(globalBorderColorAtom)
+   const setGlobalBorderColorTolereance = useSetAtom(globalBorderColorAtom)
+
+   const handleBorderRGBColorChange = (color: {
       r: number
       g: number
       b: number
    }) => {
       setBorderColor({ r: color.r, g: color.g, b: color.b })
+      setGlobalBorderColor(color)
       setBorderHexColor(RGBToHex(color.r, color.g, color.b))
    }
 
-   const handleHexColorChange = (color: string) => {
+   const handleBorderHexColorChange = (color: string) => {
       setBorderHexColor(color)
       const { r, g, b } = HexToRGB(color)
       setBorderColor({ r, g, b })
+      setGlobalBorderColor({ r, g, b })
+   }
+
+   const handleBorderColorToleranceChange = (color: {
+      r: number
+      g: number
+      b: number
+   }) => {
+      setGlobalBorderColorTolereance(color)
    }
 
    return (
@@ -38,14 +53,17 @@ const BorderColorPicker = () => {
                backgroundColor: `rgb(${borderColor.r},${borderColor.g},${borderColor.b})`,
             }}
          ></span>
+
+         {/* Color input*/}
          <div className="p-inputgroup">
             <span className="p-inputgroup-addon">
                <label htmlFor="border-color-r">RGB</label>
             </span>
             <CustomInputNumber
+               value={borderColor.r}
                inputId="border-color-r"
                onChange={(value) => {
-                  handleRGBColorChange({
+                  handleBorderRGBColorChange({
                      r: value,
                      g: borderColor.g,
                      b: borderColor.b,
@@ -54,9 +72,10 @@ const BorderColorPicker = () => {
             />
 
             <CustomInputNumber
+               value={borderColor.g}
                inputId="border-color-g"
                onChange={(value) =>
-                  handleRGBColorChange({
+                  handleBorderRGBColorChange({
                      r: borderColor.r,
                      g: value,
                      b: borderColor.b,
@@ -65,9 +84,52 @@ const BorderColorPicker = () => {
             />
 
             <CustomInputNumber
+               value={borderColor.b}
                inputId="border-color-b"
                onChange={(value) =>
-                  handleRGBColorChange({
+                  handleBorderRGBColorChange({
+                     r: borderColor.r,
+                     g: borderColor.g,
+                     b: value,
+                  })
+               }
+            />
+         </div>
+
+         {/* Tolerance input */}
+         <div className="p-inputgroup">
+            <span className="p-inputgroup-addon">
+               <label htmlFor="border-color-tolerance-r">Tolerance</label>
+            </span>
+            <CustomInputNumber
+               value={0}
+               inputId="border-color-tolerance-r"
+               onChange={(value) => {
+                  handleBorderColorToleranceChange({
+                     r: value,
+                     g: borderColor.g,
+                     b: borderColor.b,
+                  })
+               }}
+            />
+
+            <CustomInputNumber
+               value={0}
+               inputId="border-color-tolerance-g"
+               onChange={(value) =>
+                  handleBorderColorToleranceChange({
+                     r: borderColor.r,
+                     g: value,
+                     b: borderColor.b,
+                  })
+               }
+            />
+
+            <CustomInputNumber
+               value={0}
+               inputId="border-color-tolerance-b"
+               onChange={(value) =>
+                  handleBorderColorToleranceChange({
                      r: borderColor.r,
                      g: borderColor.g,
                      b: value,
@@ -83,7 +145,7 @@ const BorderColorPicker = () => {
             <InputText
                id="border-color-hex"
                value={borderHexColor}
-               onChange={(e) => handleHexColorChange(e.target.value)}
+               onChange={(e) => handleBorderHexColorChange(e.target.value)}
             />
          </div>
       </>

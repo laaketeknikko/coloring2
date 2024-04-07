@@ -2,13 +2,13 @@ import { Color } from "../types/types"
 
 class ColoringSettings {
    borderColor: Color
-   borderColorTolerance: number
+   borderColorTolerance: Color
    borderPatching: number
    colorsToUse: Array<Color>
 
    constructor() {
       this.borderColor = { r: 0, g: 0, b: 0 }
-      this.borderColorTolerance = 0
+      this.borderColorTolerance = { r: 0, g: 0, b: 0 }
       this.borderPatching = 0
       this.colorsToUse = []
    }
