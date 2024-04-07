@@ -4,6 +4,7 @@ import { FileUploadPanel } from "./components/FileUploadPanel/FileUploadPanel"
 import { useMemo, useState } from "react"
 import { Sidebar } from "primereact/sidebar"
 import { Menubar } from "primereact/menubar"
+import { Settings } from "./components/Settings/Settings"
 
 function App() {
    const [showUploadPanel, setShowUploadPanel] = useState(false)
@@ -21,6 +22,8 @@ function App() {
    return (
       <>
          <Menubar model={menuBarItems} />
+
+         <Settings />
          <ImageProcessingPanel />
 
          <Sidebar

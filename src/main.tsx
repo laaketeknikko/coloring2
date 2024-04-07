@@ -4,7 +4,8 @@ import App from "./App"
 
 import { PrimeReactProvider } from "primereact/api"
 
-import "../node_modules/primeflex/primeflex.css"
+import "primeflex/primeflex.css"
+import "primeicons/primeicons.css"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
    <React.StrictMode>

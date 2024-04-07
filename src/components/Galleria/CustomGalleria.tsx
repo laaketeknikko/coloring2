@@ -18,7 +18,13 @@ const CustomGalleria = () => {
    }, [processedImages])
 
    const itemTemplate = (item: string) => {
-      return <img src={item} alt={item} style={{ width: "100%" }} />
+      return (
+         <img
+            src={item}
+            alt={item}
+            style={{ maxWidth: "100%", maxHeight: "100vh" }}
+         />
+      )
    }
 
    const thumbnailTemplate = (item: string) => {
