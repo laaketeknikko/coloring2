@@ -13,7 +13,7 @@ onmessage = function (event: MessageEvent<DataUrlWithSettings>) {
    // TODO: use settings in processing
 
    Image.load(event.data.dataUrl).then((image) => {
-      processImage(image).then((processedImage) => {
+      processImage(image, event.data.settings).then((processedImage) => {
          const dataUrl = processedImage.toDataURL()
 
          this.postMessage({ dataUrl: dataUrl, settings: event.data.settings })

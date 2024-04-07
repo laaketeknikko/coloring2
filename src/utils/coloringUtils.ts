@@ -1,10 +1,20 @@
 import { Image } from "image-js"
+import { ColoringSettings } from "./ColoringSettings"
+
+const colorsAreEqual = (color1: Array<number>, color2: Array<number>) => {
+   return (
+      color1[0] === color2[0] &&
+      color1[1] === color2[1] &&
+      color1[2] === color2[2]
+   )
+}
 
 const paintAreaFrom = (
    image: Image,
    x: number,
    y: number,
    paintColor: Array<number>,
+   borderColor: Array<number>,
    points: Array<Array<number>> = []
 ) => {
    const queue: Array<[number, number]> = [[x, y]]
@@ -19,12 +29,8 @@ const paintAreaFrom = (
       const pixel = image.getPixelXY(x, y)
 
       if (
-         pixel[0] !== paintColor[0] &&
-         pixel[1] !== paintColor[1] &&
-         pixel[2] !== paintColor[2] &&
-         pixel[0] >= 100 &&
-         pixel[1] >= 100 &&
-         pixel[2] >= 100
+         !colorsAreEqual(pixel, paintColor) &&
+         !colorsAreEqual(pixel, borderColor)
       ) {
          image.setPixelXY(x, y, paintColor)
 
@@ -45,13 +51,18 @@ const paintAreaFrom = (
    return points
 }
 
-const colorImage = async (image: Image) => {
-   console.log("Starting image coloring with new image: ", image)
-
+const colorImage = async (image: Image, settings: ColoringSettings) => {
    const width = image.width
    const height = image.height
 
    const usedColors: Array<Array<number>> = []
+   const borderColor = [
+      settings.borderColor.r,
+      settings.borderColor.g,
+      settings.borderColor.b,
+   ]
+
+   console.log("bordercolor is: ", borderColor)
 
    for (let x = 0; x < width; x++) {
       for (let y = 0; y < height; y++) {
@@ -63,18 +74,11 @@ const colorImage = async (image: Image) => {
          ]
 
          const painted = usedColors.find((color) => {
-            return (
-               color[0] === pixel[0] &&
-               color[1] === pixel[1] &&
-               color[2] === pixel[2]
-            )
+            return colorsAreEqual(pixel, color)
          })
-         if (
-            !painted &&
-            !(pixel[0] < 100 && pixel[1] < 100 && pixel[2] < 100)
-         ) {
+         if (!painted && !colorsAreEqual(pixel, borderColor)) {
             usedColors.push(paintColor)
-            const area = paintAreaFrom(image, x, y, paintColor)
+            const area = paintAreaFrom(image, x, y, paintColor, borderColor)
 
             if (area.length > 0) {
                //                  areas.push(area)
@@ -85,8 +89,8 @@ const colorImage = async (image: Image) => {
    }
 }
 
-const processImage = async (image: Image) => {
-   await colorImage(image)
+const processImage = async (image: Image, settings: ColoringSettings) => {
+   await colorImage(image, settings)
 
    return image
 }
