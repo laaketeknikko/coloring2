@@ -8,6 +8,43 @@ const isImage = (object: unknown): object is Image => {
    }
 }
 
+const imageFromFile = async (file: File): Promise<Image | null> => {
+   return new Promise((resolve, reject) => {
+      const dataUrlReader = new FileReader()
+
+      dataUrlReader.onload = async () => {
+         if (dataUrlReader.result) {
+            const image = await Image.load(dataUrlReader.result)
+            resolve(image)
+         } else {
+            reject(null)
+         }
+      }
+
+      dataUrlReader.readAsDataURL(file)
+   })
+}
+
+const imagesFromFiles = async (files: Array<File>): Promise<Array<Image>> => {
+   const images: Array<Image> = []
+
+   for (const file of files) {
+      try {
+         const image = await imageFromFile(file)
+         if (image) {
+            images.push(image)
+         }
+      } catch (error) {
+         console.log(error)
+      }
+   }
+
+   console.log("returning images from files: ", images)
+   console.log("original files were: ", files)
+
+   return images
+}
+
 const RGBToHex = (
    r: number | string,
    g: number | string,
@@ -45,4 +82,4 @@ const HexToRGB = (hex: string) => {
    return { r: Number(r), g: Number(g), b: Number(b) }
 }
 
-export { isImage, RGBToHex, HexToRGB }
+export { isImage, RGBToHex, HexToRGB, imageFromFile, imagesFromFiles }

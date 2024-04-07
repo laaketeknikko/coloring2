@@ -2,6 +2,8 @@ import { FileUpload, FileUploadSelectEvent } from "primereact/fileupload"
 import { useAtom, useSetAtom } from "jotai"
 import { selectedFilesAtom, uploadedFilesAtom } from "../../atoms/atoms"
 import { useEffect, useRef } from "react"
+import { imagesFromFiles } from "../../utils/imageUtils"
+import { ColoringSettings } from "../../utils/ColoringSettings"
 
 const FileInput = () => {
    const [selectedFiles, setSelectedFiles] = useAtom(selectedFilesAtom)
@@ -20,8 +22,16 @@ const FileInput = () => {
       setSelectedFiles(fileList)
    }
 
-   const handleUpload = () => {
-      setUploadedFiles([...selectedFiles])
+   const handleUpload = async () => {
+      const images = await imagesFromFiles(selectedFiles)
+
+      console.log("images in handleupload: ", images)
+
+      const imagesWithSettings = images.map((image) => {
+         return { image: image, settings: new ColoringSettings() }
+      })
+
+      setUploadedFiles(imagesWithSettings)
       setSelectedFiles([])
    }
 

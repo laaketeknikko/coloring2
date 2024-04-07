@@ -30,70 +30,61 @@ const BorderColorPicker = () => {
 
    return (
       <>
-         <div className="grid">
-            <div className="col-7 sm:col-6 md:col-4 lg:col-3 xl:col-3">
-               <span className="block text-center">Border color in image</span>
-               <span
-                  className="block"
-                  style={{
-                     height: "1rem",
-                     backgroundColor: `rgb(${borderColor.r},${borderColor.g},${borderColor.b})`,
-                  }}
-               ></span>
-               <div className="p-inputgroup">
-                  <span className="p-inputgroup-addon">
-                     <label htmlFor="border-color-r">R</label>
-                  </span>
-                  <CustomInputNumber
-                     inputId="border-color-r"
-                     onChange={(value) => {
-                        handleRGBColorChange({
-                           r: value,
-                           g: borderColor.g,
-                           b: borderColor.b,
-                        })
-                     }}
-                  />
+         <span className="block text-center">Border color in image</span>
+         <span
+            className="block"
+            style={{
+               height: "1rem",
+               backgroundColor: `rgb(${borderColor.r},${borderColor.g},${borderColor.b})`,
+            }}
+         ></span>
+         <div className="p-inputgroup">
+            <span className="p-inputgroup-addon">
+               <label htmlFor="border-color-r">RGB</label>
+            </span>
+            <CustomInputNumber
+               inputId="border-color-r"
+               onChange={(value) => {
+                  handleRGBColorChange({
+                     r: value,
+                     g: borderColor.g,
+                     b: borderColor.b,
+                  })
+               }}
+            />
 
-                  <span className="p-inputgroup-addon">
-                     <label htmlFor="border-color-g">G</label>
-                  </span>
-                  <CustomInputNumber
-                     inputId="border-color-g"
-                     onChange={(value) =>
-                        handleRGBColorChange({
-                           r: borderColor.r,
-                           g: value,
-                           b: borderColor.b,
-                        })
-                     }
-                  />
-                  <span className="p-inputgroup-addon">
-                     <label htmlFor="border-color-b">B</label>
-                  </span>
-                  <CustomInputNumber
-                     inputId="border-color-b"
-                     onChange={(value) =>
-                        handleRGBColorChange({
-                           r: borderColor.r,
-                           g: borderColor.g,
-                           b: value,
-                        })
-                     }
-                  />
-               </div>
+            <CustomInputNumber
+               inputId="border-color-g"
+               onChange={(value) =>
+                  handleRGBColorChange({
+                     r: borderColor.r,
+                     g: value,
+                     b: borderColor.b,
+                  })
+               }
+            />
 
-               <div className="p-inputgroup">
-                  <div className="p-inputgroup-addon">
-                     <label htmlFor="border-color-hex">HEX</label>
-                  </div>
-                  <InputText
-                     id="border-color-hex"
-                     value={borderHexColor}
-                     onChange={(e) => handleHexColorChange(e.target.value)}
-                  />
-               </div>
+            <CustomInputNumber
+               inputId="border-color-b"
+               onChange={(value) =>
+                  handleRGBColorChange({
+                     r: borderColor.r,
+                     g: borderColor.g,
+                     b: value,
+                  })
+               }
+            />
+         </div>
+
+         <div className="p-inputgroup">
+            <div className="p-inputgroup-addon">
+               <label htmlFor="border-color-hex">HEX</label>
             </div>
+            <InputText
+               id="border-color-hex"
+               value={borderHexColor}
+               onChange={(e) => handleHexColorChange(e.target.value)}
+            />
          </div>
       </>
    )

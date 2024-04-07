@@ -1,13 +1,11 @@
-import Image from "image-js"
 import { atom } from "jotai"
+import { ImageWithSettings } from "../types/types"
 
 const selectedFilesAtom = atom<Array<File>>([])
+const uploadedFilesAtom = atom<Array<ImageWithSettings>>([])
+const processedImagesAtom = atom<Array<ImageWithSettings>>([])
 
-const uploadedFilesAtom = atom<Array<File>>([])
-
-const processedImagesAtom = atom<Array<Image>>([])
-
-const newestProcessedImageAtom = atom<Image | null>(null)
+const newestProcessedImageAtom = atom<ImageWithSettings | null>(null)
 
 export {
    uploadedFilesAtom,

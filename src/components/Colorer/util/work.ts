@@ -1,30 +1,22 @@
+import {
+   DataUrlWithSettings,
+   isDataUrlWithSettings,
+} from "../../../types/types"
 import { processImage } from "../../../utils/coloringUtils"
 import Image from "image-js"
 
-onmessage = function (event) {
-   console.log("got data from main: ", event.data)
-
-   if (
-      !event.data ||
-      !("size" in event.data && "type" in event.data && "name" in event.data)
-   ) {
+onmessage = function (event: MessageEvent<DataUrlWithSettings>) {
+   if (!isDataUrlWithSettings(event.data)) {
       return null
    }
 
-   const file = event.data
+   // TODO: use settings in processing
 
-   const dataUrlReader = new FileReader()
-   dataUrlReader.onload = (event) => {
-      if (event.target?.result) {
-         Image.load(event.target.result).then((image) => {
-            console.log("got loaded image: ", image)
-            processImage(image).then((processedImage) => {
-               console.log("processed image in worker: ", processedImage)
-               this.postMessage(processedImage.toDataURL())
-            })
-         })
-      }
-   }
+   Image.load(event.data.dataUrl).then((image) => {
+      processImage(image).then((processedImage) => {
+         const dataUrl = processedImage.toDataURL()
 
-   dataUrlReader.readAsDataURL(file)
+         this.postMessage({ dataUrl: dataUrl, settings: event.data.settings })
+      })
+   })
 }

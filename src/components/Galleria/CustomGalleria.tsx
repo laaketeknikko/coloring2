@@ -9,9 +9,9 @@ const CustomGalleria = () => {
 
    useEffect(() => {
       const newUrls: Array<string> = []
-      for (const image of processedImages) {
-         console.log("image in customgalleria: ", image)
-         newUrls.push(image.toDataURL("image/png"))
+      for (const item of processedImages) {
+         console.log("image in customgalleria: ", item)
+         newUrls.push(item.image.toDataURL("image/png"))
       }
 
       setDataUrls(newUrls)
