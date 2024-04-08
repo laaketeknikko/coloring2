@@ -5,30 +5,41 @@ import { InputText } from "primereact/inputtext"
 import { HexToRGB, RGBToHex } from "../../utils/imageUtils"
 import { CustomInputNumber } from "./CustomInputNumber"
 
-export interface ColorInputColor {
+export interface CustomColorInputProps {
+   color: CustomColorInputColor
+   onChange: (color: CustomColorInputColor) => void
+}
+
+export interface CustomColorInputColor {
    rgb: Color
    hex: string
 }
 
-const defaultColor: ColorInputColor = {
+const defaultColor: CustomColorInputColor = {
    rgb: { r: 0, g: 0, b: 0 },
    hex: "#000000",
 }
 
-const CustomColorInput = () => {
+const CustomColorInput = ({
+   color = defaultColor,
+   onChange,
+}: CustomColorInputProps) => {
    const [selectedColorMode, setSelectedColorMode] = useState<"HEX" | "RGB">(
       "RGB"
    )
    const [selectedColor, setSelectedColor] =
-      useState<ColorInputColor>(defaultColor)
+      useState<CustomColorInputColor>(color)
 
    const handleHexColorChange = (hex: string) => {
       const rgbColor = HexToRGB(hex)
       setSelectedColor({ rgb: rgbColor, hex: hex })
+      onChange({ rgb: rgbColor, hex: hex })
    }
 
    const handleRGBColorChange = (rgb: Color) => {
-      setSelectedColor({ rgb: rgb, hex: RGBToHex(rgb.r, rgb.g, rgb.b) })
+      const hex = RGBToHex(rgb.r, rgb.g, rgb.b)
+      setSelectedColor({ rgb: rgb, hex: hex })
+      onChange({ rgb: rgb, hex: hex })
    }
 
    return (
