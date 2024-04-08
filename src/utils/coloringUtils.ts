@@ -1,5 +1,6 @@
 import { Image } from "image-js"
 import { ColoringSettings } from "./ColoringSettings"
+import { Color } from "../types/types"
 
 const colorsAreEqual = (color1: Array<number>, color2: Array<number>) => {
    return (
@@ -24,8 +25,6 @@ const colorIsLargerOrEqual = (color1: Array<number>, color2: Array<number>) => {
    )
 }
 
-// TOOD: Fix this tolerance-thing.
-
 const colorIsWithinTolerance = (
    color1: Array<number>,
    color2: Array<number>,
@@ -48,6 +47,23 @@ const colorIsWithinTolerance = (
    )
 }
 
+const selectRandomPaintColor = () => {
+   return [
+      Math.floor(Math.random() * 0.6 * 255 + 0.4 * 255),
+      Math.floor(Math.random() * 0.6 * 255 + 0.4 * 255),
+      Math.floor(Math.random() * 0.6 * 255 + 0.4 * 255),
+   ]
+}
+
+const selectPaintColor = (list: Array<Color>) => {
+   if (list.length === 0) {
+      return null
+   }
+   const color = list[Math.floor(Math.random() * list.length)]
+
+   return [color.r, color.g, color.b]
+}
+
 const paintAreaFrom = (
    image: Image,
    x: number,
@@ -58,6 +74,8 @@ const paintAreaFrom = (
 ) => {
    const queue: Array<[number, number]> = [[x, y]]
    const points: Array<Array<number>> = []
+
+   console.log("Painting area with: ", paintColor)
 
    while (queue.length > 0) {
       const [x, y] = queue.shift()!
@@ -113,11 +131,11 @@ const colorImage = async (image: Image, settings: ColoringSettings) => {
    for (let x = 0; x < width; x++) {
       for (let y = 0; y < height; y++) {
          const pixel = image.getPixelXY(x, y)
-         const paintColor = [
-            Math.floor(Math.random() * 0.6 * 255 + 0.4 * 255),
-            Math.floor(Math.random() * 0.6 * 255 + 0.4 * 255),
-            Math.floor(Math.random() * 0.6 * 255 + 0.4 * 255),
-         ]
+
+         const paintColor =
+            settings.colorsToUse.length > 0
+               ? selectPaintColor(settings.colorsToUse)!
+               : selectRandomPaintColor()
 
          const painted = usedColors.find((color) => {
             return colorsAreEqual(pixel, color)

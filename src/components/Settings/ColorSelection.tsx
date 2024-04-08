@@ -1,32 +1,45 @@
 import { IColor } from "react-color-palette"
 import { ColorerColorsPicker } from "./ColorerColorsPicker"
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 
 import "react-color-palette/css"
+import { ScrollPanel } from "primereact/scrollpanel"
+import { globalColoringColorsAtom } from "../../atoms/atoms"
+import { useAtom } from "jotai"
 
 const ColorSelection = () => {
-   const [selectedColors, setSelectedColors] = useState<Array<IColor>>([])
+   const [globalColorSettings, setGlobalColorSettings] = useAtom(
+      globalColoringColorsAtom
+   )
 
    const handleColorAdded = (color: IColor) => {
-      setSelectedColors([...selectedColors, color])
+      setGlobalColorSettings([
+         ...globalColorSettings,
+         {
+            r: Math.floor(color.rgb.r),
+            g: Math.floor(color.rgb.g),
+            b: Math.floor(color.rgb.b),
+            a: Math.floor(color.rgb.a),
+         },
+      ])
    }
 
    const colorElements = useMemo(() => {
-      return selectedColors.map((color, index) => {
+      return globalColorSettings.map((color, index) => {
          return (
             <div className="col-4 sm:col-12 md:col-4 lg:col-3 xl:col-2">
                <div
                   className="border-round-lg border-2 border-solid border-900"
-                  key={`${color.hex}-${index}`}
+                  key={`${color.r}${color.g}${color.b}-${index}`}
                   style={{
                      aspectRatio: "1/1",
-                     backgroundColor: color.hex,
+                     backgroundColor: `rgb(${color.r}, ${color.g}, ${color.b})`,
                   }}
                ></div>
             </div>
          )
       })
-   }, [selectedColors])
+   }, [globalColorSettings])
 
    return (
       <div className="grid">
@@ -34,7 +47,9 @@ const ColorSelection = () => {
             <ColorerColorsPicker onSelectColor={handleColorAdded} />
          </div>
          <div className="col-6 sm:col-5 md:col-8 lg:col-9 xl:col-9">
-            <div className="grid">{colorElements}</div>
+            <ScrollPanel>
+               <div className="grid h-screen">{colorElements}</div>
+            </ScrollPanel>
          </div>
       </div>
    )
