@@ -9,36 +9,43 @@ const colorsAreEqual = (color1: Array<number>, color2: Array<number>) => {
    )
 }
 
-const colorIsSmaller = (color1: Array<number>, color2: Array<number>) => {
+const colorIsSmallerOrEqual = (
+   color1: Array<number>,
+   color2: Array<number>
+) => {
    return (
-      color1[0] < color2[0] && color1[1] < color2[1] && color1[2] < color2[2]
+      color1[0] <= color2[0] && color1[1] <= color2[1] && color1[2] <= color2[2]
    )
 }
 
-const colorIsLarger = (color1: Array<number>, color2: Array<number>) => {
+const colorIsLargerOrEqual = (color1: Array<number>, color2: Array<number>) => {
    return (
-      color1[0] > color2[0] && color1[1] > color2[1] && color1[2] > color2[2]
+      color1[0] >= color2[0] && color1[1] >= color2[1] && color1[2] >= color2[2]
    )
 }
 
 // TOOD: Fix this tolerance-thing.
 
 const colorIsWithinTolerance = (
-   color: Array<number>,
-   tolerance: Array<number>
+   color1: Array<number>,
+   color2: Array<number>,
+   color2Tolerance: Array<number>
 ) => {
    const minBound = [
-      color[0] - tolerance[0],
-      color[1] - tolerance[1],
-      color[2] - tolerance[2],
+      color2[0] - color2Tolerance[0],
+      color2[1] - color2Tolerance[1],
+      color2[2] - color2Tolerance[2],
    ].map((value) => (value < 0 ? 0 : value))
    const maxBound = [
-      color[0] + tolerance[0],
-      color[1] + tolerance[1],
-      color[2] + tolerance[2],
+      color2[0] + color2Tolerance[0],
+      color2[1] + color2Tolerance[1],
+      color2[2] + color2Tolerance[2],
    ].map((value) => (value > 255 ? 255 : value))
 
-   return colorIsLarger(color, minBound) && colorIsSmaller(color, maxBound)
+   return (
+      colorIsLargerOrEqual(color1, minBound) &&
+      colorIsSmallerOrEqual(color1, maxBound)
+   )
 }
 
 const paintAreaFrom = (
@@ -47,9 +54,10 @@ const paintAreaFrom = (
    y: number,
    paintColor: Array<number>,
    borderColor: Array<number>,
-   points: Array<Array<number>> = []
+   borderTolerance: Array<number> = [0, 0, 0]
 ) => {
    const queue: Array<[number, number]> = [[x, y]]
+   const points: Array<Array<number>> = []
 
    while (queue.length > 0) {
       const [x, y] = queue.shift()!
@@ -62,7 +70,7 @@ const paintAreaFrom = (
 
       if (
          !colorsAreEqual(pixel, paintColor) &&
-         !colorsAreEqual(pixel, borderColor)
+         !colorIsWithinTolerance(pixel, borderColor, borderTolerance)
       ) {
          image.setPixelXY(x, y, paintColor)
 
@@ -93,6 +101,14 @@ const colorImage = async (image: Image, settings: ColoringSettings) => {
       settings.borderColor.g,
       settings.borderColor.b,
    ]
+   const borderTolerance = [
+      settings.borderColorTolerance.r,
+      settings.borderColorTolerance.g,
+      settings.borderColorTolerance.b,
+   ]
+
+   console.log("border color: ", borderColor)
+   console.log("Tolerance: ", borderTolerance)
 
    for (let x = 0; x < width; x++) {
       for (let y = 0; y < height; y++) {
@@ -106,9 +122,19 @@ const colorImage = async (image: Image, settings: ColoringSettings) => {
          const painted = usedColors.find((color) => {
             return colorsAreEqual(pixel, color)
          })
-         if (!painted && !colorsAreEqual(pixel, borderColor)) {
+         if (
+            !painted &&
+            !colorIsWithinTolerance(pixel, borderColor, borderTolerance)
+         ) {
             usedColors.push(paintColor)
-            const area = paintAreaFrom(image, x, y, paintColor, borderColor)
+            const area = paintAreaFrom(
+               image,
+               x,
+               y,
+               paintColor,
+               borderColor,
+               borderTolerance
+            )
 
             if (area.length > 0) {
                //                  areas.push(area)
