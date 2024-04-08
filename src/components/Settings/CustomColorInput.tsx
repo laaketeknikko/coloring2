@@ -44,8 +44,9 @@ const CustomColorInput = ({
 
    return (
       <div className="p-inputgroup">
-         <span className="p-inputgroup-addon">
+         <span className="p-inputgroup-addon p-0">
             <Dropdown
+               panelClassName="p-0"
                placeholder="RGB"
                value={selectedColorMode}
                options={["RGB", "HEX"]}

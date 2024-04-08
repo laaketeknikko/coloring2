@@ -9,6 +9,7 @@ export interface CustomInputNumberProps {
 const CustomInputNumber = (props: CustomInputNumberProps) => {
    return (
       <InputNumber
+         inputClassName="p-1"
          min={0}
          max={255}
          inputId={props.inputId}

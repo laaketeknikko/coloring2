@@ -55,7 +55,7 @@ const BorderColorPicker = () => {
 
          {/* Tolerance input */}
          <div className="p-inputgroup">
-            <span className="p-inputgroup-addon">
+            <span className="p-inputgroup-addon p-1">
                <label htmlFor="border-color-tolerance-r">Tolerance</label>
             </span>
             <CustomInputNumber

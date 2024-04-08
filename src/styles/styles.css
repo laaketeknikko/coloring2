@@ -1,0 +1,9 @@
+@layer normcss;
+
+@import "../../public/normcss371/norm.css" layer(normcss);
+@import "../../node_modules/primeflex/primeflex";
+@import "primeicons/primeicons.css";
+
+.p-inputtext {
+   padding: 2px;
+}
