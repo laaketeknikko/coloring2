@@ -1,6 +1,5 @@
 import { atom } from "jotai"
 import { Color, ImageWithSettings } from "../types/types"
-import { ColoringSettings } from "../utils/ColoringSettings"
 
 const selectedFilesAtom = atom<Array<File>>([])
 const uploadedFilesAtom = atom<Array<ImageWithSettings>>([])
@@ -19,17 +18,19 @@ const globalBorderColorToleranceAtom = atom({
    b: 0,
 })
 const globalColoringColorsAtom = atom<Array<Color>>([])
+const globalBorderPatchingAtom = atom(0)
 
 const globalColoringSettingsAtom = atom((get) => {
    const borderColor = get(globalBorderColorAtom)
    const borderColorTolerance = get(globalBorderColorToleranceAtom)
    const globalColoringColors = get(globalColoringColorsAtom)
+   const globalPatching = get(globalBorderPatchingAtom)
 
    return {
-      ...new ColoringSettings(),
       borderColor,
       borderColorTolerance,
       colorsToUse: globalColoringColors,
+      borderPatching: globalPatching,
    }
 })
 
@@ -42,4 +43,5 @@ export {
    globalBorderColorAtom,
    globalBorderColorToleranceAtom,
    globalColoringColorsAtom,
+   globalBorderPatchingAtom,
 }

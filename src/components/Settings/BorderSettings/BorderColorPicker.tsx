@@ -1,12 +1,12 @@
 import { useState } from "react"
 
-import { CustomInputNumber } from "./CustomInputNumber"
+import { CustomInputNumber } from "../CustomInputNumber"
 import { useAtom, useSetAtom } from "jotai"
 import {
    globalBorderColorAtom,
    globalBorderColorToleranceAtom,
-} from "../../atoms/atoms"
-import { CustomColorInput, CustomColorInputColor } from "./CustomColorInput"
+} from "../../../atoms/atoms"
+import { CustomColorInput, CustomColorInputColor } from "../CustomColorInput"
 
 const BorderColorPicker = () => {
    const [borderColor, setBorderColor] = useState<{
@@ -38,7 +38,6 @@ const BorderColorPicker = () => {
 
    return (
       <>
-         <span className="block text-center">Border color in image</span>
          <span
             className="block"
             style={{

@@ -64,18 +64,51 @@ const selectPaintColor = (list: Array<Color>) => {
    return [color.r, color.g, color.b]
 }
 
+const isBorderWithinRadius = (
+   x: number,
+   y: number,
+   image: Image,
+   borderColor: Array<number>,
+   radius: number
+) => {
+   if (radius <= 0) {
+      return false
+   }
+
+   const minX = x - radius
+   const maxX = x + radius
+   const minY = y - radius
+   const maxY = y + radius
+
+   for (let i = minX; i <= maxX; i++) {
+      for (let j = minY; j <= maxY; j++) {
+         if (i === x && j === y) {
+            continue
+         }
+         if (i < 0 || j < 0 || i >= image.width || j >= image.height) {
+            continue
+         }
+         const pixel = image.getPixelXY(i, j)
+         if (colorsAreEqual(pixel, borderColor)) {
+            return true
+         }
+      }
+   }
+
+   return false
+}
+
 const paintAreaFrom = (
    image: Image,
    x: number,
    y: number,
    paintColor: Array<number>,
    borderColor: Array<number>,
-   borderTolerance: Array<number> = [0, 0, 0]
+   borderTolerance: Array<number> = [0, 0, 0],
+   borderPatching: number
 ) => {
    const queue: Array<[number, number]> = [[x, y]]
    const points: Array<Array<number>> = []
-
-   console.log("Painting area with: ", paintColor)
 
    while (queue.length > 0) {
       const [x, y] = queue.shift()!
@@ -88,7 +121,8 @@ const paintAreaFrom = (
 
       if (
          !colorsAreEqual(pixel, paintColor) &&
-         !colorIsWithinTolerance(pixel, borderColor, borderTolerance)
+         !colorIsWithinTolerance(pixel, borderColor, borderTolerance) &&
+         !isBorderWithinRadius(x, y, image, borderColor, borderPatching)
       ) {
          image.setPixelXY(x, y, paintColor)
 
@@ -142,7 +176,14 @@ const colorImage = async (image: Image, settings: ColoringSettings) => {
          })
          if (
             !painted &&
-            !colorIsWithinTolerance(pixel, borderColor, borderTolerance)
+            !colorIsWithinTolerance(pixel, borderColor, borderTolerance) &&
+            !isBorderWithinRadius(
+               x,
+               y,
+               image,
+               borderColor,
+               settings.borderPatching
+            )
          ) {
             usedColors.push(paintColor)
             const area = paintAreaFrom(
@@ -151,7 +192,8 @@ const colorImage = async (image: Image, settings: ColoringSettings) => {
                y,
                paintColor,
                borderColor,
-               borderTolerance
+               borderTolerance,
+               settings.borderPatching
             )
 
             if (area.length > 0) {
