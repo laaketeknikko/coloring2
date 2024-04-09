@@ -2,32 +2,32 @@ import { useAtom } from "jotai"
 import {
    newestProcessedImageAtom,
    processedImagesAtom,
-   uploadedFilesAtom,
+   processingQueueAtom,
 } from "../../atoms/atoms"
 
 import { runColoring } from "../Colorer/util/worker"
 import { useEffect, useState } from "react"
 
 const ColoringProcessor = () => {
-   const [uploadedFiles, setUploadedFiles] = useAtom(uploadedFilesAtom)
+   const [processingQueue, setProcessingQueue] = useAtom(processingQueueAtom)
    const [processedFiles, setProcessedFiles] = useAtom(processedImagesAtom)
    const [newestImage, setNewestImage] = useAtom(newestProcessedImageAtom)
 
    const [coloringRunning, setColoringRunning] = useState(false)
 
    useEffect(() => {
-      if (uploadedFiles.length > 0 && !coloringRunning) {
+      if (processingQueue.length > 0 && !coloringRunning) {
          setColoringRunning(true)
          setNewestImage(null)
-         runColoring(uploadedFiles[0])
+         runColoring(processingQueue[0])
       }
-   }, [coloringRunning, setNewestImage, uploadedFiles])
+   }, [coloringRunning, setNewestImage, processingQueue])
 
    useEffect(() => {
       if (newestImage && coloringRunning) {
          setProcessedFiles([...processedFiles, newestImage])
-         uploadedFiles.shift()
-         setUploadedFiles([...uploadedFiles])
+         processingQueue.shift()
+         setProcessingQueue([...processingQueue])
          setColoringRunning(false)
       }
    }, [
@@ -35,8 +35,8 @@ const ColoringProcessor = () => {
       newestImage,
       processedFiles,
       setProcessedFiles,
-      setUploadedFiles,
-      uploadedFiles,
+      setProcessingQueue,
+      processingQueue,
    ])
 
    return null
