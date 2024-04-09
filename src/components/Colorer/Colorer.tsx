@@ -1,21 +1,29 @@
 import { Button } from "primereact/button"
-import { processingQueueAtom, uploadedFilesAtom } from "../../atoms/atoms"
-import { useAtomValue, useSetAtom } from "jotai"
+import {
+   globalColoringSettingsAtom,
+   processingQueueAtom,
+   uploadedFilesAtom,
+} from "../../atoms/atoms"
+import { useAtom, useAtomValue } from "jotai"
 
 const Colorer = () => {
    const uploadedFiles = useAtomValue(uploadedFilesAtom)
-   const setProcessingQueue = useSetAtom(processingQueueAtom)
+   const [processingQueue, setProcessingQueue] = useAtom(processingQueueAtom)
+   const globalSettings = useAtomValue(globalColoringSettingsAtom)
 
    const runColoring = (event: React.SyntheticEvent) => {
       event?.preventDefault()
 
-      console.log("starting processing with uploaded files: ", uploadedFiles)
-      setProcessingQueue([...uploadedFiles])
+      const newQueue = [...processingQueue, ...uploadedFiles].map((image) => {
+         return { ...image, settings: globalSettings }
+      })
+
+      setProcessingQueue(newQueue)
    }
 
    return (
       <div>
-         <Button onClick={runColoring}>Run coloring</Button>
+         <Button onClick={runColoring}>Add to queue</Button>
       </div>
    )
 }
