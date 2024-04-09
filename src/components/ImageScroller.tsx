@@ -1,7 +1,7 @@
-import Image from "image-js"
+import { ImageWithSettings } from "../types/types"
 
 export interface ImageScrollerProps {
-   images: Array<Image>
+   images: Array<ImageWithSettings>
 }
 
 const ImageScroller = ({ images }: ImageScrollerProps) => {
@@ -16,8 +16,8 @@ const ImageScroller = ({ images }: ImageScrollerProps) => {
             return (
                <img
                   style={{ height: "30vh", display: "inline-block" }}
-                  src={image.toDataURL()}
-                  key={image.toDataURL()}
+                  src={image.imageData.dataUrl}
+                  key={image.id}
                />
             )
          })}

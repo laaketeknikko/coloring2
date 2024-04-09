@@ -36,7 +36,6 @@ const FileInput = () => {
       const imagesWithSettings: Array<ImageWithSettings> = images.map(
          (image) => {
             return {
-               image: image,
                imageData: {
                   image: image,
                   dataUrl: image.toDataURL(),

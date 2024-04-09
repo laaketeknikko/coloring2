@@ -1,7 +1,7 @@
 import { useAtomValue } from "jotai"
 import { Galleria } from "primereact/galleria"
 import { processedImagesAtom } from "../../atoms/atoms"
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { Button } from "primereact/button"
 
 import { PrimeIcons } from "primereact/api"
@@ -9,16 +9,14 @@ import { Sidebar } from "primereact/sidebar"
 
 const CustomGalleria = () => {
    const processedImages = useAtomValue(processedImagesAtom)
-   const [dataUrls, setDataUrls] = useState<Array<string>>([])
 
-   useEffect(() => {
+   const dataUrls = useMemo(() => {
       const newUrls: Array<string> = []
       for (const item of processedImages) {
-         console.log("image in customgalleria: ", item)
-         newUrls.push(item.image.toDataURL("image/png"))
+         newUrls.push(item.imageData.dataUrl)
       }
 
-      setDataUrls(newUrls)
+      return newUrls
    }, [processedImages])
 
    const itemTemplate = (item: string) => {

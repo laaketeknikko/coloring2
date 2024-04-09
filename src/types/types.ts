@@ -14,7 +14,6 @@ export interface ImageData {
 }
 
 export interface ImageWithSettings {
-   image: Image
    imageData: ImageData
    id: string
    settings: ColoringSettings

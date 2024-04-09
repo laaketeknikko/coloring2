@@ -21,7 +21,6 @@ coloringWorker.onmessage = (event: MessageEvent<DataUrlWithSettings>) => {
       const jotaiStore = getDefaultStore()
 
       jotaiStore.set(newestProcessedImageAtom, {
-         image: image,
          imageData: {
             image: image,
             dataUrl: image.toDataURL(),
@@ -34,7 +33,7 @@ coloringWorker.onmessage = (event: MessageEvent<DataUrlWithSettings>) => {
 
 const runColoring = (imageWithSettings: ImageWithSettings) => {
    const dataUrlWithSettings: DataUrlWithSettings = {
-      dataUrl: imageWithSettings.image.toDataURL(),
+      dataUrl: imageWithSettings.imageData.dataUrl,
       settings: imageWithSettings.settings,
       id: imageWithSettings.id,
    }
