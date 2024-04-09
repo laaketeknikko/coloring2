@@ -1,38 +1,29 @@
 import "primereact/resources/themes/saga-orange/theme.css"
 import { ImageProcessingPanel } from "./components/ImageProcessingPanel/ImageProcessingPanel"
 import { FileUploadPanel } from "./components/FileUploadPanel/FileUploadPanel"
-import { useMemo, useState } from "react"
-import { Sidebar } from "primereact/sidebar"
-import { Menubar } from "primereact/menubar"
 import { Settings } from "./components/Settings/Settings"
+import { TabPanel, TabView } from "primereact/tabview"
+
+import { PrimeIcons } from "primereact/api"
 
 function App() {
-   const [showUploadPanel, setShowUploadPanel] = useState(false)
-
-   const menuBarItems = useMemo(() => {
-      return [
-         {
-            label: "Add files",
-            icon: "pi pi-file-plus",
-            command: () => setShowUploadPanel(true),
-         },
-      ]
-   }, [])
-
    return (
       <>
-         <Menubar model={menuBarItems} />
-
-         <Settings />
-         <ImageProcessingPanel />
-
-         <Sidebar
-            visible={showUploadPanel}
-            onHide={() => setShowUploadPanel(false)}
-            style={{ width: "80%", height: "100vh" }}
-         >
-            <FileUploadPanel />
-         </Sidebar>
+         <TabView>
+            <TabPanel header="Add files" leftIcon={`${PrimeIcons.UPLOAD} mr-2`}>
+               <FileUploadPanel />
+            </TabPanel>
+            <TabPanel header="Settings" leftIcon={`${PrimeIcons.COG} mr-2`}>
+               <Settings />
+            </TabPanel>
+            <TabPanel header="Coloring" leftIcon={`${PrimeIcons.PLAY} mr-2`}>
+               <ImageProcessingPanel />
+            </TabPanel>
+            <TabPanel
+               header="Download"
+               leftIcon={`${PrimeIcons.DOWNLOAD} mr-2`}
+            ></TabPanel>
+         </TabView>
       </>
    )
 }
