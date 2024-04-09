@@ -37,6 +37,10 @@ const FileInput = () => {
          (image) => {
             return {
                image: image,
+               imageData: {
+                  image: image,
+                  dataUrl: image.toDataURL(),
+               },
                settings: { ...globalColoringSettings },
                id: v4(),
             }

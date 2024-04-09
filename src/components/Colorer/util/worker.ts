@@ -22,6 +22,10 @@ coloringWorker.onmessage = (event: MessageEvent<DataUrlWithSettings>) => {
 
       jotaiStore.set(newestProcessedImageAtom, {
          image: image,
+         imageData: {
+            image: image,
+            dataUrl: image.toDataURL(),
+         },
          settings: event.data.settings,
          id: event.data.id,
       })

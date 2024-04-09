@@ -8,8 +8,14 @@ export interface Color {
    a?: number
 }
 
+export interface ImageData {
+   image: Image
+   dataUrl: string
+}
+
 export interface ImageWithSettings {
    image: Image
+   imageData: ImageData
    id: string
    settings: ColoringSettings
 }
