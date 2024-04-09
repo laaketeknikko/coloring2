@@ -10,11 +10,13 @@ export interface Color {
 
 export interface ImageWithSettings {
    image: Image
+   id: string
    settings: ColoringSettings
 }
 
 export interface DataUrlWithSettings {
    dataUrl: string
+   id: string
    settings: ColoringSettings
 }
 

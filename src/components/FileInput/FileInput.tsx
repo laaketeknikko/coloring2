@@ -8,6 +8,7 @@ import {
 import { useEffect, useRef } from "react"
 import { imagesFromFiles } from "../../utils/imageUtils"
 import { ImageWithSettings } from "../../types/types"
+import { v4 } from "uuid"
 
 const FileInput = () => {
    const [selectedFiles, setSelectedFiles] = useAtom(selectedFilesAtom)
@@ -34,7 +35,11 @@ const FileInput = () => {
 
       const imagesWithSettings: Array<ImageWithSettings> = images.map(
          (image) => {
-            return { image: image, settings: { ...globalColoringSettings } }
+            return {
+               image: image,
+               settings: { ...globalColoringSettings },
+               id: v4(),
+            }
          }
       )
 
