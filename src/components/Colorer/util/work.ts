@@ -10,13 +10,22 @@ onmessage = function (event: MessageEvent<DataUrlWithSettings>) {
       return null
    }
 
-   // TODO: use settings in processing
+   console.log("starting work")
 
-   Image.load(event.data.dataUrl).then((image) => {
+   Image.load(event.data.data.dataUrl).then((image) => {
       processImage(image, event.data.settings).then((processedImage) => {
          const dataUrl = processedImage.toDataURL()
 
-         this.postMessage({ dataUrl: dataUrl, settings: event.data.settings })
+         const message: DataUrlWithSettings = {
+            data: {
+               dataUrl: dataUrl,
+               meta: { name: event.data.data.meta.name },
+            },
+            settings: event.data.settings,
+            id: event.data.id,
+         }
+
+         this.postMessage(message)
       })
    })
 }

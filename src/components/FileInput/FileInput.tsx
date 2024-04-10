@@ -34,9 +34,12 @@ const FileInput = () => {
       const images = await imagesFromFiles(selectedFiles)
 
       const imagesWithSettings: Array<ImageWithSettings> = images.map(
-         (image) => {
+         (image, index) => {
             return {
                imageData: {
+                  meta: {
+                     name: selectedFiles[index].name,
+                  },
                   image: image,
                   dataUrl: image.toDataURL(),
                },

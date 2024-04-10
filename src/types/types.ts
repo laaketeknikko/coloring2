@@ -9,8 +9,18 @@ export interface Color {
 }
 
 export interface ImageData {
+   meta: {
+      name: string
+   }
    image: Image
    dataUrl: string
+}
+
+export interface DataURLData {
+   dataUrl: string
+   meta: {
+      name: string
+   }
 }
 
 export interface ImageWithSettings {
@@ -20,16 +30,45 @@ export interface ImageWithSettings {
 }
 
 export interface DataUrlWithSettings {
-   dataUrl: string
+   data: DataURLData
    id: string
    settings: ColoringSettings
+}
+
+const isImageData = (data: unknown): data is ImageData => {
+   if (
+      data &&
+      typeof data === "object" &&
+      "meta" in data &&
+      "image" in data &&
+      "dataUrl" in data
+   ) {
+      return true
+   } else {
+      return false
+   }
+}
+
+const isDataUrlData = (data: unknown): data is DataURLData => {
+   if (
+      data &&
+      typeof data === "object" &&
+      "dataUrl" in data &&
+      "meta" in data
+   ) {
+      return true
+   } else {
+      return false
+   }
 }
 
 const isDataUrlWithSettings = (data: unknown): data is DataUrlWithSettings => {
    if (
       data &&
       typeof data === "object" &&
-      "dataUrl" in data &&
+      "data" in data &&
+      isDataUrlData(data.data) &&
+      "id" in data &&
       "settings" in data
    ) {
       if (ColoringSettings.isColoringSettings(data.settings)) {
@@ -46,7 +85,8 @@ const isImageWithSettings = (data: unknown): data is ImageWithSettings => {
    if (
       data &&
       typeof data === "object" &&
-      "image" in data &&
+      "imageData" in data &&
+      isImageData(data.imageData) &&
       "settings" in data
    ) {
       if (ColoringSettings.isColoringSettings(data.settings)) {
