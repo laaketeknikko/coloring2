@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "fflate": "^0.8.2",
     "image-js": "^0.35.5",
     "jotai": "^2.7.2",
     "primeflex": "^3.3.1",

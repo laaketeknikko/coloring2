@@ -6,31 +6,45 @@ import { Button } from "primereact/button"
 
 import { PrimeIcons } from "primereact/api"
 import { Sidebar } from "primereact/sidebar"
+import { ImageWithSettings } from "../../types/types"
+import { FlateCallback } from "fflate"
+import { zipImages } from "../../utils/zipping"
 
 const CustomGalleria = () => {
    const processedImages = useAtomValue(processedImagesAtom)
 
-   const dataUrls = useMemo(() => {
-      const newUrls: Array<string> = []
-      for (const item of processedImages) {
-         newUrls.push(item.imageData.dataUrl)
-      }
-
-      return newUrls
-   }, [processedImages])
-
-   const itemTemplate = (item: string) => {
+   const itemTemplate = (item: ImageWithSettings) => {
       return (
-         <img
-            src={item}
-            alt={item}
-            style={{ maxWidth: "100%", maxHeight: "100vh" }}
-         />
+         <div>
+            <Button
+               role="button"
+               onClick={() => {
+                  const aElem = document.createElement("a")
+                  aElem.href = item.imageData.dataUrl
+                  aElem.download = `${item.imageData.meta.name}`
+                  aElem.click()
+               }}
+            >
+               Download image
+            </Button>
+
+            <img
+               src={item.imageData.dataUrl}
+               alt={item.imageData.meta.name}
+               style={{ maxWidth: "100%", maxHeight: "100vh" }}
+            />
+         </div>
       )
    }
 
-   const thumbnailTemplate = (item: string) => {
-      return <img src={item} alt={item} style={{ height: "200px" }} />
+   const thumbnailTemplate = (item: ImageWithSettings) => {
+      return (
+         <img
+            src={item.imageData.dataUrl}
+            alt={`${item.imageData.meta.name} thumbnail`}
+            style={{ height: "200px" }}
+         />
+      )
    }
 
    const [fullScreenGallery, setFullScreenGallery] = useState(false)
@@ -42,15 +56,38 @@ const CustomGalleria = () => {
             changeItemOnIndicatorHover={true}
             showIndicators={true}
             thumbnailsPosition="top"
-            value={dataUrls}
+            value={processedImages}
             item={itemTemplate}
             thumbnail={thumbnailTemplate}
          />
       )
-   }, [dataUrls])
+   }, [processedImages])
+
+   const onImagesZipped: FlateCallback = (error, data) => {
+      if (error) {
+         console.log(error)
+         return
+      }
+
+      const blob = new Blob([data], { type: "application/zip" })
+
+      const a = document.createElement("a")
+      a.href = URL.createObjectURL(blob)
+      a.download = "images.zip"
+      a.click()
+      URL.revokeObjectURL(a.href)
+   }
 
    return (
       <>
+         <Button
+            icon={`${PrimeIcons.DOWNLOAD}`}
+            onClick={() => {
+               zipImages(processedImages, onImagesZipped)
+            }}
+         >
+            all as zip
+         </Button>
          <Button
             icon={`${PrimeIcons.WINDOW_MAXIMIZE}`}
             onClick={() => {
