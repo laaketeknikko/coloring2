@@ -22,23 +22,11 @@ const CustomGalleria = () => {
 
    const itemTemplate = (item: ImageWithSettings) => {
       return (
-         <div>
-            <Button
-               role="button"
-               onClick={() => {
-                  const aElem = document.createElement("a")
-                  aElem.href = item.imageData.dataUrl
-                  aElem.download = `${item.imageData.meta.name}`
-                  aElem.click()
-               }}
-            >
-               Download image
-            </Button>
-
+         <div style={{ width: "100%", height: "70vh" }}>
             <img
                src={item.imageData.dataUrl}
                alt={item.imageData.meta.name}
-               style={{ maxWidth: "100%", maxHeight: "100vh" }}
+               style={{ maxWidth: "100%", maxHeight: "100%" }}
             />
          </div>
       )
@@ -73,7 +61,7 @@ const CustomGalleria = () => {
                <img
                   src={item.imageData.dataUrl}
                   alt={`${item.imageData.meta.name} thumbnail`}
-                  style={{ height: "200px" }}
+                  style={{ height: "18vh" }}
                />
                <div className="grid justify-content-center">
                   <div>

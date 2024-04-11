@@ -21,7 +21,9 @@ function App() {
                   <Settings />
                </TabPanel>
                <TabPanel header="Coloring" leftIcon={`${PrimeIcons.PLAY} mr-2`}>
-                  <ImageProcessingPanel />
+                  <div style={{ height: "70vh" }}>
+                     <ImageProcessingPanel />
+                  </div>
                </TabPanel>
             </TabView>
          </div>
