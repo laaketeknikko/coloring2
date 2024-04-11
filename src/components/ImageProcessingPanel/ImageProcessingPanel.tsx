@@ -14,10 +14,12 @@ const ImageProcessingPanel = () => {
 
    return (
       <>
-         <ImageScroller
-            images={uploadedImages}
-            onImageRemove={handleImageRemoved}
-         />
+         <div style={{ height: "18vh" }}>
+            <ImageScroller
+               images={uploadedImages}
+               onImageRemove={handleImageRemoved}
+            />
+         </div>
          <Colorer />
          <CustomGalleria />
          <ColoringProcessor />
