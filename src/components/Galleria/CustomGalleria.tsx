@@ -10,6 +10,12 @@ import { ImageWithSettings } from "../../types/types"
 import { FlateCallback } from "fflate"
 import { zipImages } from "../../utils/zipping"
 
+// TODO:
+// 1. Hide the thumbnails
+// 2. Show own image scroller in footer component
+// 3. control shown image with activeIndex
+// 4. Listen to onItemChange event and update activeIndex
+
 const CustomGalleria = () => {
    const processedImages = useAtomValue(processedImagesAtom)
 

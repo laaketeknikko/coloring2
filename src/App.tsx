@@ -9,17 +9,22 @@ import { PrimeIcons } from "primereact/api"
 function App() {
    return (
       <>
-         <TabView>
-            <TabPanel header="Add files" leftIcon={`${PrimeIcons.UPLOAD} mr-2`}>
-               <FileUploadPanel />
-            </TabPanel>
-            <TabPanel header="Settings" leftIcon={`${PrimeIcons.COG} mr-2`}>
-               <Settings />
-            </TabPanel>
-            <TabPanel header="Coloring" leftIcon={`${PrimeIcons.PLAY} mr-2`}>
-               <ImageProcessingPanel />
-            </TabPanel>
-         </TabView>
+         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+            <TabView>
+               <TabPanel
+                  header="Add files"
+                  leftIcon={`${PrimeIcons.UPLOAD} mr-2`}
+               >
+                  <FileUploadPanel />
+               </TabPanel>
+               <TabPanel header="Settings" leftIcon={`${PrimeIcons.COG} mr-2`}>
+                  <Settings />
+               </TabPanel>
+               <TabPanel header="Coloring" leftIcon={`${PrimeIcons.PLAY} mr-2`}>
+                  <ImageProcessingPanel />
+               </TabPanel>
+            </TabView>
+         </div>
       </>
    )
 }

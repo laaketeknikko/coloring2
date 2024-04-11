@@ -1,4 +1,4 @@
-import { useAtomValue } from "jotai"
+import { useAtom } from "jotai"
 import { uploadedFilesAtom } from "../../atoms/atoms"
 import { Colorer } from "../Colorer/Colorer"
 import { ColoringProcessor } from "../ColoringProcessor/ColoringProcessor"
@@ -6,11 +6,18 @@ import { CustomGalleria } from "../Galleria/CustomGalleria"
 import { ImageScroller } from "../ImageScroller"
 
 const ImageProcessingPanel = () => {
-   const uploadedImages = useAtomValue(uploadedFilesAtom)
+   const [uploadedImages, setUploadedImages] = useAtom(uploadedFilesAtom)
+
+   const handleImageRemoved = (id: string) => {
+      setUploadedImages(uploadedImages.filter((image) => image.id !== id))
+   }
 
    return (
       <>
-         <ImageScroller images={uploadedImages} />
+         <ImageScroller
+            images={uploadedImages}
+            onImageRemove={handleImageRemoved}
+         />
          <Colorer />
          <CustomGalleria />
          <ColoringProcessor />

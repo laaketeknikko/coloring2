@@ -1,6 +1,5 @@
-import { Button } from "primereact/button"
 import { ColoringSettingsColor } from "../../../utils/ColoringSettings"
-import { PrimeIcons } from "primereact/api"
+import { RemoveButton } from "../../utils/RemoveButton"
 
 export interface SingleColorSelectionColorProps {
    color: ColoringSettingsColor
@@ -11,6 +10,10 @@ const SingleColorSelectionColor = ({
    color,
    onRemove,
 }: SingleColorSelectionColorProps) => {
+   const handleColorRemove = () => {
+      onRemove(color)
+   }
+
    return (
       <div
          className="border-round-lg border-2 border-solid border-900"
@@ -20,11 +23,7 @@ const SingleColorSelectionColor = ({
          }}
       >
          <div>
-            <Button
-               className="bg-black-alpha-40 border-none text-primary p-1"
-               icon={`${PrimeIcons.TIMES} text-xl font-light`}
-               onClick={() => onRemove(color)}
-            ></Button>
+            <RemoveButton onRemove={handleColorRemove} id={color.id} />
          </div>
       </div>
    )
