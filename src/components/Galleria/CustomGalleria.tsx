@@ -52,6 +52,8 @@ const CustomGalleria = () => {
    const galleria = useMemo(() => {
       return (
          <Galleria
+            showIndicatorsOnItem={true}
+            showItemNavigatorsOnHover={true}
             indicatorsPosition="top"
             changeItemOnIndicatorHover={true}
             showIndicators={true}
@@ -81,12 +83,12 @@ const CustomGalleria = () => {
    return (
       <>
          <Button
-            icon={`${PrimeIcons.DOWNLOAD}`}
+            icon={`${PrimeIcons.DOWNLOAD} mr-2`}
             onClick={() => {
                zipImages(processedImages, onImagesZipped)
             }}
          >
-            all as zip
+            as zip
          </Button>
          <Button
             icon={`${PrimeIcons.WINDOW_MAXIMIZE}`}

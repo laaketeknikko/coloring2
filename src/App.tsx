@@ -19,14 +19,9 @@ function App() {
             <TabPanel header="Coloring" leftIcon={`${PrimeIcons.PLAY} mr-2`}>
                <ImageProcessingPanel />
             </TabPanel>
-            <TabPanel
-               header="Download"
-               leftIcon={`${PrimeIcons.DOWNLOAD} mr-2`}
-            ></TabPanel>
          </TabView>
       </>
    )
 }
 
 export default App
-

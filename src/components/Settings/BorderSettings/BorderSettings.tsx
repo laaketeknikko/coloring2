@@ -1,10 +1,10 @@
-import { useSetAtom } from "jotai"
+import { useAtom } from "jotai"
 import { globalBorderPatchingAtom } from "../../../atoms/atoms"
 import { CustomInputNumber } from "../CustomInputNumber"
 import { BorderColorPicker } from "./BorderColorPicker"
 
 const BorderSettings = () => {
-   const setBorderPathing = useSetAtom(globalBorderPatchingAtom)
+   const [borderPatching, setBorderPatching] = useAtom(globalBorderPatchingAtom)
 
    return (
       <>
@@ -12,10 +12,10 @@ const BorderSettings = () => {
          <div className="p-inputgroup">
             <span className="p-inputgroup-addon">Patching</span>
             <CustomInputNumber
-               value={0}
+               value={borderPatching}
                inputId="border-color-patching"
                onChange={(event) => {
-                  setBorderPathing(event)
+                  setBorderPatching(event)
                }}
             />
          </div>

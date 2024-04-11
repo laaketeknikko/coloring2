@@ -1,23 +1,29 @@
 import { useState } from "react"
 
 import { CustomInputNumber } from "../CustomInputNumber"
-import { useAtom, useSetAtom } from "jotai"
+import { useAtom } from "jotai"
 import {
    globalBorderColorAtom,
    globalBorderColorToleranceAtom,
 } from "../../../atoms/atoms"
 import { CustomColorInput, CustomColorInputColor } from "../CustomColorInput"
+import { RGBToHex } from "../../../utils/imageUtils"
 
 const BorderColorPicker = () => {
+   const [globalBorderColor, setGlobalBorderColor] = useAtom(
+      globalBorderColorAtom
+   )
+
    const [borderColor, setBorderColor] = useState<{
       r: number
       g: number
       b: number
-   }>({ r: 0, g: 0, b: 0 })
+   }>(globalBorderColor)
 
-   const [borderHexColor, setBorderHexColor] = useState("#000000")
+   const [borderHexColor, setBorderHexColor] = useState(
+      RGBToHex(globalBorderColor.r, globalBorderColor.g, globalBorderColor.b)
+   )
 
-   const setGlobalBorderColor = useSetAtom(globalBorderColorAtom)
    const [globalBorderColorTolerance, setGlobalBorderColorTolerance] = useAtom(
       globalBorderColorToleranceAtom
    )
@@ -58,7 +64,7 @@ const BorderColorPicker = () => {
                <label htmlFor="border-color-tolerance-r">Tolerance</label>
             </span>
             <CustomInputNumber
-               value={0}
+               value={globalBorderColorTolerance.r}
                inputId="border-color-tolerance-r"
                onChange={(value) => {
                   handleBorderColorToleranceChange({
@@ -70,7 +76,7 @@ const BorderColorPicker = () => {
             />
 
             <CustomInputNumber
-               value={0}
+               value={globalBorderColorTolerance.g}
                inputId="border-color-tolerance-g"
                onChange={(value) =>
                   handleBorderColorToleranceChange({
@@ -82,7 +88,7 @@ const BorderColorPicker = () => {
             />
 
             <CustomInputNumber
-               value={0}
+               value={globalBorderColorTolerance.b}
                inputId="border-color-tolerance-b"
                onChange={(value) =>
                   handleBorderColorToleranceChange({

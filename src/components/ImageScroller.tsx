@@ -15,7 +15,7 @@ const ImageScroller = ({ images }: ImageScrollerProps) => {
          {images.map((image) => {
             return (
                <img
-                  style={{ height: "30vh", display: "inline-block" }}
+                  style={{ height: "20vh", display: "inline-block" }}
                   src={image.imageData.dataUrl}
                   key={image.id}
                />
