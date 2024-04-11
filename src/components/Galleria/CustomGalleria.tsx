@@ -1,7 +1,7 @@
-import { useAtomValue } from "jotai"
+import { useAtom } from "jotai"
 import { Galleria } from "primereact/galleria"
 import { processedImagesAtom } from "../../atoms/atoms"
-import { useMemo, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { Button } from "primereact/button"
 
 import { PrimeIcons } from "primereact/api"
@@ -9,6 +9,7 @@ import { Sidebar } from "primereact/sidebar"
 import { ImageWithSettings } from "../../types/types"
 import { FlateCallback } from "fflate"
 import { zipImages } from "../../utils/zipping"
+import { ImageActionButtons } from "../utils/ImageActionButtons"
 
 // TODO:
 // 1. Hide the thumbnails
@@ -17,7 +18,7 @@ import { zipImages } from "../../utils/zipping"
 // 4. Listen to onItemChange event and update activeIndex
 
 const CustomGalleria = () => {
-   const processedImages = useAtomValue(processedImagesAtom)
+   const [processedImages, setProcessedImages] = useAtom(processedImagesAtom)
 
    const itemTemplate = (item: ImageWithSettings) => {
       return (
@@ -43,13 +44,46 @@ const CustomGalleria = () => {
       )
    }
 
+   const handleImageRemove = useCallback(
+      (id: string) => {
+         setProcessedImages(processedImages.filter((image) => image.id !== id))
+      },
+      [processedImages, setProcessedImages]
+   )
+
+   const handleImageDownload = useCallback(
+      (id: string) => {
+         const image = processedImages.find((image) => image.id === id)
+         if (!image) {
+            return
+         }
+
+         const aElem = document.createElement("a")
+         aElem.href = image.imageData.dataUrl
+         aElem.download = `${image.imageData.meta.name}`
+         aElem.click()
+      },
+      [processedImages]
+   )
+
    const thumbnailTemplate = (item: ImageWithSettings) => {
       return (
-         <img
-            src={item.imageData.dataUrl}
-            alt={`${item.imageData.meta.name} thumbnail`}
-            style={{ height: "200px" }}
-         />
+         <div>
+            <img
+               src={item.imageData.dataUrl}
+               alt={`${item.imageData.meta.name} thumbnail`}
+               style={{ height: "200px" }}
+            />
+            <div className="grid justify-content-center">
+               <div>
+                  <ImageActionButtons
+                     id={item.id}
+                     onImageRemove={handleImageRemove}
+                     onImageDownload={handleImageDownload}
+                  />
+               </div>
+            </div>
+         </div>
       )
    }
 

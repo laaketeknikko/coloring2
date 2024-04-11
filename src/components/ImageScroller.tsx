@@ -1,7 +1,5 @@
-import { Button } from "primereact/button"
 import { ImageWithSettings } from "../types/types"
-import { RemoveButton } from "./utils/RemoveButton"
-import { PrimeIcons } from "primereact/api"
+import { ImageActionButtons } from "./utils/ImageActionButtons"
 
 export interface ImageScrollerProps {
    images: Array<ImageWithSettings>
@@ -40,30 +38,11 @@ const ImageScroller = ({
                         backgroundImage: `url("${image.imageData.dataUrl}")`,
                      }}
                   >
-                     <div className="flex flex-row gap-1 justify-content-start">
-                        {onImageRemove && (
-                           <div className="">
-                              <RemoveButton
-                                 onRemove={onImageRemove}
-                                 id={image.id}
-                              />
-                           </div>
-                        )}
-                        {onImageDownload && (
-                           <div className="">
-                              <Button
-                                 icon={`${PrimeIcons.DOWNLOAD}`}
-                                 role="button"
-                                 onClick={() => {
-                                    const aElem = document.createElement("a")
-                                    aElem.href = image.imageData.dataUrl
-                                    aElem.download = `${image.imageData.meta.name}`
-                                    aElem.click()
-                                 }}
-                              ></Button>
-                           </div>
-                        )}
-                     </div>
+                     <ImageActionButtons
+                        id={image.id}
+                        onImageDownload={onImageDownload}
+                        onImageRemove={onImageRemove}
+                     />
                   </div>
                </div>
             )
