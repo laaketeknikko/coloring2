@@ -1,6 +1,5 @@
 import { Image } from "image-js"
-import { ColoringSettings } from "./ColoringSettings"
-import { Color } from "../types/types"
+import { ColoringSettings, ColoringSettingsColor } from "./ColoringSettings"
 
 const colorsAreEqual = (color1: Array<number>, color2: Array<number>) => {
    return (
@@ -55,13 +54,13 @@ const selectRandomPaintColor = () => {
    ]
 }
 
-const selectPaintColor = (list: Array<Color>) => {
+const selectPaintColor = (list: Array<ColoringSettingsColor>) => {
    if (list.length === 0) {
       return null
    }
    const color = list[Math.floor(Math.random() * list.length)]
 
-   return [color.r, color.g, color.b]
+   return [color.color.r, color.color.g, color.color.b]
 }
 
 const isBorderWithinRadius = (

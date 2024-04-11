@@ -1,10 +1,15 @@
 import { Color } from "../types/types"
 
+export interface ColoringSettingsColor {
+   color: Color
+   id: string
+}
+
 class ColoringSettings {
    borderColor: Color
    borderColorTolerance: Color
    borderPatching: number
-   colorsToUse: Array<Color>
+   colorsToUse: Array<ColoringSettingsColor>
 
    constructor() {
       this.borderColor = { r: 0, g: 0, b: 0 }

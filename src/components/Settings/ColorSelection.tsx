@@ -6,6 +6,7 @@ import "react-color-palette/css"
 import { ScrollPanel } from "primereact/scrollpanel"
 import { globalColoringColorsAtom } from "../../atoms/atoms"
 import { useAtom } from "jotai"
+import { v4 } from "uuid"
 
 const ColorSelection = () => {
    const [globalColorSettings, setGlobalColorSettings] = useAtom(
@@ -16,24 +17,29 @@ const ColorSelection = () => {
       setGlobalColorSettings([
          ...globalColorSettings,
          {
-            r: Math.floor(color.rgb.r),
-            g: Math.floor(color.rgb.g),
-            b: Math.floor(color.rgb.b),
-            a: Math.floor(color.rgb.a),
+            color: {
+               r: Math.floor(color.rgb.r),
+               g: Math.floor(color.rgb.g),
+               b: Math.floor(color.rgb.b),
+               a: Math.floor(color.rgb.a),
+            },
+            id: v4(),
          },
       ])
    }
 
    const colorElements = useMemo(() => {
-      return globalColorSettings.map((color, index) => {
+      return globalColorSettings.map((color) => {
          return (
-            <div className="col-4 sm:col-12 md:col-4 lg:col-3 xl:col-2">
+            <div
+               key={`${color.id}`}
+               className="col-4 sm:col-12 md:col-4 lg:col-3 xl:col-2"
+            >
                <div
                   className="border-round-lg border-2 border-solid border-900"
-                  key={`${color.r}${color.g}${color.b}-${index}`}
                   style={{
                      aspectRatio: "1/1",
-                     backgroundColor: `rgb(${color.r}, ${color.g}, ${color.b})`,
+                     backgroundColor: `rgb(${color.color.r}, ${color.color.g}, ${color.color.b})`,
                   }}
                ></div>
             </div>
