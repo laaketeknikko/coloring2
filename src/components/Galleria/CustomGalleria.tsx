@@ -66,26 +66,29 @@ const CustomGalleria = () => {
       [processedImages]
    )
 
-   const thumbnailTemplate = (item: ImageWithSettings) => {
-      return (
-         <div>
-            <img
-               src={item.imageData.dataUrl}
-               alt={`${item.imageData.meta.name} thumbnail`}
-               style={{ height: "200px" }}
-            />
-            <div className="grid justify-content-center">
-               <div>
-                  <ImageActionButtons
-                     id={item.id}
-                     onImageRemove={handleImageRemove}
-                     onImageDownload={handleImageDownload}
-                  />
+   const thumbnailTemplate = useCallback(
+      (item: ImageWithSettings) => {
+         return (
+            <div>
+               <img
+                  src={item.imageData.dataUrl}
+                  alt={`${item.imageData.meta.name} thumbnail`}
+                  style={{ height: "200px" }}
+               />
+               <div className="grid justify-content-center">
+                  <div>
+                     <ImageActionButtons
+                        id={item.id}
+                        onImageRemove={handleImageRemove}
+                        onImageDownload={handleImageDownload}
+                     />
+                  </div>
                </div>
             </div>
-         </div>
-      )
-   }
+         )
+      },
+      [handleImageDownload, handleImageRemove]
+   )
 
    const [fullScreenGallery, setFullScreenGallery] = useState(false)
 
@@ -103,7 +106,7 @@ const CustomGalleria = () => {
             thumbnail={thumbnailTemplate}
          />
       )
-   }, [processedImages])
+   }, [processedImages, thumbnailTemplate])
 
    const onImagesZipped: FlateCallback = (error, data) => {
       if (error) {
@@ -115,7 +118,7 @@ const CustomGalleria = () => {
 
       const a = document.createElement("a")
       a.href = URL.createObjectURL(blob)
-      a.download = "images.zip"
+      a.download = "colored_images.zip"
       a.click()
       URL.revokeObjectURL(a.href)
    }
