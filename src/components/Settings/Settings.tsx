@@ -1,5 +1,5 @@
 import { BorderSettings } from "./BorderSettings/BorderSettings"
-import { ColorSelection } from "./ColorSelection"
+import { ColorSelection } from "./ColorSelection/ColorSelection"
 
 const Settings = () => {
    return (
