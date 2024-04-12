@@ -57,4 +57,6 @@ export {
    globalColoringColorsAtom,
    globalBorderPatchingAtom,
    processingQueueAtom,
+   globalColorByAreaSize,
+   globalColorByAreaNumber,
 }

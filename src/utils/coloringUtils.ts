@@ -241,7 +241,7 @@ const mapAreaFrom = (
    borderPatching: number
 ) => {
    const queue: Array<[number, number]> = [[x, y]]
-   const points: Array<Array<number>> = []
+   const points: Array<[number, number]> = []
 
    while (queue.length > 0) {
       const [x, y] = queue.shift()!
@@ -257,7 +257,7 @@ const mapAreaFrom = (
          !colorIsWithinTolerance(pixel, borderColor, borderTolerance) &&
          !isBorderWithinRadius(x, y, image, borderColor, borderPatching)
       ) {
-         points.push(pixel)
+         points.push([x, y])
          queue.push(
             [x - 1, y - 1],
             [x, y - 1],
@@ -274,7 +274,7 @@ const mapAreaFrom = (
    return points
 }
 
-const sortAreasBySize = (areas: Array<Array<Array<number>>>) => {
+const sortAreasBySize = (areas: Array<Array<[number, number]>>) => {
    return areas.slice(0).sort((a, b) => b.length - a.length)
 }
 
@@ -290,7 +290,7 @@ const paintPixels = (
 }
 
 const getPaintColorsByAreaSize = (
-   areas: Array<Array<Array<number>>>,
+   areas: Array<Array<[number, number]>>,
    colors: ColoringSettings
 ): Array<{
    area: Array<Array<number>>
@@ -328,7 +328,7 @@ const colorImageWithAreas = async (
 ) => {
    const width = image.width
    const height = image.height
-   const areas: Array<Array<Array<number>>> = []
+   const areas: Array<Array<[number, number]>> = []
 
    const borderColor = [
       settings.borderColor.r,
@@ -362,11 +362,12 @@ const colorImageWithAreas = async (
                image,
                x,
                y,
-
                borderColor,
                borderTolerance,
                settings.borderPatching
             )
+
+            console.log("got area: ", area)
 
             if (area.length > 0) {
                areas.push(area)

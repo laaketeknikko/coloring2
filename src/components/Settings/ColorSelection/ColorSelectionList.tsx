@@ -14,6 +14,25 @@ const ColorSelectionList = () => {
       [globalColors, setGlobalColors]
    )
 
+   const handleColorThresholdChange = useCallback(
+      (changedColor: ColoringSettingsColor) => {
+         const color = globalColors.find(
+            (color) => color.id === changedColor.id
+         )
+
+         if (!color) {
+            return
+         }
+
+         setGlobalColors(
+            globalColors.map((color) =>
+               color.id === changedColor.id ? changedColor : color
+            )
+         )
+      },
+      [globalColors, setGlobalColors]
+   )
+
    const colorElements = useMemo(() => {
       return globalColors.map((color) => {
          return (
@@ -24,11 +43,12 @@ const ColorSelectionList = () => {
                <SingleColorSelectionColor
                   color={color}
                   onRemove={handleColorRemove}
+                  onThresholdChange={handleColorThresholdChange}
                />
             </div>
          )
       })
-   }, [globalColors, handleColorRemove])
+   }, [globalColors, handleColorRemove, handleColorThresholdChange])
 
    return <div className="grid h-screen">{colorElements}</div>
 }
