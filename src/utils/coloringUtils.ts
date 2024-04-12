@@ -210,28 +210,6 @@ const colorImageWithoutAreas = async (
  * Mapping algorithm
  */
 
-const isPixelInArea = (area: Array<Array<number>>, x: number, y: number) => {
-   const found = area.find((point) => point[0] === x && point[1] === y)
-   if (found) {
-      return true
-   } else {
-      return false
-   }
-}
-
-const isPixelInAreas = (
-   areas: Array<Array<Array<number>>>,
-   x: number,
-   y: number
-) => {
-   const found = areas.find((area) => isPixelInArea(area, x, y))
-   if (found) {
-      return true
-   } else {
-      return false
-   }
-}
-
 const mapAreaFrom = (
    image: Image,
    startX: number,
@@ -325,6 +303,44 @@ const getPaintColorsByAreaSize = (
    return result
 }
 
+const getPaintColorsByAreaNumber = (
+   areas: Array<Array<[number, number]>>,
+   colors: ColoringSettings
+): Array<{
+   area: Array<Array<number>>
+   color: Array<number>
+}> => {
+   const sortedColors = colors.colorsToUse.sort(
+      (a, b) => (a.minimumAreaThreshold || 0) - (b.minimumAreaThreshold || 0)
+   )
+
+   const sortedAreas = areas.slice().sort((a, b) => a.length - b.length)
+
+   const result: Array<{
+      area: Array<Array<number>>
+      color: Array<number>
+   }> = []
+
+   for (const color of sortedColors) {
+      for (const area of sortedAreas) {
+         const firstAreaSmallerThan =
+            areas.findIndex(
+               (comparedArea) => comparedArea.length < area.length
+            ) || 0
+
+         const proportionLargerThan = firstAreaSmallerThan / areas.length
+         if (proportionLargerThan >= (color.minimumAreaThreshold || 0)) {
+            result.push({
+               area: area,
+               color: [color.color.r, color.color.g, color.color.b],
+            })
+         }
+      }
+   }
+
+   return result
+}
+
 const colorImageWithAreas = async (
    image: Image,
    settings: ColoringSettings
@@ -389,7 +405,15 @@ const colorImageWithAreas = async (
 
    const sortedAreas = sortAreasBySize(areas)
 
-   const paintColors = getPaintColorsByAreaSize(sortedAreas, settings)
+   let paintColors: ReturnType<
+      typeof getPaintColorsByAreaNumber | typeof getPaintColorsByAreaSize
+   > = []
+
+   if (settings.colorByAreaNumber) {
+      paintColors = getPaintColorsByAreaNumber(sortedAreas, settings)
+   } else if (settings.colorByAreaSize) {
+      paintColors = getPaintColorsByAreaSize(sortedAreas, settings)
+   }
 
    for (const area of paintColors) {
       paintPixels(image, area.area, area.color)
