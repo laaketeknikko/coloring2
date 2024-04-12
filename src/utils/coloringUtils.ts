@@ -97,7 +97,7 @@ const isBorderWithinRadius = (
    return false
 }
 
-const paintAreaFrom = (
+const colorAreaFrom = (
    image: Image,
    x: number,
    y: number,
@@ -142,7 +142,10 @@ const paintAreaFrom = (
    return points
 }
 
-const colorImage = async (image: Image, settings: ColoringSettings) => {
+const colorImageWithoutAreas = async (
+   image: Image,
+   settings: ColoringSettings
+) => {
    const width = image.width
    const height = image.height
 
@@ -157,9 +160,6 @@ const colorImage = async (image: Image, settings: ColoringSettings) => {
       settings.borderColorTolerance.g,
       settings.borderColorTolerance.b,
    ]
-
-   console.log("border color: ", borderColor)
-   console.log("Tolerance: ", borderTolerance)
 
    for (let x = 0; x < width; x++) {
       for (let y = 0; y < height; y++) {
@@ -185,7 +185,7 @@ const colorImage = async (image: Image, settings: ColoringSettings) => {
             )
          ) {
             usedColors.push(paintColor)
-            const area = paintAreaFrom(
+            const area = colorAreaFrom(
                image,
                x,
                y,
@@ -204,8 +204,193 @@ const colorImage = async (image: Image, settings: ColoringSettings) => {
    }
 }
 
+/**
+ *
+ *
+ * Mapping algorithm
+ */
+
+const isPixelInArea = (area: Array<Array<number>>, x: number, y: number) => {
+   const found = area.find((point) => point[0] === x && point[1] === y)
+   if (found) {
+      return true
+   } else {
+      return false
+   }
+}
+
+const isPixelInAreas = (
+   areas: Array<Array<Array<number>>>,
+   x: number,
+   y: number
+) => {
+   const found = areas.find((area) => isPixelInArea(area, x, y))
+   if (found) {
+      return true
+   } else {
+      return false
+   }
+}
+
+const mapAreaFrom = (
+   image: Image,
+   x: number,
+   y: number,
+   borderColor: Array<number>,
+   borderTolerance: Array<number> = [0, 0, 0],
+   borderPatching: number
+) => {
+   const queue: Array<[number, number]> = [[x, y]]
+   const points: Array<[number, number]> = []
+
+   while (queue.length > 0) {
+      const [x, y] = queue.shift()!
+
+      if (x < 0 || y < 0 || x >= image.width || y >= image.height) {
+         continue
+      }
+
+      const pixel = image.getPixelXY(x, y)
+
+      if (
+         !isPixelInArea(points, x, y) &&
+         !colorIsWithinTolerance(pixel, borderColor, borderTolerance) &&
+         !isBorderWithinRadius(x, y, image, borderColor, borderPatching)
+      ) {
+         points.push([x, y])
+         queue.push(
+            [x - 1, y - 1],
+            [x, y - 1],
+            [x + 1, y - 1],
+            [x - 1, y],
+            [x + 1, y],
+            [x - 1, y + 1],
+            [x, y + 1],
+            [x + 1, y + 1]
+         )
+      }
+   }
+
+   return points
+}
+
+const sortAreasBySize = (areas: Array<Array<[number, number]>>) => {
+   return areas.slice(0).sort((a, b) => b.length - a.length)
+}
+
+const paintPixels = (
+   image: Image,
+   area: Array<Array<number>>,
+   color: Array<number>
+) => {
+   for (let i = 0; i < area.length; i++) {
+      const point = area[i]
+      image.setPixelXY(point[0], point[1], color)
+   }
+}
+
+const getPaintColorsByAreaSize = (
+   areas: Array<Array<[number, number]>>,
+   colors: ColoringSettings
+): Array<{
+   area: Array<Array<number>>
+   color: Array<number>
+}> => {
+   const sortedColors = colors.colorsToUse.sort(
+      (a, b) => (a.minimumAreaThreshold || 0) - (b.minimumAreaThreshold || 0)
+   )
+
+   const result: Array<{
+      area: Array<Array<number>>
+      color: Array<number>
+   }> = []
+
+   const totalArea = areas.reduce((acc, area) => acc + area.length, 0)
+
+   for (const color of sortedColors) {
+      for (const area of areas) {
+         const areaProportion = area.length / totalArea
+         if (areaProportion >= (color.minimumAreaThreshold || 0)) {
+            result.push({
+               area: area,
+               color: [color.color.r, color.color.g, color.color.b],
+            })
+         }
+      }
+   }
+
+   return result
+}
+
+const colorImageWithAreas = async (
+   image: Image,
+   settings: ColoringSettings
+) => {
+   const width = image.width
+   const height = image.height
+   const areas: Array<Array<[number, number]>> = []
+
+   const borderColor = [
+      settings.borderColor.r,
+      settings.borderColor.g,
+      settings.borderColor.b,
+   ]
+   const borderTolerance = [
+      settings.borderColorTolerance.r,
+      settings.borderColorTolerance.g,
+      settings.borderColorTolerance.b,
+   ]
+
+   for (let x = 0; x < width; x++) {
+      for (let y = 0; y < height; y++) {
+         const pixel = image.getPixelXY(x, y)
+
+         const isMapped = isPixelInAreas(areas, x, y)
+
+         if (
+            !isMapped &&
+            !colorIsWithinTolerance(pixel, borderColor, borderTolerance) &&
+            !isBorderWithinRadius(
+               x,
+               y,
+               image,
+               borderColor,
+               settings.borderPatching
+            )
+         ) {
+            const area = mapAreaFrom(
+               image,
+               x,
+               y,
+               borderColor,
+               borderTolerance,
+               settings.borderPatching
+            )
+
+            console.log("got area: ", area)
+
+            if (area.length > 0) {
+               areas.push(area)
+            }
+         }
+      }
+   }
+
+   const sortedAreas = sortAreasBySize(areas)
+
+   const paintColors = getPaintColorsByAreaSize(sortedAreas, settings)
+
+   for (const area of paintColors) {
+      paintPixels(image, area.area, area.color)
+   }
+}
+
 const processImage = async (image: Image, settings: ColoringSettings) => {
-   await colorImage(image, settings)
+   if (settings.colorByAreaNumber || settings.colorByAreaSize) {
+      await colorImageWithAreas(image, settings)
+   } else {
+      await colorImageWithoutAreas(image, settings)
+   }
 
    return image
 }
