@@ -234,14 +234,15 @@ const isPixelInAreas = (
 
 const mapAreaFrom = (
    image: Image,
-   x: number,
-   y: number,
+   startX: number,
+   startY: number,
+   mappedPoints: Array<Array<boolean>>,
    borderColor: Array<number>,
    borderTolerance: Array<number> = [0, 0, 0],
    borderPatching: number
 ) => {
-   const queue: Array<[number, number]> = [[x, y]]
-   const points: Array<[number, number]> = []
+   const queue: Array<[number, number]> = [[startX, startY]]
+   const area: Array<[number, number]> = []
 
    while (queue.length > 0) {
       const [x, y] = queue.shift()!
@@ -251,13 +252,15 @@ const mapAreaFrom = (
       }
 
       const pixel = image.getPixelXY(x, y)
+      const isMapped = mappedPoints[x] && mappedPoints[x][y]
 
       if (
-         !isPixelInArea(points, x, y) &&
+         !isMapped &&
          !colorIsWithinTolerance(pixel, borderColor, borderTolerance) &&
          !isBorderWithinRadius(x, y, image, borderColor, borderPatching)
       ) {
-         points.push([x, y])
+         mappedPoints[x][y] = true
+         area.push([x, y])
          queue.push(
             [x - 1, y - 1],
             [x, y - 1],
@@ -271,7 +274,7 @@ const mapAreaFrom = (
       }
    }
 
-   return points
+   return { area, mappedPoints }
 }
 
 const sortAreasBySize = (areas: Array<Array<[number, number]>>) => {
@@ -341,11 +344,16 @@ const colorImageWithAreas = async (
       settings.borderColorTolerance.b,
    ]
 
+   let allMappedPoints: Array<Array<boolean>> = []
+   for (let i = 0; i < width; i++) {
+      allMappedPoints.push(Array(height).fill(false))
+   }
+
    for (let x = 0; x < width; x++) {
       for (let y = 0; y < height; y++) {
          const pixel = image.getPixelXY(x, y)
 
-         const isMapped = isPixelInAreas(areas, x, y)
+         const isMapped = allMappedPoints[x] && allMappedPoints[x][y]
 
          if (
             !isMapped &&
@@ -358,14 +366,17 @@ const colorImageWithAreas = async (
                settings.borderPatching
             )
          ) {
-            const area = mapAreaFrom(
+            const { area, mappedPoints } = mapAreaFrom(
                image,
                x,
                y,
+               allMappedPoints,
                borderColor,
                borderTolerance,
                settings.borderPatching
             )
+
+            allMappedPoints = mappedPoints
 
             console.log("got area: ", area)
 
