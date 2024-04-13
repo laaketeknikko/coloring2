@@ -83,7 +83,8 @@ const CustomGalleria = () => {
    const galleria = useMemo(() => {
       return (
          <Galleria
-            showIndicatorsOnItem={true}
+            showThumbnailNavigators={false}
+            showIndicatorsOnItem={false}
             showItemNavigatorsOnHover={true}
             indicatorsPosition="top"
             changeItemOnIndicatorHover={true}
