@@ -8,3 +8,10 @@
 .p-inputgroup-addon {
    padding: 2px;
 }
+
+/*
+Prevent react-color-picker fields from expanding beyond the container
+*/
+.rcp-fields-floor {
+   grid-template-columns: repeat(auto-fit, 100%) !important;
+}

@@ -6,12 +6,14 @@ import { PrimeIcons } from "primereact/api"
 export interface SingleColorSelectionColorProps {
    color: ColoringSettingsColor
    onRemove: (color: ColoringSettingsColor) => void
+   threshold: number
    onThresholdChange: (color: ColoringSettingsColor) => void
 }
 
 const SingleColorSelectionColor = ({
    color,
    onRemove,
+   threshold,
    onThresholdChange,
 }: SingleColorSelectionColorProps) => {
    const handleColorRemove = () => {
@@ -41,6 +43,11 @@ const SingleColorSelectionColor = ({
             <div className="">
                <div className="p-inputgroup">
                   <InputNumber
+                     format={false}
+                     min={0}
+                     max={100}
+                     value={(threshold || 0) * 100}
+                     maxFractionDigits={10}
                      suffix=" %"
                      placeholder="Threshold %"
                      className="p-inputtext-sm w-full"

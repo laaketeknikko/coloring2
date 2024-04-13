@@ -38,9 +38,10 @@ const ColorSelectionList = () => {
          return (
             <div
                key={`${color.id}`}
-               className="col-4 sm:col-12 md:col-4 lg:col-3 xl:col-2"
+               className="col-12 sm:col-12 md:col-6 lg:col-4 xl:col-3"
             >
                <SingleColorSelectionColor
+                  threshold={color.minimumAreaThreshold || 0}
                   color={color}
                   onRemove={handleColorRemove}
                   onThresholdChange={handleColorThresholdChange}
