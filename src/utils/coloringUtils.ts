@@ -310,9 +310,11 @@ const getPaintColorsByAreaNumber = (
    area: Array<Array<number>>
    color: Array<number>
 }> => {
-   const sortedColors = colors.colorsToUse.sort(
-      (a, b) => (a.minimumAreaThreshold || 0) - (b.minimumAreaThreshold || 0)
-   )
+   const sortedColors = colors.colorsToUse
+      .slice()
+      .sort(
+         (a, b) => (b.minimumAreaThreshold || 0) - (a.minimumAreaThreshold || 0)
+      )
 
    const sortedAreas = areas.slice().sort((a, b) => a.length - b.length)
 
@@ -321,19 +323,19 @@ const getPaintColorsByAreaNumber = (
       color: Array<number>
    }> = []
 
-   for (const color of sortedColors) {
-      for (const area of sortedAreas) {
-         const firstAreaSmallerThan =
-            areas.findIndex(
-               (comparedArea) => comparedArea.length < area.length
-            ) || 0
+   for (const area of sortedAreas) {
+      const areaProportion =
+         (sortedAreas.findLastIndex((a) => {
+            return a.length < area.length
+         }) || 0) / sortedAreas.length
 
-         const proportionLargerThan = firstAreaSmallerThan / areas.length
-         if (proportionLargerThan >= (color.minimumAreaThreshold || 0)) {
+      for (const color of sortedColors) {
+         if (areaProportion >= (color.minimumAreaThreshold || 0)) {
             result.push({
                area: area,
                color: [color.color.r, color.color.g, color.color.b],
             })
+            break
          }
       }
    }
