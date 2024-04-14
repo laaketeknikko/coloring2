@@ -63,15 +63,25 @@ function App() {
                         icon={`${PrimeIcons.UPLOAD}`}
                         onClick={() => setShowUploadPanel(true)}
                      />
+                     <span className="text-primary-700 text-2xl">
+                        {uploadedFiles.length}
+                     </span>
                   </>
                }
                center={
                   <>
+                     <p className="">
+                        <span className="text-primary-700 text-2xl">
+                           {uploadedFiles.length} ({processingQueue.length})
+                        </span>
+                     </p>
+
                      <Button
                         className="m-1 border-circle"
                         icon={`${PrimeIcons.PLAY}`}
                         onClick={runColoring}
                      ></Button>
+
                      <Button
                         className="m-1 border-circle"
                         icon={`${PrimeIcons.DOWNLOAD}`}
@@ -79,7 +89,20 @@ function App() {
                            zipImages(processedImages, onImagesZipped)
                         }}
                      ></Button>
+                     <p>
+                        <span className="text-primary-700 text-2xl">
+                           {processedImages.length}
+                        </span>
+                     </p>
                   </>
+               }
+               end={
+                  <Button
+                     style={{ aspectRatio: 1 }}
+                     size="large"
+                     className="border-circle bg-blue-200 border-0"
+                     icon={`${PrimeIcons.INFO_CIRCLE} text-2xl text-white`}
+                  ></Button>
                }
             ></Toolbar>
 

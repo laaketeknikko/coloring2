@@ -20,9 +20,12 @@ const SingleColorSelectionColor = ({
       onRemove(color)
    }
 
-   const handleThresholdChange = (threshold: number) => {
+   const handleThresholdChange = (threshold: number | null) => {
       // Change threshold from 0-100 to 0-1
-      onThresholdChange({ ...color, minimumAreaThreshold: threshold / 100 })
+      onThresholdChange({
+         ...color,
+         minimumAreaThreshold: (threshold || 0) / 100,
+      })
    }
 
    return (
@@ -46,13 +49,13 @@ const SingleColorSelectionColor = ({
                      format={false}
                      min={0}
                      max={100}
-                     value={(threshold || 0) * 100}
+                     value={threshold * 100}
                      maxFractionDigits={10}
                      suffix=" %"
                      placeholder="Threshold %"
                      className="p-inputtext-sm w-full"
                      inputClassName="w-full"
-                     onChange={(e) => handleThresholdChange(e.value || 0)}
+                     onChange={(e) => handleThresholdChange(e.value)}
                   />
                   <div className="p-inputgroup-addon bg-primary-500">
                      <i className={`${PrimeIcons.INFO_CIRCLE}`} />

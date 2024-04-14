@@ -7,20 +7,25 @@ import { Button } from "primereact/button"
 import { PrimeIcons } from "primereact/api"
 import { Sidebar } from "primereact/sidebar"
 import { ImageWithSettings } from "../../types/types"
-import { FlateCallback } from "fflate"
-import { zipImages } from "../../utils/zipping"
-import { ImageActionButtons } from "../utils/ImageActionButtons"
 
-// TODO:
-// 1. Hide the thumbnails
-// 2. Show own image scroller in footer component
-// 3. control shown image with activeIndex
-// 4. Listen to onItemChange event and update activeIndex
+import { ImageActionButtons } from "../utils/ImageActionButtons"
+import Image from "image-js"
+import { Skeleton } from "primereact/skeleton"
 
 const CustomGalleria = () => {
    const [processedImages, setProcessedImages] = useAtom(processedImagesAtom)
 
    const itemTemplate = (item: ImageWithSettings) => {
+      if (item.id === "placeholder") {
+         return (
+            <Skeleton
+               animation="none"
+               borderRadius="30px"
+               height="10rem"
+            ></Skeleton>
+         )
+      }
+
       return (
          <div style={{ width: "100%", height: "70vh" }}>
             <img
@@ -56,6 +61,10 @@ const CustomGalleria = () => {
 
    const thumbnailTemplate = useCallback(
       (item: ImageWithSettings) => {
+         if (item.id === "placeholder") {
+            return <Skeleton height="10rem"></Skeleton>
+         }
+
          return (
             <div>
                <img
@@ -81,6 +90,27 @@ const CustomGalleria = () => {
    const [fullScreenGallery, setFullScreenGallery] = useState(false)
 
    const galleria = useMemo(() => {
+      const placeHolder: Array<ImageWithSettings> = [
+         {
+            id: "placeholder",
+            imageData: {
+               dataUrl: "",
+               image: new Image(),
+               meta: {
+                  name: "placeholder",
+               },
+            },
+            settings: {
+               borderColor: { r: 0, g: 0, b: 0 },
+               borderColorTolerance: { r: 0, g: 0, b: 0 },
+               borderPatching: 0,
+               colorByAreaNumber: false,
+               colorByAreaSize: false,
+               colorsToUse: [],
+            },
+         },
+      ]
+
       return (
          <Galleria
             showThumbnailNavigators={false}
@@ -90,38 +120,15 @@ const CustomGalleria = () => {
             changeItemOnIndicatorHover={true}
             showIndicators={true}
             thumbnailsPosition="top"
-            value={processedImages}
+            value={processedImages.length === 0 ? placeHolder : processedImages}
             item={itemTemplate}
             thumbnail={thumbnailTemplate}
          />
       )
    }, [processedImages, thumbnailTemplate])
 
-   const onImagesZipped: FlateCallback = (error, data) => {
-      if (error) {
-         console.log(error)
-         return
-      }
-
-      const blob = new Blob([data], { type: "application/zip" })
-
-      const a = document.createElement("a")
-      a.href = URL.createObjectURL(blob)
-      a.download = "colored_images.zip"
-      a.click()
-      URL.revokeObjectURL(a.href)
-   }
-
    return (
       <>
-         <Button
-            icon={`${PrimeIcons.DOWNLOAD} mr-2`}
-            onClick={() => {
-               zipImages(processedImages, onImagesZipped)
-            }}
-         >
-            as zip
-         </Button>
          <Button
             icon={`${PrimeIcons.WINDOW_MAXIMIZE}`}
             onClick={() => {
