@@ -1,6 +1,6 @@
 //import { useAtom } from "jotai"
 //import { uploadedFilesAtom } from "../../atoms/atoms"
-import { Colorer } from "../Colorer/Colorer"
+
 import { ColoringProcessor } from "../ColoringProcessor/ColoringProcessor"
 import { CustomGalleria } from "../Galleria/CustomGalleria"
 //import { ImageScroller } from "../ImageScroller"
@@ -22,7 +22,7 @@ const ImageProcessingPanel = () => {
             />
          </div>
    */}
-         <Colorer />
+
          <CustomGalleria />
          <ColoringProcessor />
       </>
