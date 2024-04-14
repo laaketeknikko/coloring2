@@ -5,11 +5,11 @@ import { ColorSelection } from "./ColorSelection/ColorSelection"
 const Settings = () => {
    return (
       <div className="grid">
-         <div className="col-5 sm:col-4 md:col-3 lg:col-2 xl:col-2">
+         <div className="col-12 sm:col-12 md:col-12 lg:col-12 xl:col-12">
             <AlgorithmSelection />
             <BorderSettings />
          </div>
-         <div className="col-7 sm:col-8 md:col-9 lg:col-10 xl:col-10">
+         <div className="col-12 sm:col-12 md:col-12 lg:col-12 xl:col-12">
             <ColorSelection />
          </div>
       </div>

@@ -30,10 +30,10 @@ const ColorSelection = () => {
 
    return (
       <div className="grid">
-         <div className="col-6 sm:col-7 md:col-4 lg:col-3 xl:col-3">
+         <div className="col-6 sm:col-4 md:col-5 lg:col-4 xl:col-4">
             <ColorerColorsPicker onSelectColor={handleColorAdded} />
          </div>
-         <div className="col-6 sm:col-5 md:col-8 lg:col-9 xl:col-9">
+         <div className="col-6 sm:col-8 md:col-7 lg:col-8 xl:col-8">
             <ScrollPanel>
                <ColorSelectionList />
             </ScrollPanel>

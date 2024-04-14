@@ -15,3 +15,11 @@ Prevent react-color-picker fields from expanding beyond the container
 .rcp-fields-floor {
    grid-template-columns: repeat(auto-fit, 100%) !important;
 }
+
+body {
+   margin: 0;
+   margin-left: 2px;
+   margin-right: 2px;
+
+   padding: 0;
+}
