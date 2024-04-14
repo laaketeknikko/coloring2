@@ -18,6 +18,7 @@ import {
 import { useAtom } from "jotai"
 import { zipImages } from "./utils/zipping"
 import { FlateCallback } from "fflate"
+import { HelpButton } from "./utils/HelpButton"
 
 function App() {
    const [showUploadPanel, setShowUploadPanel] = useState(false)
@@ -96,14 +97,7 @@ function App() {
                      </p>
                   </>
                }
-               end={
-                  <Button
-                     style={{ aspectRatio: 1 }}
-                     size="large"
-                     className="border-circle bg-blue-200 border-0"
-                     icon={`${PrimeIcons.INFO_CIRCLE} text-2xl text-white`}
-                  ></Button>
-               }
+               end={<HelpButton size="small">Help me!</HelpButton>}
             ></Toolbar>
 
             <Sidebar

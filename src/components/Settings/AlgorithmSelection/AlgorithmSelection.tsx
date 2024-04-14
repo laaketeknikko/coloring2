@@ -11,27 +11,32 @@ const AlgorithmSelection = () => {
 
    return (
       <div>
-         <p>Coloring by area</p>
-         <label>
-            Number
-            <Checkbox
-               checked={colorByNumber}
-               onChange={() => {
-                  setColorByNumber(!colorByNumber)
-                  setColorBySize(false)
-               }}
-            />
-         </label>
-         <label>
-            Size
-            <Checkbox
-               checked={colorBySize}
-               onChange={() => {
-                  setColorBySize(!colorBySize)
-                  setColorByNumber(false)
-               }}
-            />
-         </label>
+         <p>Algorithm settings</p>
+         <div>
+            <span>Compare by: </span>
+            <label>
+               Number of areas
+               <Checkbox
+                  className="mx-1"
+                  checked={colorByNumber}
+                  onChange={() => {
+                     setColorByNumber(!colorByNumber)
+                     setColorBySize(false)
+                  }}
+               />
+            </label>
+            <label>
+               Size of area
+               <Checkbox
+                  className="mx-1"
+                  checked={colorBySize}
+                  onChange={() => {
+                     setColorBySize(!colorBySize)
+                     setColorByNumber(false)
+                  }}
+               />
+            </label>
+         </div>
       </div>
    )
 }
