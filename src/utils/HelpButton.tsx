@@ -5,8 +5,8 @@ import { PropsWithChildren, useRef } from "react"
 
 export interface HelpButtonProps {
    size: "small" | "large"
-   iconSize: string
-   height: string
+   iconSize?: string
+   height?: string
 }
 
 const HelpButton = ({

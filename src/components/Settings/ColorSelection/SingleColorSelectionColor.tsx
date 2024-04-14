@@ -1,7 +1,6 @@
 import { InputNumber } from "primereact/inputnumber"
 import { ColoringSettingsColor } from "../../../utils/ColoringSettings"
 import { RemoveButton } from "../../utils/RemoveButton"
-import { PrimeIcons } from "primereact/api"
 
 export interface SingleColorSelectionColorProps {
    color: ColoringSettingsColor
@@ -37,30 +36,27 @@ const SingleColorSelectionColor = ({
          }}
       >
          <div
-            className="flex flex-row gap-1 justify-content-start"
+            className="flex flex-row gap-1 justify-content-between"
             style={{ maxWidth: "100%" }}
          >
             <div style={{}} className="">
                <RemoveButton onRemove={handleColorRemove} id={color.id} />
             </div>
             <div className="">
-               <div className="p-inputgroup">
-                  <InputNumber
-                     format={false}
-                     min={0}
-                     max={100}
-                     value={threshold * 100}
-                     maxFractionDigits={10}
-                     suffix=" %"
-                     placeholder="Threshold %"
-                     className="p-inputtext-sm w-full"
-                     inputClassName="w-full"
-                     onChange={(e) => handleThresholdChange(e.value)}
-                  />
-                  <div className="p-inputgroup-addon bg-primary-500">
-                     <i className={`${PrimeIcons.INFO_CIRCLE}`} />
-                  </div>
-               </div>
+               <InputNumber
+                  id={color.id}
+                  tooltip="Threshold from 0 to 100 %."
+                  format={false}
+                  min={0}
+                  max={100}
+                  value={threshold * 100}
+                  maxFractionDigits={10}
+                  suffix=" %"
+                  placeholder="Threshold %"
+                  className="p-inputtext-sm w-full"
+                  inputClassName="w-full"
+                  onChange={(e) => handleThresholdChange(e.value)}
+               />
             </div>
          </div>
       </div>
