@@ -97,7 +97,11 @@ function App() {
                      </p>
                   </>
                }
-               end={<HelpButton size="small">Help me!</HelpButton>}
+               end={
+                  <HelpButton size="large" iconSize="text-4xl" height="2.5rem">
+                     Help me!
+                  </HelpButton>
+               }
             ></Toolbar>
 
             <Sidebar

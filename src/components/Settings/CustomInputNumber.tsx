@@ -1,14 +1,19 @@
 import { InputNumber } from "primereact/inputnumber"
+import { TooltipOptions } from "primereact/tooltip/tooltipoptions"
 
 export interface CustomInputNumberProps {
    inputId: string
    value: number
    onChange: (value: number) => void
+   tooltip?: string
+   tooltipOptions?: TooltipOptions
 }
 
 const CustomInputNumber = (props: CustomInputNumberProps) => {
    return (
       <InputNumber
+         tooltip={props.tooltip}
+         tooltipOptions={props.tooltipOptions}
          inputClassName="p-1"
          min={0}
          max={255}

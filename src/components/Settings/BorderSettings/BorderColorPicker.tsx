@@ -64,6 +64,7 @@ const BorderColorPicker = () => {
                <label htmlFor="border-color-tolerance-r">Tolerance</label>
             </span>
             <CustomInputNumber
+               tooltip="Red channel tolerance for outline color matching."
                value={globalBorderColorTolerance.r}
                inputId="border-color-tolerance-r"
                onChange={(value) => {
@@ -76,6 +77,7 @@ const BorderColorPicker = () => {
             />
 
             <CustomInputNumber
+               tooltip="Green channel tolerance for outline color matching."
                value={globalBorderColorTolerance.g}
                inputId="border-color-tolerance-g"
                onChange={(value) =>
@@ -88,6 +90,7 @@ const BorderColorPicker = () => {
             />
 
             <CustomInputNumber
+               tooltip="Blue channel tolerance for outline color matching."
                value={globalBorderColorTolerance.b}
                inputId="border-color-tolerance-b"
                onChange={(value) =>

@@ -4,6 +4,7 @@ import {
    globalColorByAreaNumber,
    globalColorByAreaSize,
 } from "../../../atoms/atoms"
+import { HelpButton } from "../../../utils/HelpButton"
 
 const AlgorithmSelection = () => {
    const [colorByNumber, setColorByNumber] = useAtom(globalColorByAreaNumber)
@@ -11,7 +12,15 @@ const AlgorithmSelection = () => {
 
    return (
       <div>
-         <p>Algorithm settings</p>
+         <p>
+            Algorithm settings{" "}
+            <HelpButton size={"small"}>
+               <p>
+                  Choose if the algorithm should color areas by their area size
+                  or their number.
+               </p>
+            </HelpButton>
+         </p>
          <div>
             <span>Compare by: </span>
             <label>

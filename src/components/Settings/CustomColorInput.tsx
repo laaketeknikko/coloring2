@@ -46,6 +46,7 @@ const CustomColorInput = ({
       <div className="p-inputgroup">
          <span className="p-inputgroup-addon p-0">
             <Dropdown
+               tooltip="Area outline color in the image."
                panelClassName="p-0"
                placeholder="RGB"
                value={selectedColorMode}
@@ -55,6 +56,8 @@ const CustomColorInput = ({
          </span>
          {selectedColorMode === "HEX" && (
             <InputText
+               tooltip="Hex value of the area outline color."
+               tooltipOptions={{ position: "right" }}
                value={selectedColor.hex}
                onChange={(event) => handleHexColorChange(event.target.value)}
             />
@@ -62,6 +65,8 @@ const CustomColorInput = ({
          {selectedColorMode === "RGB" && (
             <>
                <CustomInputNumber
+                  tooltip="Red value of the area outline color."
+                  tooltipOptions={{ position: "right" }}
                   inputId="r"
                   value={selectedColor.rgb.r}
                   onChange={(value) =>
@@ -74,6 +79,8 @@ const CustomColorInput = ({
                />
 
                <CustomInputNumber
+                  tooltip="Green value of the area outline color."
+                  tooltipOptions={{ position: "right" }}
                   inputId="g"
                   value={selectedColor.rgb.g}
                   onChange={(value) =>
@@ -86,6 +93,8 @@ const CustomColorInput = ({
                />
 
                <CustomInputNumber
+                  tooltip="Blue value of the area outline color."
+                  tooltipOptions={{ position: "right" }}
                   inputId="b"
                   value={selectedColor.rgb.b}
                   onChange={(value) =>

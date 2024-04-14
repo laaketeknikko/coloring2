@@ -3,7 +3,7 @@ import { globalBorderPatchingAtom } from "../../../atoms/atoms"
 import { CustomInputNumber } from "../CustomInputNumber"
 import { BorderColorPicker } from "./BorderColorPicker"
 
-const BorderSettings = () => {
+const OutlineSettings = () => {
    const [borderPatching, setBorderPatching] = useAtom(globalBorderPatchingAtom)
 
    return (
@@ -12,6 +12,12 @@ const BorderSettings = () => {
          <div className="p-inputgroup">
             <span className="p-inputgroup-addon">Patching</span>
             <CustomInputNumber
+               tooltipOptions={{ position: "right" }}
+               tooltip="The pixel distance from an outline pixel up to which a pixel is considered an outline pixel.
+            
+            This can be used to 'patch' small holes in broken outlines.
+            
+            Note: These pixels are not colored."
                value={borderPatching}
                inputId="border-color-patching"
                onChange={(event) => {
@@ -23,4 +29,4 @@ const BorderSettings = () => {
    )
 }
 
-export { BorderSettings }
+export { OutlineSettings }
