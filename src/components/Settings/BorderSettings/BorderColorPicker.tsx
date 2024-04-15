@@ -6,7 +6,7 @@ import {
    globalBorderColorAtom,
    globalBorderColorToleranceAtom,
 } from "../../../atoms/atoms"
-import { CustomColorInput, CustomColorInputColor } from "../CustomColorInput"
+import { BorderColorInput, CustomColorInputColor } from "../CustomColorInput"
 import { RGBToHex } from "../../../utils/imageUtils"
 
 const BorderColorPicker = () => {
@@ -53,7 +53,7 @@ const BorderColorPicker = () => {
          ></span>
 
          {/* Color input*/}
-         <CustomColorInput
+         <BorderColorInput
             color={{ rgb: borderColor, hex: borderHexColor }}
             onChange={handleBorderColorChange}
          />

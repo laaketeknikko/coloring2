@@ -20,7 +20,7 @@ const FileUploadPanel = () => {
             />
          </div>
 
-         <ScrollPanel style={{ width: "100%", height: "70vh" }}>
+         <ScrollPanel style={{ width: "100%" }}>
             <FileInput />
          </ScrollPanel>
       </>

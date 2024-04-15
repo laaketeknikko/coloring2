@@ -51,7 +51,7 @@ const ColorSelectionList = () => {
       })
    }, [globalColors, handleColorRemove, handleColorThresholdChange])
 
-   return <div className="grid h-screen">{colorElements}</div>
+   return <div className="grid max-h-30rem">{colorElements}</div>
 }
 
 export { ColorSelectionList }

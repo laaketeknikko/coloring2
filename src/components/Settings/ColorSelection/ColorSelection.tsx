@@ -30,9 +30,9 @@ const ColorSelection = () => {
    }
 
    return (
-      <div className="grid">
+      <div className="grid  bg-teal-50">
          <div className="col-12 text-center">
-            Color settings{" "}
+            Paint color settings{" "}
             <HelpButton size="small">
                <div className="max-w-30rem">
                   <p>
@@ -56,6 +56,7 @@ const ColorSelection = () => {
                </div>
             </HelpButton>
          </div>
+
          <div className="col-6 sm:col-4 md:col-5 lg:col-4 xl:col-4">
             <ColorerColorsPicker onSelectColor={handleColorAdded} />
          </div>

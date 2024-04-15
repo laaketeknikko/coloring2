@@ -54,11 +54,12 @@ function App() {
    }
 
    return (
-      <>
+      <div className="bg-green-50">
          <div style={{ maxWidth: "1600px", margin: "0 auto" }}>
             <Toolbar
+               className="bg-teal-50"
                start={
-                  <>
+                  <div>
                      <Button
                         className="m-1 border-circle"
                         icon={`${PrimeIcons.UPLOAD}`}
@@ -67,7 +68,7 @@ function App() {
                      <span className="text-primary-700 text-2xl">
                         {uploadedFiles.length}
                      </span>
-                  </>
+                  </div>
                }
                center={
                   <>
@@ -120,29 +121,8 @@ function App() {
                   <ImageProcessingPanel />
                </div>
             </div>
-
-            {/*
-         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-            <TabView>
-               <TabPanel
-                  header="Add files"
-                  leftIcon={`${PrimeIcons.UPLOAD} mr-2`}
-               >
-                  <FileUploadPanel />
-               </TabPanel>
-               <TabPanel header="Settings" leftIcon={`${PrimeIcons.COG} mr-2`}>
-                  <Settings />
-               </TabPanel>
-               <TabPanel header="Coloring" leftIcon={`${PrimeIcons.PLAY} mr-2`}>
-                  <div style={{ height: "70vh" }}>
-                     <ImageProcessingPanel />
-                  </div>
-               </TabPanel>
-            </TabView>
          </div>
-*/}
-         </div>
-      </>
+      </div>
    )
 }
 

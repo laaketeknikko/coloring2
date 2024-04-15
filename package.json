@@ -11,30 +11,30 @@
   },
   "dependencies": {
     "@uidotdev/usehooks": "^2.4.1",
+    "eslint": "^8.57.0",
     "fflate": "^0.8.2",
     "image-js": "^0.35.5",
-    "jotai": "^2.7.2",
+    "jotai": "^2.8.0",
     "primeflex": "^3.3.1",
     "primeicons": "^7.0.0",
-    "primereact": "^10.6.2",
+    "primereact": "^10.6.3",
     "react": "^18.2.0",
-    "react-color-palette": "^7.1.0",
+    "react-color-palette": "^7.1.1",
     "react-dom": "^18.2.0",
     "use-eye-dropper": "^1.6.1",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "@types/react": "^18.2.66",
-    "@types/react-dom": "^18.2.22",
+    "@types/react": "^18.2.78",
+    "@types/react-dom": "^18.2.25",
     "@types/uuid": "^9.0.8",
-    "@typescript-eslint/eslint-plugin": "^7.2.0",
-    "@typescript-eslint/parser": "^7.2.0",
+    "@typescript-eslint/eslint-plugin": "^7.6.0",
+    "@typescript-eslint/parser": "^7.6.0",
     "@vitejs/plugin-react": "^4.2.1",
-    "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
-    "sass": "^1.74.1",
-    "typescript": "^5.2.2",
-    "vite": "^5.2.0"
+    "sass": "^1.75.0",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.8"
   }
 }

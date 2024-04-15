@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { CustomColorInput, CustomColorInputColor } from "./CustomColorInput"
+import { BorderColorInput, CustomColorInputColor } from "./CustomColorInput"
 import { ColorPicker, ColorPickerChangeEvent } from "primereact/colorpicker"
 import { RGBToHex } from "../../utils/imageUtils"
 
@@ -37,7 +37,7 @@ const CustomColorPicker = () => {
                   onChange={handleColorPickerChange}
                />
             </span>
-            <CustomColorInput
+            <BorderColorInput
                color={color}
                onChange={handleCustomColorInputChange}
             />

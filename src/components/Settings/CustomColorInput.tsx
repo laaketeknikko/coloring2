@@ -20,7 +20,7 @@ const defaultColor: CustomColorInputColor = {
    hex: "#000000",
 }
 
-const CustomColorInput = ({
+const BorderColorInput = ({
    color = defaultColor,
    onChange,
 }: CustomColorInputProps) => {
@@ -44,6 +44,7 @@ const CustomColorInput = ({
 
    return (
       <div className="p-inputgroup">
+         <span className="p-inputgroup-addon ">Color</span>
          <span className="p-inputgroup-addon p-0">
             <Dropdown
                tooltip="Area outline color in the image."
@@ -111,4 +112,4 @@ const CustomColorInput = ({
    )
 }
 
-export { CustomColorInput }
+export { BorderColorInput }

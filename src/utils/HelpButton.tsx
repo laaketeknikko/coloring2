@@ -28,7 +28,9 @@ const HelpButton = ({
             className={`border-circle bg-blue-200 border-0 p-1`}
             icon={`${PrimeIcons.INFO_CIRCLE} ${iconSize} text-white`}
          ></Button>
-         <OverlayPanel ref={overlayRef}>{children}</OverlayPanel>
+         <OverlayPanel className="max-w-30rem" ref={overlayRef}>
+            {children}
+         </OverlayPanel>
       </>
    )
 }
