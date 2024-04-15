@@ -2,8 +2,9 @@ import { FileUpload, FileUploadSelectEvent } from "primereact/fileupload"
 import { useAtom, useAtomValue } from "jotai"
 import {
    globalColoringSettingsAtom,
+   processingQueueAtom,
    selectedFilesAtom,
-   uploadedFilesAtom,
+   uploadedImagesAtom,
 } from "../../atoms/atoms"
 import { useEffect, useRef } from "react"
 import { imagesFromFiles } from "../../utils/imageUtils"
@@ -15,7 +16,8 @@ const FileInput = () => {
 
    const globalColoringSettings = useAtomValue(globalColoringSettingsAtom)
 
-   const [uploadedFiles, setUploadedFiles] = useAtom(uploadedFilesAtom)
+   const [uploadedFiles, setUploadedFiles] = useAtom(uploadedImagesAtom)
+   const [processingQueue, setProcessingQueue] = useAtom(processingQueueAtom)
 
    const handleFileChange = (event: FileUploadSelectEvent) => {
       const fileList: Array<File> = []
@@ -49,7 +51,10 @@ const FileInput = () => {
          }
       )
 
+      console.log("setting the shit")
+
       setUploadedFiles([...uploadedFiles, ...imagesWithSettings])
+      setProcessingQueue([...processingQueue, ...imagesWithSettings])
       setSelectedFiles([])
    }
 
