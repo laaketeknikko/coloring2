@@ -1,11 +1,11 @@
 import { ScrollPanel } from "primereact/scrollpanel"
 import { FileInput } from "../FileInput/FileInput"
 import { ImageScroller } from "../ImageScroller"
-import { uploadedFilesAtom } from "../../atoms/atoms"
+import { uploadedImagesAtom } from "../../atoms/atoms"
 import { useAtom } from "jotai"
 
 const FileUploadPanel = () => {
-   const [uploadedFiles, setUploadedFiles] = useAtom(uploadedFilesAtom)
+   const [uploadedFiles, setUploadedFiles] = useAtom(uploadedImagesAtom)
 
    const handleImageRemove = (id: string) => {
       setUploadedFiles(uploadedFiles.filter((image) => image.id !== id))

@@ -2,12 +2,12 @@ import { Button } from "primereact/button"
 import {
    globalColoringSettingsAtom,
    processingQueueAtom,
-   uploadedFilesAtom,
+   uploadedImagesAtom,
 } from "../../atoms/atoms"
 import { useAtom, useAtomValue } from "jotai"
 
 const Colorer = () => {
-   const uploadedFiles = useAtomValue(uploadedFilesAtom)
+   const uploadedFiles = useAtomValue(uploadedImagesAtom)
    const [processingQueue, setProcessingQueue] = useAtom(processingQueueAtom)
    const globalSettings = useAtomValue(globalColoringSettingsAtom)
 

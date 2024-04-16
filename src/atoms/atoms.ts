@@ -6,12 +6,13 @@ import {
 } from "../utils/ColoringSettings"
 
 const selectedFilesAtom = atom<Array<File>>([])
-const uploadedFilesAtom = atom<Array<ImageWithSettings>>([])
+const uploadedImagesAtom = atom<Array<ImageWithSettings>>([])
 
 const processingQueueAtom = atom<Array<ImageWithSettings>>([])
 const processedImagesAtom = atom<Array<ImageWithSettings>>([])
 
 const newestProcessedImageAtom = atom<ImageWithSettings | null>(null)
+const isProcessingPausedAtom = atom(true)
 
 const globalBorderColorAtom = atom({
    r: 0,
@@ -47,7 +48,7 @@ const globalColoringSettingsAtom = atom<ColoringSettings>((get) => {
 })
 
 export {
-   uploadedFilesAtom,
+   uploadedImagesAtom,
    processedImagesAtom,
    newestProcessedImageAtom,
    selectedFilesAtom,
@@ -59,4 +60,5 @@ export {
    processingQueueAtom,
    globalColorByAreaSize,
    globalColorByAreaNumber,
+   isProcessingPausedAtom,
 }

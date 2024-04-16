@@ -10,33 +10,27 @@ import { Button } from "primereact/button"
 
 import { Sidebar } from "primereact/sidebar"
 import {
-   globalColoringSettingsAtom,
+   isProcessingPausedAtom,
    processedImagesAtom,
    processingQueueAtom,
-   uploadedFilesAtom,
+   uploadedImagesAtom,
 } from "./atoms/atoms"
 import { useAtom } from "jotai"
 import { zipImages } from "./utils/zipping"
 import { FlateCallback } from "fflate"
 import { HelpButton } from "./utils/HelpButton"
+import { ImageViewer } from "./components/ImageViewer/ImageViewer"
 
 function App() {
    const [showUploadPanel, setShowUploadPanel] = useState(false)
 
-   const [processingQueue, setProcessingQueue] = useAtom(processingQueueAtom)
-   const [uploadedFiles] = useAtom(uploadedFilesAtom)
+   const [processingQueue] = useAtom(processingQueueAtom)
+   const [uploadedFiles] = useAtom(uploadedImagesAtom)
    const [processedImages] = useAtom(processedImagesAtom)
-   const [globalSettings] = useAtom(globalColoringSettingsAtom)
 
-   const runColoring = (event: React.SyntheticEvent) => {
-      event?.preventDefault()
-
-      const newQueue = [...processingQueue, ...uploadedFiles].map((image) => {
-         return { ...image, settings: globalSettings }
-      })
-
-      setProcessingQueue(newQueue)
-   }
+   const [isProcessingPaused, setIsProcessingPaused] = useAtom(
+      isProcessingPausedAtom
+   )
 
    const onImagesZipped: FlateCallback = (error, data) => {
       if (error) {
@@ -74,14 +68,24 @@ function App() {
                   <>
                      <p className="">
                         <span className="text-primary-700 text-2xl">
-                           {uploadedFiles.length} ({processingQueue.length})
+                           {processingQueue.length}
                         </span>
                      </p>
 
                      <Button
                         className="m-1 border-circle"
-                        icon={`${PrimeIcons.PLAY}`}
-                        onClick={runColoring}
+                        icon={`${
+                           isProcessingPaused
+                              ? PrimeIcons.PLAY
+                              : PrimeIcons.PAUSE
+                        }`}
+                        onClick={() => {
+                           if (isProcessingPaused) {
+                              setIsProcessingPaused(false)
+                           } else {
+                              setIsProcessingPaused(true)
+                           }
+                        }}
                      ></Button>
 
                      <Button
@@ -114,6 +118,9 @@ function App() {
             </Sidebar>
 
             <div className="grid">
+               <div className="col-12">
+                  <ImageViewer />
+               </div>
                <div className="col-12 sm:col-12 md:col-6 lg:col-5 xl:col-4">
                   <Settings />
                </div>
