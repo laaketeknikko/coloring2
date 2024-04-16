@@ -3,7 +3,6 @@ import { ImageWithSettings } from "../../types/types"
 import { PrimeIcons } from "primereact/api"
 import { Button } from "primereact/button"
 import { Checkbox } from "primereact/checkbox"
-import { ScrollPanel } from "primereact/scrollpanel"
 
 export interface ImageListProps {
    images: Array<{ image: ImageWithSettings; isSelected: boolean }>
@@ -31,10 +30,14 @@ const ImageList = ({
          return (
             <div
                key={image.image.id}
-               className="col-6 sm:col-4 md:col-3 lg:col-2 xl:col-1"
+               className="col-12 sm:col-6 md:col-4 lg:col-3 xl:col-2
+               border-round-lg p-1"
             >
-               <div className="grid">
-                  <div className="col-2">
+               <div className="grid bg-green-100 m-1 shadow-2 h-full">
+                  <div
+                     className="col-2 p-0 m-0
+                  "
+                  >
                      {onImageSelect && (
                         <Checkbox
                            checked={image.isSelected}
@@ -56,7 +59,7 @@ const ImageList = ({
                         ></Button>
                      )}
                   </div>
-                  <div className="col-10">
+                  <div className="col-10 p-0 m-0 align-self-center text-center">
                      <img
                         onClick={() => toggleImageSelected(image.image.id)}
                         src={image.image.imageData.dataUrl}
@@ -77,9 +80,9 @@ const ImageList = ({
    ])
 
    return (
-      <ScrollPanel className="h-30rem">
+      <div className="h-30rem overflow-y-auto overflow-x-hidden p-1">
          <div className="grid">{imageList}</div>
-      </ScrollPanel>
+      </div>
    )
 }
 

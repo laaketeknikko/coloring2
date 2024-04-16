@@ -114,12 +114,14 @@ const ImageViewer = () => {
    const addImagesToQueue = (
       images: Array<{ image: ImageWithSettings; isSelected: boolean }>
    ) => {
-      const queuedImages = images.map((image) => {
-         return {
-            ...image.image,
-            id: v4(),
-         }
-      })
+      const queuedImages = images
+         .filter((image) => image.isSelected)
+         .map((image) => {
+            return {
+               ...image.image,
+               id: v4(),
+            }
+         })
 
       setProcessingQueue([...processingQueue, ...queuedImages])
    }
@@ -152,14 +154,36 @@ const ImageViewer = () => {
 
    return (
       <Panel
-         className="m-0 p-0"
+         pt={{
+            content: {
+               className: "bg-teal-50",
+            },
+         }}
+         className="m-0 p-0 bg-yellow-100"
          ref={panelRef}
          headerTemplate={headerTemplate}
          toggleable
          collapsed={collapsed}
       >
-         <TabView renderActiveOnly={false} className="m-0 p-0">
-            <TabPanel header="Uploaded images" className="">
+         <TabView
+            renderActiveOnly={false}
+            className="m-0 p-0"
+            pt={{
+               nav: {
+                  className: "bg-yellow-50",
+               },
+               navContainer: {
+                  className: "bg-yellow-50",
+               },
+               navContent: {
+                  className: "bg-yellow-50",
+               },
+               panelContainer: {
+                  className: "bg-green-50",
+               },
+            }}
+         >
+            <TabPanel header="Uploaded images" className="bg-teal-50">
                <div className="">
                   <ImageList
                      onImageRemove={handleUploadedImageRemove}
