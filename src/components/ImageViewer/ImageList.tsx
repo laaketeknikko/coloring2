@@ -1,11 +1,13 @@
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useMemo } from "react"
 import { ImageWithSettings } from "../../types/types"
 import { PrimeIcons } from "primereact/api"
 import { Button } from "primereact/button"
 import { Checkbox } from "primereact/checkbox"
+import { ScrollPanel } from "primereact/scrollpanel"
 
 export interface ImageListProps {
-   images: Array<ImageWithSettings>
+   images: Array<{ image: ImageWithSettings; isSelected: boolean }>
+
    onImageRemove?: (id: string) => void
    onImageSelect?: (id: string) => void
    onImageDownload?: (id: string) => void
@@ -17,49 +19,47 @@ const ImageList = ({
    onImageRemove,
    onImageSelect,
 }: ImageListProps) => {
-   const [selectedImages, setSelectedImages] = useState(
-      new Set(images.map((image) => image.id))
-   )
-
    const toggleImageSelected = useCallback(
       (id: string) => {
-         if (selectedImages.has(id)) {
-            selectedImages.delete(id)
-            setSelectedImages(new Set(selectedImages))
-         } else {
-            setSelectedImages(new Set(selectedImages.add(id)))
-         }
-
-         console.log("set: ", selectedImages)
-
          onImageSelect && onImageSelect(id)
       },
-      [onImageSelect, selectedImages]
+      [onImageSelect]
    )
 
    const imageList = useMemo(() => {
       return images.map((image) => {
          return (
             <div
-               key={image.id}
+               key={image.image.id}
                className="col-6 sm:col-4 md:col-3 lg:col-2 xl:col-1"
             >
                <div className="grid">
                   <div className="col-2">
+                     {onImageSelect && (
+                        <Checkbox
+                           checked={image.isSelected}
+                           onChange={() => toggleImageSelected(image.image.id)}
+                        />
+                     )}
                      {onImageRemove && (
                         <Button
                            icon={`${PrimeIcons.TIMES}`}
                            onClick={() => {
-                              onImageRemove(image.id)
+                              onImageRemove(image.image.id)
                            }}
                         ></Button>
                      )}
-                     <Checkbox checked={selectedImages.has(image.id)} />
+                     {onImageDownload && (
+                        <Button
+                           icon={`${PrimeIcons.DOWNLOAD}`}
+                           onClick={() => onImageDownload(image.image.id)}
+                        ></Button>
+                     )}
                   </div>
                   <div className="col-10">
                      <img
-                        onClick={() => toggleImageSelected(image.id)}
-                        src={image.imageData.dataUrl}
+                        onClick={() => toggleImageSelected(image.image.id)}
+                        src={image.image.imageData.dataUrl}
                         className="max-w-full max-h-full"
                         style={{ aspectRatio: 1 }}
                      />
@@ -68,9 +68,19 @@ const ImageList = ({
             </div>
          )
       })
-   }, [images, onImageRemove, selectedImages, toggleImageSelected])
+   }, [
+      images,
+      onImageDownload,
+      onImageRemove,
+      onImageSelect,
+      toggleImageSelected,
+   ])
 
-   return <div className="grid">{imageList}</div>
+   return (
+      <ScrollPanel className="h-30rem">
+         <div className="grid">{imageList}</div>
+      </ScrollPanel>
+   )
 }
 
 export { ImageList }
