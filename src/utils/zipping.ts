@@ -17,9 +17,13 @@ const getFileName = (
    }
 
    const split = keys[fileIndex].filename.split(".")
+   // eslint-disable-next-line @typescript-eslint/no-unused-vars
    const ext = "." + split.pop()
 
-   const fileName = `${split.join(".")}_${keys[fileIndex].sequence}${ext}`
+   // TODO: Fix image loading so that image is either jpg or png
+   // depending on the original extension.
+   // Now all images are processed as png.
+   const fileName = `${split.join(".")}_${keys[fileIndex].sequence}.png`
 
    return fileName
 }

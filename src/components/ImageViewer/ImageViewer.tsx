@@ -13,6 +13,7 @@ import { Button } from "primereact/button"
 import { PrimeIcons } from "primereact/api"
 import { ImageWithSettings } from "../../types/types"
 import { v4 } from "uuid"
+import { zipImages } from "../../utils/zipping"
 
 const ImageViewer = () => {
    const [uploadedImages, setUploadedImages] = useAtom(uploadedImagesAtom)
@@ -203,7 +204,13 @@ const ImageViewer = () => {
                   >
                      Delete selected
                   </Button>
-                  <Button>Queue selected</Button>
+                  <Button
+                     onClick={() => {
+                        addImagesToQueue(selectedUploadedImages)
+                     }}
+                  >
+                     Queue selected
+                  </Button>
                   <ImageList
                      onImageRemove={handleUploadedImageRemove}
                      images={selectedUploadedImages}
@@ -231,8 +238,42 @@ const ImageViewer = () => {
                   >
                      Delete selected
                   </Button>
-                  <Button>Queue selected</Button>
-                  <Button>Download selected</Button>
+                  <Button
+                     onClick={() => {
+                        addImagesToQueue(selectedColoredImages)
+                     }}
+                  >
+                     Queue selected
+                  </Button>
+                  <Button
+                     onClick={() => {
+                        zipImages(
+                           selectedColoredImages
+                              .filter((image) => image.isSelected)
+                              .map((image) => {
+                                 return image.image
+                              }),
+                           (error, data) => {
+                              if (error) {
+                                 console.log(error)
+                                 return
+                              }
+
+                              const blob = new Blob([data], {
+                                 type: "application/zip",
+                              })
+
+                              const a = document.createElement("a")
+                              a.href = URL.createObjectURL(blob)
+                              a.download = "colored_images.zip"
+                              a.click()
+                              URL.revokeObjectURL(a.href)
+                           }
+                        )
+                     }}
+                  >
+                     Download selected
+                  </Button>
                   <ImageList
                      onImageRemove={handleColoredImageRemove}
                      onImageSelect={toggleColoredImageSelected}
