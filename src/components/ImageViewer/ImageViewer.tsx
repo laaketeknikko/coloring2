@@ -1,7 +1,7 @@
 import { Panel } from "primereact/panel"
 
 import {
-   processedImagesAtom,
+   coloredImagesAtom,
    processingQueueAtom,
    uploadedImagesAtom,
 } from "../../atoms/atoms"
@@ -10,7 +10,7 @@ import { ImageList } from "./ImageList"
 import { TabPanel, TabView } from "primereact/tabview"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Button } from "primereact/button"
-import { PrimeIcons } from "primereact/api"
+
 import { ImageWithSettings } from "../../types/types"
 import { v4 } from "uuid"
 import { zipImages } from "../../utils/zipping"
@@ -58,7 +58,7 @@ const ImageViewer = () => {
       setUploadedImages(uploadedImages.filter((image) => image.id !== id))
    }
 
-   const [coloredImages, setColoredImages] = useAtom(processedImagesAtom)
+   const [coloredImages, setColoredImages] = useAtom(coloredImagesAtom)
    const [selectedColoredImages, setSelectedColoredImages] = useState([
       ...coloredImages.map((image) => {
          return { image: image, isSelected: true }
@@ -127,21 +127,12 @@ const ImageViewer = () => {
       setProcessingQueue([...processingQueue, ...queuedImages])
    }
 
-   const [collapsed, setCollapsed] = useState(true)
-
    const panelRef = useRef<Panel>(null)
 
    const headerTemplate = () => {
       return (
          <div>
             <div>
-               <Button
-                  onClick={(e) => {
-                     panelRef.current?.toggle(e)
-                     setCollapsed(!collapsed)
-                  }}
-                  icon={`${collapsed ? PrimeIcons.PLUS : PrimeIcons.MINUS}`}
-               ></Button>
                <Button
                   onClick={() =>
                      addImagesToQueue(
@@ -185,8 +176,6 @@ const ImageViewer = () => {
          className="m-0 p-0 bg-yellow-100"
          ref={panelRef}
          headerTemplate={headerTemplate}
-         toggleable
-         collapsed={collapsed}
       >
          <TabView
             renderActiveOnly={false}

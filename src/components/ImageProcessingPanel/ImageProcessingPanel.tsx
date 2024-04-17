@@ -1,10 +1,11 @@
 import { ColoringProcessor } from "../ColoringProcessor/ColoringProcessor"
-import { CustomGalleria } from "../Galleria/CustomGalleria"
+
+import { ImageViewer } from "../ImageViewer/ImageViewer"
 
 const ImageProcessingPanel = () => {
    return (
       <>
-         <CustomGalleria />
+         <ImageViewer />
          <ColoringProcessor />
       </>
    )

@@ -9,7 +9,7 @@ const selectedFilesAtom = atom<Array<File>>([])
 const uploadedImagesAtom = atom<Array<ImageWithSettings>>([])
 
 const processingQueueAtom = atom<Array<ImageWithSettings>>([])
-const processedImagesAtom = atom<Array<ImageWithSettings>>([])
+const coloredImagesAtom = atom<Array<ImageWithSettings>>([])
 
 const newestProcessedImageAtom = atom<ImageWithSettings | null>(null)
 const isProcessingPausedAtom = atom(true)
@@ -49,7 +49,7 @@ const globalColoringSettingsAtom = atom<ColoringSettings>((get) => {
 
 export {
    uploadedImagesAtom,
-   processedImagesAtom,
+   coloredImagesAtom,
    newestProcessedImageAtom,
    selectedFilesAtom,
    globalColoringSettingsAtom,
