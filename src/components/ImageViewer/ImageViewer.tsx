@@ -142,10 +142,32 @@ const ImageViewer = () => {
                   }}
                   icon={`${collapsed ? PrimeIcons.PLUS : PrimeIcons.MINUS}`}
                ></Button>
-               <Button onClick={() => addImagesToQueue(selectedUploadedImages)}>
+               <Button
+                  onClick={() =>
+                     addImagesToQueue(
+                        uploadedImages.map((image) => {
+                           return {
+                              image: image,
+                              isSelected: true,
+                           }
+                        })
+                     )
+                  }
+               >
                   Queue uploaded
                </Button>
-               <Button onClick={() => addImagesToQueue(selectedColoredImages)}>
+               <Button
+                  onClick={() =>
+                     addImagesToQueue(
+                        coloredImages.map((image) => {
+                           return {
+                              image: image,
+                              isSelected: true,
+                           }
+                        })
+                     )
+                  }
+               >
                   Queue colored
                </Button>
             </div>
@@ -283,8 +305,6 @@ const ImageViewer = () => {
             </TabPanel>
             <TabPanel header="Queued images">
                <div className="">
-                  <Button>Remove selected</Button>
-
                   <ImageList
                      images={queuedImages}
                      onImageRemove={handleQueuedImageRemoved}
