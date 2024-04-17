@@ -20,12 +20,12 @@ const globalBorderColorAtom = atom({
    b: 0,
 })
 const globalBorderColorToleranceAtom = atom({
-   r: 0,
-   g: 0,
-   b: 0,
+   r: 100,
+   g: 100,
+   b: 100,
 })
 const globalColoringColorsAtom = atom<Array<ColoringSettingsColor>>([])
-const globalBorderPatchingAtom = atom(0)
+const globalBorderPatchingAtom = atom(1)
 const globalColorByAreaSize = atom(false)
 const globalColorByAreaNumber = atom(false)
 

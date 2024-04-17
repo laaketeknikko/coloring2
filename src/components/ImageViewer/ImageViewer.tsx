@@ -185,6 +185,25 @@ const ImageViewer = () => {
          >
             <TabPanel header="Uploaded images" className="bg-teal-50">
                <div className="">
+                  <Button
+                     onClick={() => {
+                        const notSelected = selectedUploadedImages.filter(
+                           (image) => {
+                              return !image.isSelected
+                           }
+                        )
+
+                        setSelectedUploadedImages(notSelected)
+                        setUploadedImages(
+                           notSelected.map((image) => {
+                              return image.image
+                           })
+                        )
+                     }}
+                  >
+                     Delete selected
+                  </Button>
+                  <Button>Queue selected</Button>
                   <ImageList
                      onImageRemove={handleUploadedImageRemove}
                      images={selectedUploadedImages}
@@ -194,6 +213,26 @@ const ImageViewer = () => {
             </TabPanel>
             <TabPanel header="Colored images" className="">
                <div className="">
+                  <Button
+                     onClick={() => {
+                        const notSelected = selectedColoredImages.filter(
+                           (image) => {
+                              return !image.isSelected
+                           }
+                        )
+
+                        setSelectedColoredImages(notSelected)
+                        setColoredImages(
+                           notSelected.map((image) => {
+                              return image.image
+                           })
+                        )
+                     }}
+                  >
+                     Delete selected
+                  </Button>
+                  <Button>Queue selected</Button>
+                  <Button>Download selected</Button>
                   <ImageList
                      onImageRemove={handleColoredImageRemove}
                      onImageSelect={toggleColoredImageSelected}
@@ -203,6 +242,8 @@ const ImageViewer = () => {
             </TabPanel>
             <TabPanel header="Queued images">
                <div className="">
+                  <Button>Remove selected</Button>
+
                   <ImageList
                      images={queuedImages}
                      onImageRemove={handleQueuedImageRemoved}

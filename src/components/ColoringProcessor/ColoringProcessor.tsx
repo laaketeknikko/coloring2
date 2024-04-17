@@ -32,10 +32,10 @@ const ColoringProcessor = () => {
       }
    }, [
       coloringRunning,
-      setNewestImage,
-      processingQueue,
-      isProcessingPaused,
       globalSettings,
+      isProcessingPaused,
+      processingQueue,
+      setNewestImage,
    ])
 
    useEffect(() => {
@@ -49,9 +49,9 @@ const ColoringProcessor = () => {
       coloringRunning,
       newestImage,
       processedFiles,
+      processingQueue,
       setProcessedFiles,
       setProcessingQueue,
-      processingQueue,
    ])
 
    return null

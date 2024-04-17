@@ -51,7 +51,7 @@ function App() {
       <div className="bg-green-50">
          <div style={{ maxWidth: "1600px", margin: "0 auto" }}>
             <Toolbar
-               className="bg-teal-50"
+               className="bg-teal-50 p-1"
                start={
                   <div>
                      <Button
@@ -117,7 +117,7 @@ function App() {
                <FileUploadPanel />
             </Sidebar>
 
-            <div className="grid">
+            <div className="grid m-0">
                <div className="col-12">
                   <ImageViewer />
                </div>
