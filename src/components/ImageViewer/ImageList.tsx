@@ -64,7 +64,7 @@ const ImageList = ({
                      <div>
                         <img
                            src={image.image.imageData.dataUrl}
-                           className="max-w-full max-h-full"
+                           className="max-w-full max-h-full p-1"
                            style={{ aspectRatio: 1 }}
                         />
                      </div>

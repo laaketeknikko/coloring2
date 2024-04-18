@@ -1,6 +1,13 @@
 @import "../../node_modules/primeflex/primeflex.css";
 @import "primeicons/primeicons.css";
 
+p {
+   margin: 0;
+   margin-top: 2px;
+   margin-bottom: 2px;
+   padding: 0;
+}
+
 .p-inputtext {
    padding: 2px !important;
 }

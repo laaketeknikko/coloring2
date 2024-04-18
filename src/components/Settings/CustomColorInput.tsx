@@ -47,8 +47,14 @@ const BorderColorInput = ({
          <span className="p-inputgroup-addon ">Color</span>
          <span className="p-inputgroup-addon p-0">
             <Dropdown
+               className="w-auto"
                tooltip="Area outline color in the image."
-               panelClassName="p-0"
+               panelClassName="p-0 w-auto"
+               pt={{
+                  trigger: {
+                     className: "w-auto p-1",
+                  },
+               }}
                placeholder="RGB"
                value={selectedColorMode}
                options={["RGB", "HEX"]}

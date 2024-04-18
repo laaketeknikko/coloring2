@@ -1,12 +1,3 @@
-TODO: implement helps and tooltips.
-
-TODO: Allow selecting images for coloring
-
--  Have an expandable list of uploaded images in the main screen.
-   -  Have a select/deselect all/individual in the list
--  Have a select/deselect checkbox in the gallery thumbnails
-   -  Selecting gallery image automatically deselects uploaded images?
-
 TODO: Comment the code?
 
 TODO: Testing?

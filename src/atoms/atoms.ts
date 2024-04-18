@@ -2,6 +2,7 @@ import { atom } from "jotai"
 import { ImageWithSettings } from "../types/types"
 import {
    ColoringSettings,
+   ColoringSettingsAlgorithmDirection,
    ColoringSettingsColor,
 } from "../utils/ColoringSettings"
 
@@ -26,16 +27,19 @@ const globalBorderColorToleranceAtom = atom({
 })
 const globalColoringColorsAtom = atom<Array<ColoringSettingsColor>>([])
 const globalBorderPatchingAtom = atom(1)
-const globalColorByAreaSize = atom(false)
-const globalColorByAreaNumber = atom(false)
+const globalColorByAreaSizeAtom = atom(false)
+const globalColorByAreaNumberAtom = atom(false)
+const globalAlgorithmDirectionAtom =
+   atom<ColoringSettingsAlgorithmDirection>("8")
 
 const globalColoringSettingsAtom = atom<ColoringSettings>((get) => {
    const borderColor = get(globalBorderColorAtom)
    const borderColorTolerance = get(globalBorderColorToleranceAtom)
    const globalColoringColors = get(globalColoringColorsAtom)
    const globalPatching = get(globalBorderPatchingAtom)
-   const colorByAreaSize = get(globalColorByAreaSize)
-   const colorByAreaNumber = get(globalColorByAreaNumber)
+   const colorByAreaSize = get(globalColorByAreaSizeAtom)
+   const colorByAreaNumber = get(globalColorByAreaNumberAtom)
+   const algorithmDirection = get(globalAlgorithmDirectionAtom)
 
    return {
       borderColor,
@@ -44,6 +48,7 @@ const globalColoringSettingsAtom = atom<ColoringSettings>((get) => {
       borderPatching: globalPatching,
       colorByAreaNumber: colorByAreaNumber,
       colorByAreaSize: colorByAreaSize,
+      algorithmDirection: algorithmDirection,
    }
 })
 
@@ -58,7 +63,8 @@ export {
    globalColoringColorsAtom,
    globalBorderPatchingAtom,
    processingQueueAtom,
-   globalColorByAreaSize,
-   globalColorByAreaNumber,
+   globalColorByAreaSizeAtom,
+   globalColorByAreaNumberAtom,
    isProcessingPausedAtom,
+   globalAlgorithmDirectionAtom,
 }
