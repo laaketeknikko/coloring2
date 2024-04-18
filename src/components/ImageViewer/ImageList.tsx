@@ -30,14 +30,11 @@ const ImageList = ({
          return (
             <div
                key={image.image.id}
-               className="col-12 sm:col-6 md:col-4 lg:col-3 xl:col-2
+               className="col-12 sm:col-6 md:col-12 lg:col-4 xl:col-3
                border-round-lg p-1"
             >
                <div className="grid bg-green-100 m-1 shadow-2 h-full">
-                  <div
-                     className="col-2 p-0 m-0
-                  "
-                  >
+                  <div className="col-2 p-0 m-0">
                      {onImageSelect && (
                         <Checkbox
                            checked={image.isSelected}
@@ -59,13 +56,18 @@ const ImageList = ({
                         ></Button>
                      )}
                   </div>
-                  <div className="col-10 p-0 m-0 align-self-center text-center">
-                     <img
-                        onClick={() => toggleImageSelected(image.image.id)}
-                        src={image.image.imageData.dataUrl}
-                        className="max-w-full max-h-full"
-                        style={{ aspectRatio: 1 }}
-                     />
+                  <div
+                     className="col-10 p-0 m-0 h-full 
+                     justify-content-center flex align-items-center"
+                     onClick={() => toggleImageSelected(image.image.id)}
+                  >
+                     <div>
+                        <img
+                           src={image.image.imageData.dataUrl}
+                           className="max-w-full max-h-full"
+                           style={{ aspectRatio: 1 }}
+                        />
+                     </div>
                   </div>
                </div>
             </div>

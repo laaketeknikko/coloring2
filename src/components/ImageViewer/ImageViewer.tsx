@@ -14,6 +14,9 @@ import { Button } from "primereact/button"
 import { ImageWithSettings } from "../../types/types"
 import { v4 } from "uuid"
 import { zipImages } from "../../utils/zipping"
+import { PrimeIcons } from "primereact/api"
+import { Sidebar } from "primereact/sidebar"
+import { CustomGalleria } from "../Galleria/CustomGalleria"
 
 const ImageViewer = () => {
    const [uploadedImages, setUploadedImages] = useAtom(uploadedImagesAtom)
@@ -166,142 +169,167 @@ const ImageViewer = () => {
       )
    }
 
+   const [isFullScreenGallery, setIsFullScreenGallery] = useState(false)
+
    return (
-      <Panel
-         pt={{
-            content: {
-               className: "bg-teal-50",
-            },
-         }}
-         className="m-0 p-0 bg-yellow-100"
-         ref={panelRef}
-         headerTemplate={headerTemplate}
-      >
-         <TabView
-            renderActiveOnly={false}
-            className="m-0 p-0"
+      <div>
+         <Panel
             pt={{
-               nav: {
-                  className: "bg-yellow-50",
-               },
-               navContainer: {
-                  className: "bg-yellow-50",
-               },
-               navContent: {
-                  className: "bg-yellow-50",
-               },
-               panelContainer: {
-                  className: "bg-green-50",
+               content: {
+                  className: "bg-teal-50",
                },
             }}
+            className="m-0 p-0 bg-yellow-100"
+            ref={panelRef}
+            headerTemplate={headerTemplate}
          >
-            <TabPanel header="Uploaded images" className="bg-teal-50">
-               <div className="">
-                  <Button
-                     onClick={() => {
-                        const notSelected = selectedUploadedImages.filter(
-                           (image) => {
-                              return !image.isSelected
-                           }
-                        )
-
-                        setSelectedUploadedImages(notSelected)
-                        setUploadedImages(
-                           notSelected.map((image) => {
-                              return image.image
-                           })
-                        )
-                     }}
-                  >
-                     Delete selected
-                  </Button>
-                  <Button
-                     onClick={() => {
-                        addImagesToQueue(selectedUploadedImages)
-                     }}
-                  >
-                     Queue selected
-                  </Button>
-                  <ImageList
-                     onImageRemove={handleUploadedImageRemove}
-                     images={selectedUploadedImages}
-                     onImageSelect={toggleUploadedImageSelected}
-                  />
-               </div>
-            </TabPanel>
-            <TabPanel header="Colored images" className="">
-               <div className="">
-                  <Button
-                     onClick={() => {
-                        const notSelected = selectedColoredImages.filter(
-                           (image) => {
-                              return !image.isSelected
-                           }
-                        )
-
-                        setSelectedColoredImages(notSelected)
-                        setColoredImages(
-                           notSelected.map((image) => {
-                              return image.image
-                           })
-                        )
-                     }}
-                  >
-                     Delete selected
-                  </Button>
-                  <Button
-                     onClick={() => {
-                        addImagesToQueue(selectedColoredImages)
-                     }}
-                  >
-                     Queue selected
-                  </Button>
-                  <Button
-                     onClick={() => {
-                        zipImages(
-                           selectedColoredImages
-                              .filter((image) => image.isSelected)
-                              .map((image) => {
-                                 return image.image
-                              }),
-                           (error, data) => {
-                              if (error) {
-                                 console.log(error)
-                                 return
+            <TabView
+               renderActiveOnly={false}
+               className="m-0 p-0"
+               pt={{
+                  nav: {
+                     className: "bg-yellow-50",
+                  },
+                  navContainer: {
+                     className: "bg-yellow-50",
+                  },
+                  navContent: {
+                     className: "bg-yellow-50",
+                  },
+                  panelContainer: {
+                     className: "bg-green-50 m-0 p-0",
+                  },
+               }}
+            >
+               {/** Uploaded images */}
+               <TabPanel
+                  header="Uploaded images"
+                  className="bg-teal-50 p-0 m-0"
+               >
+                  <div className="">
+                     <Button
+                        onClick={() => {
+                           const notSelected = selectedUploadedImages.filter(
+                              (image) => {
+                                 return !image.isSelected
                               }
+                           )
 
-                              const blob = new Blob([data], {
-                                 type: "application/zip",
+                           setSelectedUploadedImages(notSelected)
+                           setUploadedImages(
+                              notSelected.map((image) => {
+                                 return image.image
                               })
+                           )
+                        }}
+                     >
+                        Delete selected
+                     </Button>
+                     <Button
+                        onClick={() => {
+                           addImagesToQueue(selectedUploadedImages)
+                        }}
+                     >
+                        Queue selected
+                     </Button>
+                     <ImageList
+                        onImageRemove={handleUploadedImageRemove}
+                        images={selectedUploadedImages}
+                        onImageSelect={toggleUploadedImageSelected}
+                     />
+                  </div>
+               </TabPanel>
 
-                              const a = document.createElement("a")
-                              a.href = URL.createObjectURL(blob)
-                              a.download = "colored_images.zip"
-                              a.click()
-                              URL.revokeObjectURL(a.href)
-                           }
-                        )
-                     }}
-                  >
-                     Download selected
-                  </Button>
-                  <ImageList
-                     onImageRemove={handleColoredImageRemove}
-                     onImageSelect={toggleColoredImageSelected}
-                     images={selectedColoredImages}
-                  />
-               </div>
-            </TabPanel>
-            <TabPanel header="Queued images">
-               <div className="">
-                  <ImageList
-                     images={queuedImages}
-                     onImageRemove={handleQueuedImageRemoved}
-                  />
-               </div>
-            </TabPanel>
-         </TabView>
-      </Panel>
+               {/** Colored images */}
+               <TabPanel header="Colored images" className="">
+                  <div className="">
+                     <Button
+                        onClick={() => setIsFullScreenGallery(true)}
+                        icon={`${PrimeIcons.WINDOW_MAXIMIZE}`}
+                     ></Button>
+
+                     <Button
+                        onClick={() => {
+                           const notSelected = selectedColoredImages.filter(
+                              (image) => {
+                                 return !image.isSelected
+                              }
+                           )
+
+                           setSelectedColoredImages(notSelected)
+                           setColoredImages(
+                              notSelected.map((image) => {
+                                 return image.image
+                              })
+                           )
+                        }}
+                     >
+                        Delete selected
+                     </Button>
+                     <Button
+                        onClick={() => {
+                           addImagesToQueue(selectedColoredImages)
+                        }}
+                     >
+                        Queue selected
+                     </Button>
+                     <Button
+                        onClick={() => {
+                           zipImages(
+                              selectedColoredImages
+                                 .filter((image) => image.isSelected)
+                                 .map((image) => {
+                                    return image.image
+                                 }),
+                              (error, data) => {
+                                 if (error) {
+                                    console.log(error)
+                                    return
+                                 }
+
+                                 const blob = new Blob([data], {
+                                    type: "application/zip",
+                                 })
+
+                                 const a = document.createElement("a")
+                                 a.href = URL.createObjectURL(blob)
+                                 a.download = "colored_images.zip"
+                                 a.click()
+                                 URL.revokeObjectURL(a.href)
+                              }
+                           )
+                        }}
+                     >
+                        Download selected
+                     </Button>
+                     <ImageList
+                        onImageRemove={handleColoredImageRemove}
+                        onImageSelect={toggleColoredImageSelected}
+                        images={selectedColoredImages}
+                     />
+                  </div>
+               </TabPanel>
+
+               {/** Queued images */}
+               <TabPanel header="Queued images">
+                  <div className="">
+                     <ImageList
+                        images={queuedImages}
+                        onImageRemove={handleQueuedImageRemoved}
+                     />
+                  </div>
+               </TabPanel>
+            </TabView>
+         </Panel>
+         <Sidebar
+            visible={isFullScreenGallery}
+            fullScreen={isFullScreenGallery}
+            onHide={() => setIsFullScreenGallery(false)}
+            header="Colored images"
+         >
+            <CustomGalleria />
+         </Sidebar>
+      </div>
    )
 }
 

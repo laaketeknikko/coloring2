@@ -2,7 +2,7 @@
 @import "primeicons/primeicons.css";
 
 .p-inputtext {
-   padding: 2px;
+   padding: 2px !important;
 }
 
 .p-inputgroup-addon {
