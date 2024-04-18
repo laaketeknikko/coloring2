@@ -12,10 +12,9 @@ export interface CustomInputNumberProps {
 const CustomInputNumber = (props: CustomInputNumberProps) => {
    return (
       <InputNumber
-         className=""
          tooltip={props.tooltip}
          tooltipOptions={props.tooltipOptions}
-         inputClassName="p-1"
+         inputClassName="p-1 text-sm m-0"
          min={0}
          max={255}
          inputId={props.inputId}

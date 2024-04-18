@@ -3,7 +3,7 @@ import {
    globalColoringSettingsAtom,
    isProcessingPausedAtom,
    newestProcessedImageAtom,
-   processedImagesAtom,
+   coloredImagesAtom,
    processingQueueAtom,
 } from "../../atoms/atoms"
 
@@ -13,7 +13,7 @@ import { v4 } from "uuid"
 
 const ColoringProcessor = () => {
    const [processingQueue, setProcessingQueue] = useAtom(processingQueueAtom)
-   const [processedFiles, setProcessedFiles] = useAtom(processedImagesAtom)
+   const [processedFiles, setProcessedFiles] = useAtom(coloredImagesAtom)
    const [newestImage, setNewestImage] = useAtom(newestProcessedImageAtom)
    const [isProcessingPaused] = useAtom(isProcessingPausedAtom)
    const [globalSettings] = useAtom(globalColoringSettingsAtom)

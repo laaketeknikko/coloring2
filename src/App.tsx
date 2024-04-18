@@ -11,7 +11,7 @@ import { Button } from "primereact/button"
 import { Sidebar } from "primereact/sidebar"
 import {
    isProcessingPausedAtom,
-   processedImagesAtom,
+   coloredImagesAtom,
    processingQueueAtom,
    uploadedImagesAtom,
 } from "./atoms/atoms"
@@ -19,14 +19,13 @@ import { useAtom } from "jotai"
 import { zipImages } from "./utils/zipping"
 import { FlateCallback } from "fflate"
 import { HelpButton } from "./utils/HelpButton"
-import { ImageViewer } from "./components/ImageViewer/ImageViewer"
 
 function App() {
    const [showUploadPanel, setShowUploadPanel] = useState(false)
 
    const [processingQueue] = useAtom(processingQueueAtom)
    const [uploadedFiles] = useAtom(uploadedImagesAtom)
-   const [processedImages] = useAtom(processedImagesAtom)
+   const [processedImages] = useAtom(coloredImagesAtom)
 
    const [isProcessingPaused, setIsProcessingPaused] = useAtom(
       isProcessingPausedAtom
@@ -118,9 +117,6 @@ function App() {
             </Sidebar>
 
             <div className="grid m-0">
-               <div className="col-12">
-                  <ImageViewer />
-               </div>
                <div className="col-12 sm:col-12 md:col-6 lg:col-5 xl:col-4">
                   <Settings />
                </div>

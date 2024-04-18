@@ -1,6 +1,6 @@
 import { useAtom } from "jotai"
 import { Galleria } from "primereact/galleria"
-import { processedImagesAtom } from "../../atoms/atoms"
+import { coloredImagesAtom } from "../../atoms/atoms"
 import { useCallback, useMemo, useState } from "react"
 import { Button } from "primereact/button"
 
@@ -13,7 +13,7 @@ import Image from "image-js"
 import { Skeleton } from "primereact/skeleton"
 
 const CustomGalleria = () => {
-   const [processedImages, setProcessedImages] = useAtom(processedImagesAtom)
+   const [processedImages, setProcessedImages] = useAtom(coloredImagesAtom)
 
    const [activeIndex, setActiveIndex] = useState(0)
    const [fullScreenGallery, setFullScreenGallery] = useState(false)
