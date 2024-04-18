@@ -104,7 +104,8 @@ const colorAreaFrom = (
    paintColor: Array<number>,
    borderColor: Array<number>,
    borderTolerance: Array<number> = [0, 0, 0],
-   borderPatching: number
+   borderPatching: number,
+   algorithmDirection: "4" | "8" | "4-diagonal"
 ) => {
    const queue: Array<[number, number]> = [[x, y]]
    const points: Array<Array<number>> = []
@@ -126,16 +127,27 @@ const colorAreaFrom = (
          image.setPixelXY(x, y, paintColor)
 
          points.push(pixel)
-         queue.push(
-            [x - 1, y - 1],
-            [x, y - 1],
-            [x + 1, y - 1],
-            [x - 1, y],
-            [x + 1, y],
-            [x - 1, y + 1],
-            [x, y + 1],
-            [x + 1, y + 1]
-         )
+         if (algorithmDirection === "8") {
+            queue.push(
+               [x - 1, y - 1],
+               [x, y - 1],
+               [x + 1, y - 1],
+               [x - 1, y],
+               [x + 1, y],
+               [x - 1, y + 1],
+               [x, y + 1],
+               [x + 1, y + 1]
+            )
+         } else if (algorithmDirection === "4") {
+            queue.push([x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1])
+         } else if (algorithmDirection === "4-diagonal") {
+            queue.push(
+               [x - 1, y - 1],
+               [x + 1, y - 1],
+               [x - 1, y + 1],
+               [x + 1, y + 1]
+            )
+         }
       }
    }
 
@@ -160,6 +172,7 @@ const colorImageWithoutAreas = async (
       settings.borderColorTolerance.g,
       settings.borderColorTolerance.b,
    ]
+   const algorithmDirection = settings.algorithmDirection
 
    for (let x = 0; x < width; x++) {
       for (let y = 0; y < height; y++) {
@@ -192,7 +205,8 @@ const colorImageWithoutAreas = async (
                paintColor,
                borderColor,
                borderTolerance,
-               settings.borderPatching
+               settings.borderPatching,
+               algorithmDirection
             )
 
             if (area.length > 0) {
@@ -217,7 +231,8 @@ const mapAreaFrom = (
    mappedPoints: Array<Array<boolean>>,
    borderColor: Array<number>,
    borderTolerance: Array<number> = [0, 0, 0],
-   borderPatching: number
+   borderPatching: number,
+   algorithmDirection: "4" | "8" | "4-diagonal"
 ) => {
    const queue: Array<[number, number]> = [[startX, startY]]
    const area: Array<[number, number]> = []
@@ -239,16 +254,28 @@ const mapAreaFrom = (
       ) {
          mappedPoints[x][y] = true
          area.push([x, y])
-         queue.push(
-            [x - 1, y - 1],
-            [x, y - 1],
-            [x + 1, y - 1],
-            [x - 1, y],
-            [x + 1, y],
-            [x - 1, y + 1],
-            [x, y + 1],
-            [x + 1, y + 1]
-         )
+
+         if (algorithmDirection === "8") {
+            queue.push(
+               [x - 1, y - 1],
+               [x, y - 1],
+               [x + 1, y - 1],
+               [x - 1, y],
+               [x + 1, y],
+               [x - 1, y + 1],
+               [x, y + 1],
+               [x + 1, y + 1]
+            )
+         } else if (algorithmDirection === "4") {
+            queue.push([x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1])
+         } else if (algorithmDirection === "4-diagonal") {
+            queue.push(
+               [x - 1, y - 1],
+               [x + 1, y - 1],
+               [x - 1, y + 1],
+               [x + 1, y + 1]
+            )
+         }
       }
    }
 
@@ -391,7 +418,8 @@ const colorImageWithAreas = async (
                allMappedPoints,
                borderColor,
                borderTolerance,
-               settings.borderPatching
+               settings.borderPatching,
+               settings.algorithmDirection
             )
 
             allMappedPoints = mappedPoints

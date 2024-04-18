@@ -90,7 +90,33 @@ const AlgorithmOptions = () => {
          </div>
          <Divider className="m-1" />
          <div>
-            <p>Algorithm direction</p>
+            <p>
+               Algorithm mapping
+               <HelpButton size={"small"}>
+                  <div className="">
+                     <p>Choose how areas are mapped</p>
+                     <p>
+                        <strong>8-way</strong>: The algorithm will map to all
+                        adjacent pixels when finding an uncolored pixel. Will
+                        result in properly filled areas. The coloring might
+                        bleed through outlines if the outlines are pixelated.
+                     </p>
+                     <p>
+                        <strong>4-way</strong>: The algorithm will map
+                        orthogonally to adjacent pixels. Lone pixels in some
+                        areas might not be colored. Better tolerance for broken
+                        outlines.
+                     </p>
+                     <p>
+                        <strong>4-way diagonal</strong>: The algorithm will map
+                        to diagonally adjacent pixels. This is more about
+                        aesthetics than mapping. This results in every other
+                        pixel being different colors, which might create a more
+                        washed-out and not as strong impression.
+                     </p>
+                  </div>
+               </HelpButton>
+            </p>
             <div className="flex flex-column align-items-end">
                <label className="flex-1">
                   8-way
