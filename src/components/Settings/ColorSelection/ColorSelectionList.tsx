@@ -3,9 +3,14 @@ import { globalColoringColorsAtom } from "../../../atoms/atoms"
 import { useCallback, useMemo } from "react"
 import { SingleColorSelectionColor } from "./SingleColorSelectionColor"
 import { ColoringSettingsColor } from "../../../utils/ColoringSettings"
+import { colorSelectionSelectedColorAtom } from "./atoms"
 
 const ColorSelectionList = () => {
    const [globalColors, setGlobalColors] = useAtom(globalColoringColorsAtom)
+
+   const [selectedColor, setSelectedColor] = useAtom(
+      colorSelectionSelectedColorAtom
+   )
 
    const handleColorRemove = useCallback(
       (color: ColoringSettingsColor) => {
@@ -44,18 +49,30 @@ const ColorSelectionList = () => {
             return (
                <div
                   key={color.id}
-                  className="col-12 sm:col-6 md:col-12 lg:col-6 xl:col-6"
+                  className={`col-12 sm:col-6 md:col-12 lg:col-6 xl:col-6
+                  ${
+                     color.id === selectedColor?.id
+                        ? "bg-yellow-100 shadow-4"
+                        : ""
+                  }`}
                >
                   <SingleColorSelectionColor
                      threshold={color.minimumAreaThreshold ?? 0}
                      color={color}
                      onRemove={handleColorRemove}
                      onThresholdChange={handleColorThresholdChange}
+                     onSelected={setSelectedColor}
                   />
                </div>
             )
          })
-   }, [globalColors, handleColorRemove, handleColorThresholdChange])
+   }, [
+      globalColors,
+      handleColorRemove,
+      handleColorThresholdChange,
+      selectedColor?.id,
+      setSelectedColor,
+   ])
 
    return <div className="grid max-h-30rem">{colorElements}</div>
 }

@@ -1,5 +1,5 @@
 import { IColor } from "react-color-palette"
-import { ColorerColorsPicker } from "../ColorerColorsPicker"
+import { ColorerColorsPicker } from "./ColorerColorsPicker"
 
 import "react-color-palette/css"
 import { ScrollPanel } from "primereact/scrollpanel"
@@ -8,11 +8,19 @@ import { useAtom } from "jotai"
 import { v4 } from "uuid"
 import { ColorSelectionList } from "./ColorSelectionList"
 import { HelpButton } from "../../../utils/HelpButton"
+import { colorSelectionSelectedColorAtom } from "./atoms"
+import { ColoringSettingsColor } from "../../../utils/ColoringSettings"
 
 const ColorSelection = () => {
    const [globalColorSettings, setGlobalColorSettings] = useAtom(
       globalColoringColorsAtom
    )
+
+   const [globalColoringColors, setGlobalColoringColors] = useAtom(
+      globalColoringColorsAtom
+   )
+
+   const [selectedColor] = useAtom(colorSelectionSelectedColorAtom)
 
    const handleColorAdded = (color: IColor) => {
       setGlobalColorSettings([
@@ -29,8 +37,23 @@ const ColorSelection = () => {
       ])
    }
 
+   const handleColorChange = (color: ColoringSettingsColor) => {
+      const colorIndex = globalColoringColors.findIndex((item) => {
+         return item.id === color.id
+      })
+
+      if (colorIndex === -1) {
+         return
+      }
+
+      const newColors = globalColoringColors
+      newColors[colorIndex] = color
+
+      setGlobalColoringColors([...newColors])
+   }
+
    return (
-      <div className="grid  bg-teal-50">
+      <div className="grid m-0 bg-teal-50">
          <div className="col-12 text-center">
             Paint color settings{" "}
             <HelpButton size="small">
@@ -58,10 +81,14 @@ const ColorSelection = () => {
          </div>
 
          <div className="col-6 sm:col-4 md:col-5 lg:col-4 xl:col-4">
-            <ColorerColorsPicker onSelectColor={handleColorAdded} />
+            <ColorerColorsPicker
+               onColorAdded={handleColorAdded}
+               onColorChange={handleColorChange}
+               color={selectedColor}
+            />
          </div>
          <div className="col-6 sm:col-8 md:col-7 lg:col-8 xl:col-8">
-            <ScrollPanel>
+            <ScrollPanel className="w-full h-full">
                <ColorSelectionList />
             </ScrollPanel>
          </div>

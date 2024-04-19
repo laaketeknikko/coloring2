@@ -7,6 +7,7 @@ export interface SingleColorSelectionColorProps {
    onRemove: (color: ColoringSettingsColor) => void
    threshold: number
    onThresholdChange: (color: ColoringSettingsColor) => void
+   onSelected: (color: ColoringSettingsColor) => void
 }
 
 const SingleColorSelectionColor = ({
@@ -14,6 +15,7 @@ const SingleColorSelectionColor = ({
    onRemove,
    threshold,
    onThresholdChange,
+   onSelected,
 }: SingleColorSelectionColorProps) => {
    const handleColorRemove = () => {
       onRemove(color)
@@ -29,6 +31,9 @@ const SingleColorSelectionColor = ({
 
    return (
       <div
+         onClick={() => {
+            onSelected(color)
+         }}
          className="border-round-lg border-2 border-solid border-900"
          style={{
             aspectRatio: "1/1",
