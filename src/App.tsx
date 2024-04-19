@@ -55,8 +55,10 @@ function App() {
                   <div>
                      <Button
                         className="m-1 border-circle"
-                        icon={`${PrimeIcons.UPLOAD}`}
-                        onClick={() => setShowUploadPanel(true)}
+                        icon={PrimeIcons.UPLOAD}
+                        onClick={() => {
+                           setShowUploadPanel(true)
+                        }}
                      />
                      <span className="text-primary-700 text-2xl">
                         {uploadedFiles.length}
@@ -73,11 +75,11 @@ function App() {
 
                      <Button
                         className="m-1 border-circle"
-                        icon={`${
+                        icon={
                            isProcessingPaused
                               ? PrimeIcons.PLAY
                               : PrimeIcons.PAUSE
-                        }`}
+                        }
                         onClick={() => {
                            if (isProcessingPaused) {
                               setIsProcessingPaused(false)
@@ -89,7 +91,7 @@ function App() {
 
                      <Button
                         className="m-1 border-circle"
-                        icon={`${PrimeIcons.DOWNLOAD}`}
+                        icon={PrimeIcons.DOWNLOAD}
                         onClick={() => {
                            zipImages(processedImages, onImagesZipped)
                         }}
@@ -111,7 +113,9 @@ function App() {
             <Sidebar
                visible={showUploadPanel}
                fullScreen={true}
-               onHide={() => setShowUploadPanel(false)}
+               onHide={() => {
+                  setShowUploadPanel(false)
+               }}
             >
                <FileUploadPanel />
             </Sidebar>

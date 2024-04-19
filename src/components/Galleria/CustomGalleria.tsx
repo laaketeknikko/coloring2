@@ -68,7 +68,7 @@ const CustomGalleria = () => {
                {!fullScreenGallery && (
                   <Button
                      style={{ position: "absolute", top: 0, left: 0 }}
-                     icon={`${PrimeIcons.WINDOW_MAXIMIZE}`}
+                     icon={PrimeIcons.WINDOW_MAXIMIZE}
                      onClick={() => {
                         setFullScreenGallery(true)
                      }}
@@ -101,7 +101,7 @@ const CustomGalleria = () => {
 
          const aElem = document.createElement("a")
          aElem.href = image.imageData.dataUrl
-         aElem.download = `${image.imageData.meta.name}`
+         aElem.download = image.imageData.meta.name
          aElem.click()
       },
       [processedImages]
@@ -160,6 +160,7 @@ const CustomGalleria = () => {
                colorByAreaNumber: false,
                colorByAreaSize: false,
                colorsToUse: [],
+               algorithmDirection: "8",
             },
          },
          {
@@ -178,6 +179,7 @@ const CustomGalleria = () => {
                colorByAreaNumber: false,
                colorByAreaSize: false,
                colorsToUse: [],
+               algorithmDirection: "8",
             },
          },
          {
@@ -196,6 +198,7 @@ const CustomGalleria = () => {
                colorByAreaNumber: false,
                colorByAreaSize: false,
                colorsToUse: [],
+               algorithmDirection: "8",
             },
          },
       ]
@@ -232,7 +235,9 @@ const CustomGalleria = () => {
             <Sidebar
                visible={true}
                fullScreen
-               onHide={() => setFullScreenGallery(false)}
+               onHide={() => {
+                  setFullScreenGallery(false)
+               }}
             >
                {galleria}
             </Sidebar>

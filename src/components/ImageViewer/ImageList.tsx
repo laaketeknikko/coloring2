@@ -38,12 +38,14 @@ const ImageList = ({
                      {onImageSelect && (
                         <Checkbox
                            checked={image.isSelected}
-                           onChange={() => toggleImageSelected(image.image.id)}
+                           onChange={() => {
+                              toggleImageSelected(image.image.id)
+                           }}
                         />
                      )}
                      {onImageRemove && (
                         <Button
-                           icon={`${PrimeIcons.TIMES}`}
+                           icon={PrimeIcons.TIMES}
                            onClick={() => {
                               onImageRemove(image.image.id)
                            }}
@@ -51,15 +53,19 @@ const ImageList = ({
                      )}
                      {onImageDownload && (
                         <Button
-                           icon={`${PrimeIcons.DOWNLOAD}`}
-                           onClick={() => onImageDownload(image.image.id)}
+                           icon={PrimeIcons.DOWNLOAD}
+                           onClick={() => {
+                              onImageDownload(image.image.id)
+                           }}
                         ></Button>
                      )}
                   </div>
                   <div
                      className="col-10 p-0 m-0 h-full 
                      justify-content-center flex align-items-center"
-                     onClick={() => toggleImageSelected(image.image.id)}
+                     onClick={() => {
+                        toggleImageSelected(image.image.id)
+                     }}
                   >
                      <div>
                         <img

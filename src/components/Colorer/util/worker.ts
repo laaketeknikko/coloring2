@@ -17,21 +17,25 @@ coloringWorker.onmessage = (event: MessageEvent<DataUrlWithSettings>) => {
       return
    }
 
-   Image.load(event.data.data.dataUrl).then((image) => {
-      const jotaiStore = getDefaultStore()
+   Image.load(event.data.data.dataUrl)
+      .then((image) => {
+         const jotaiStore = getDefaultStore()
 
-      jotaiStore.set(newestProcessedImageAtom, {
-         imageData: {
-            meta: {
-               name: event.data.data.meta.name,
+         jotaiStore.set(newestProcessedImageAtom, {
+            imageData: {
+               meta: {
+                  name: event.data.data.meta.name,
+               },
+               image: image,
+               dataUrl: image.toDataURL(),
             },
-            image: image,
-            dataUrl: image.toDataURL(),
-         },
-         settings: event.data.settings,
-         id: event.data.id,
+            settings: event.data.settings,
+            id: event.data.id,
+         })
       })
-   })
+      .catch((error: unknown) => {
+         console.log(error)
+      })
 }
 
 const runColoring = (imageWithSettings: ImageWithSettings) => {

@@ -17,7 +17,7 @@ const imageFromFile = async (file: File): Promise<Image | null> => {
             const image = await Image.load(dataUrlReader.result)
             resolve(image)
          } else {
-            reject(null)
+            reject(Error("Error loading image data from file: " + file.name))
          }
       }
 
@@ -38,9 +38,6 @@ const imagesFromFiles = async (files: Array<File>): Promise<Array<Image>> => {
          console.log(error)
       }
    }
-
-   console.log("returning images from files: ", images)
-   console.log("original files were: ", files)
 
    return images
 }

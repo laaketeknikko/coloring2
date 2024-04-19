@@ -48,7 +48,9 @@ const BorderColorPicker = () => {
             className="block"
             style={{
                height: "1rem",
-               backgroundColor: `rgb(${borderColor.r},${borderColor.g},${borderColor.b})`,
+               backgroundColor: `rgb(${String(borderColor.r)},${String(
+                  borderColor.g
+               )},${String(borderColor.b)})`,
             }}
          ></span>
 
@@ -80,26 +82,26 @@ const BorderColorPicker = () => {
                tooltip="Green channel tolerance for outline color matching."
                value={globalBorderColorTolerance.g}
                inputId="border-color-tolerance-g"
-               onChange={(value) =>
+               onChange={(value) => {
                   handleBorderColorToleranceChange({
                      r: globalBorderColorTolerance.r,
                      g: value,
                      b: globalBorderColorTolerance.b,
                   })
-               }
+               }}
             />
 
             <CustomInputNumber
                tooltip="Blue channel tolerance for outline color matching."
                value={globalBorderColorTolerance.b}
                inputId="border-color-tolerance-b"
-               onChange={(value) =>
+               onChange={(value) => {
                   handleBorderColorToleranceChange({
                      r: globalBorderColorTolerance.r,
                      g: globalBorderColorTolerance.g,
                      b: value,
                   })
-               }
+               }}
             />
          </div>
       </>

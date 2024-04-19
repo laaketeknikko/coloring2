@@ -58,7 +58,9 @@ const BorderColorInput = ({
                placeholder="RGB"
                value={selectedColorMode}
                options={["RGB", "HEX"]}
-               onChange={(e) => setSelectedColorMode(e.value)}
+               onChange={(e) => {
+                  setSelectedColorMode(e.value as "RGB" | "HEX")
+               }}
             />
          </span>
          {selectedColorMode === "HEX" && (
@@ -66,7 +68,9 @@ const BorderColorInput = ({
                tooltip="Hex value of the area outline color."
                tooltipOptions={{ position: "right" }}
                value={selectedColor.hex}
-               onChange={(event) => handleHexColorChange(event.target.value)}
+               onChange={(event) => {
+                  handleHexColorChange(event.target.value)
+               }}
             />
          )}
          {selectedColorMode === "RGB" && (
@@ -76,13 +80,13 @@ const BorderColorInput = ({
                   tooltipOptions={{ position: "right" }}
                   inputId="r"
                   value={selectedColor.rgb.r}
-                  onChange={(value) =>
+                  onChange={(value) => {
                      handleRGBColorChange({
                         r: value,
                         g: selectedColor.rgb.g,
                         b: selectedColor.rgb.b,
                      })
-                  }
+                  }}
                />
 
                <CustomInputNumber
@@ -90,13 +94,13 @@ const BorderColorInput = ({
                   tooltipOptions={{ position: "right" }}
                   inputId="g"
                   value={selectedColor.rgb.g}
-                  onChange={(value) =>
+                  onChange={(value) => {
                      handleRGBColorChange({
                         r: selectedColor.rgb.r,
                         g: value,
                         b: selectedColor.rgb.b,
                      })
-                  }
+                  }}
                />
 
                <CustomInputNumber
@@ -104,13 +108,13 @@ const BorderColorInput = ({
                   tooltipOptions={{ position: "right" }}
                   inputId="b"
                   value={selectedColor.rgb.b}
-                  onChange={(value) =>
+                  onChange={(value) => {
                      handleRGBColorChange({
                         r: selectedColor.rgb.r,
                         g: selectedColor.rgb.g,
                         b: value,
                      })
-                  }
+                  }}
                />
             </>
          )}

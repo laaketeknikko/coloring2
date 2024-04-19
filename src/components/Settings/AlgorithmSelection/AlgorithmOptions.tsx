@@ -124,7 +124,9 @@ const AlgorithmOptions = () => {
                      id="algorithm-8-way"
                      name="algorithm-direction"
                      checked={algorithmDirection === "8"}
-                     onChange={() => setAlgorithmDirection("8")}
+                     onChange={() => {
+                        setAlgorithmDirection("8")
+                     }}
                   ></Checkbox>
                </label>
                <label className="flex-1">
@@ -133,7 +135,9 @@ const AlgorithmOptions = () => {
                      id="algorithm-4-way"
                      name="algorithm-direction"
                      checked={algorithmDirection === "4"}
-                     onChange={() => setAlgorithmDirection("4")}
+                     onChange={() => {
+                        setAlgorithmDirection("4")
+                     }}
                   ></Checkbox>
                </label>
                <label className="flex-1">
@@ -142,7 +146,9 @@ const AlgorithmOptions = () => {
                      id="algorithm-4-way-diagonal"
                      name="algorithm-direction"
                      checked={algorithmDirection === "4-diagonal"}
-                     onChange={() => setAlgorithmDirection("4-diagonal")}
+                     onChange={() => {
+                        setAlgorithmDirection("4-diagonal")
+                     }}
                   ></Checkbox>
                </label>
             </div>

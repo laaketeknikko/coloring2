@@ -20,9 +20,15 @@ const HelpButton = ({
    return (
       <>
          <Button
-            onPointerEnter={(e) => overlayRef.current!.toggle(e)}
-            onPointerLeave={(e) => overlayRef.current!.toggle(e)}
-            onClick={(e) => overlayRef.current!.toggle(e)}
+            onPointerEnter={(e) => {
+               overlayRef.current?.toggle(e)
+            }}
+            onPointerLeave={(e) => {
+               overlayRef.current?.toggle(e)
+            }}
+            onClick={(e) => {
+               overlayRef.current?.toggle(e)
+            }}
             style={{ aspectRatio: 1, height: height, width: height }}
             size={size}
             className={`border-circle bg-blue-200 border-0 p-1`}

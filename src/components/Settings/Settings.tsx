@@ -24,9 +24,9 @@ const Settings = () => {
                         <p>
                            Patching: The distance in pixels from an outline
                            pixel up to which a pixel is considered an outline
-                           pixel. This can be used to 'patch' small holes in
-                           broken outlines. Note that using this also "indents"
-                           the coloring by the same amount.
+                           pixel. This can be used to &apos;patch&apos; small
+                           holes in broken outlines. Note that using this also
+                           &apos;ndents&apos; the coloring by the same amount.
                         </p>
                      </HelpButton>
                   </p>

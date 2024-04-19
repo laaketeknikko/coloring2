@@ -72,11 +72,20 @@ const FileInput = () => {
             ref={fileUploadRef}
             accept="image/*"
             customUpload
-            uploadHandler={handleUpload}
+            uploadHandler={() => {
+               // eslint-disable-next-line no-extra-semi
+               ;() => {
+                  void (async () => {
+                     await handleUpload()
+                  })()
+               }
+            }}
             multiple
             mode="advanced"
             onSelect={handleFileChange}
-            onClear={() => setSelectedFiles([])}
+            onClear={() => {
+               setSelectedFiles([])
+            }}
             previewWidth={200}
             uploadLabel="Add"
          />

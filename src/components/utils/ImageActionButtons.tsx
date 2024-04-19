@@ -23,9 +23,11 @@ const ImageActionButtons = ({
          {onImageDownload && (
             <div className="">
                <Button
-                  icon={`${PrimeIcons.DOWNLOAD}`}
+                  icon={PrimeIcons.DOWNLOAD}
                   role="button"
-                  onClick={() => onImageDownload(id)}
+                  onClick={() => {
+                     onImageDownload(id)
+                  }}
                ></Button>
             </div>
          )}

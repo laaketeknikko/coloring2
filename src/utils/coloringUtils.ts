@@ -111,7 +111,15 @@ const colorAreaFrom = (
    const points: Array<Array<number>> = []
 
    while (queue.length > 0) {
-      const [x, y] = queue.shift()!
+      const coord = queue.shift()
+      let x = 0
+      let y = 0
+      if (coord) {
+         x = coord[0]
+         y = coord[1]
+      } else {
+         return points
+      }
 
       if (x < 0 || y < 0 || x >= image.width || y >= image.height) {
          continue
@@ -127,26 +135,30 @@ const colorAreaFrom = (
          image.setPixelXY(x, y, paintColor)
 
          points.push(pixel)
-         if (algorithmDirection === "8") {
-            queue.push(
-               [x - 1, y - 1],
-               [x, y - 1],
-               [x + 1, y - 1],
-               [x - 1, y],
-               [x + 1, y],
-               [x - 1, y + 1],
-               [x, y + 1],
-               [x + 1, y + 1]
-            )
-         } else if (algorithmDirection === "4") {
-            queue.push([x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1])
-         } else if (algorithmDirection === "4-diagonal") {
-            queue.push(
-               [x - 1, y - 1],
-               [x + 1, y - 1],
-               [x - 1, y + 1],
-               [x + 1, y + 1]
-            )
+         switch (algorithmDirection) {
+            case "8":
+               queue.push(
+                  [x - 1, y - 1],
+                  [x, y - 1],
+                  [x + 1, y - 1],
+                  [x - 1, y],
+                  [x + 1, y],
+                  [x - 1, y + 1],
+                  [x, y + 1],
+                  [x + 1, y + 1]
+               )
+               break
+            case "4":
+               queue.push([x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1])
+               break
+            case "4-diagonal":
+               queue.push(
+                  [x - 1, y - 1],
+                  [x + 1, y - 1],
+                  [x - 1, y + 1],
+                  [x + 1, y + 1]
+               )
+               break
          }
       }
    }
@@ -154,10 +166,7 @@ const colorAreaFrom = (
    return points
 }
 
-const colorImageWithoutAreas = async (
-   image: Image,
-   settings: ColoringSettings
-) => {
+const colorImageWithoutAreas = (image: Image, settings: ColoringSettings) => {
    const width = image.width
    const height = image.height
 
@@ -179,9 +188,7 @@ const colorImageWithoutAreas = async (
          const pixel = image.getPixelXY(x, y)
 
          const paintColor =
-            settings.colorsToUse.length > 0
-               ? selectPaintColor(settings.colorsToUse)!
-               : selectRandomPaintColor()
+            selectPaintColor(settings.colorsToUse) ?? selectRandomPaintColor()
 
          const painted = usedColors.find((color) => {
             return colorsAreEqual(pixel, color)
@@ -238,14 +245,22 @@ const mapAreaFrom = (
    const area: Array<[number, number]> = []
 
    while (queue.length > 0) {
-      const [x, y] = queue.shift()!
+      const coord = queue.shift()
+      let x = 0
+      let y = 0
+      if (coord) {
+         x = coord[0]
+         y = coord[1]
+      } else {
+         return { area, mappedPoints }
+      }
 
       if (x < 0 || y < 0 || x >= image.width || y >= image.height) {
          continue
       }
 
       const pixel = image.getPixelXY(x, y)
-      const isMapped = mappedPoints[x] && mappedPoints[x][y]
+      const isMapped = mappedPoints[x]?.[y]
 
       if (
          !isMapped &&
@@ -255,26 +270,30 @@ const mapAreaFrom = (
          mappedPoints[x][y] = true
          area.push([x, y])
 
-         if (algorithmDirection === "8") {
-            queue.push(
-               [x - 1, y - 1],
-               [x, y - 1],
-               [x + 1, y - 1],
-               [x - 1, y],
-               [x + 1, y],
-               [x - 1, y + 1],
-               [x, y + 1],
-               [x + 1, y + 1]
-            )
-         } else if (algorithmDirection === "4") {
-            queue.push([x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1])
-         } else if (algorithmDirection === "4-diagonal") {
-            queue.push(
-               [x - 1, y - 1],
-               [x + 1, y - 1],
-               [x - 1, y + 1],
-               [x + 1, y + 1]
-            )
+         switch (algorithmDirection) {
+            case "8":
+               queue.push(
+                  [x - 1, y - 1],
+                  [x, y - 1],
+                  [x + 1, y - 1],
+                  [x - 1, y],
+                  [x + 1, y],
+                  [x - 1, y + 1],
+                  [x, y + 1],
+                  [x + 1, y + 1]
+               )
+               break
+            case "4":
+               queue.push([x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1])
+               break
+            case "4-diagonal":
+               queue.push(
+                  [x - 1, y - 1],
+                  [x + 1, y - 1],
+                  [x - 1, y + 1],
+                  [x + 1, y + 1]
+               )
+               break
          }
       }
    }
@@ -291,8 +310,7 @@ const paintPixels = (
    area: Array<Array<number>>,
    color: Array<number>
 ) => {
-   for (let i = 0; i < area.length; i++) {
-      const point = area[i]
+   for (const point of area) {
       image.setPixelXY(point[0], point[1], color)
    }
 }
@@ -305,7 +323,7 @@ const getPaintColorsByAreaSize = (
    color: Array<number>
 }> => {
    const sortedColors = colors.colorsToUse.sort(
-      (a, b) => (a.minimumAreaThreshold || 0) - (b.minimumAreaThreshold || 0)
+      (a, b) => (a.minimumAreaThreshold ?? 0) - (b.minimumAreaThreshold ?? 0)
    )
 
    const result: Array<{
@@ -318,7 +336,7 @@ const getPaintColorsByAreaSize = (
    for (const color of sortedColors) {
       for (const area of areas) {
          const areaProportion = area.length / totalArea
-         if (areaProportion >= (color.minimumAreaThreshold || 0)) {
+         if (areaProportion >= (color.minimumAreaThreshold ?? 0)) {
             result.push({
                area: area,
                color: [color.color.r, color.color.g, color.color.b],
@@ -340,7 +358,7 @@ const getPaintColorsByAreaNumber = (
    const sortedColors = colors.colorsToUse
       .slice()
       .sort(
-         (a, b) => (b.minimumAreaThreshold || 0) - (a.minimumAreaThreshold || 0)
+         (a, b) => (b.minimumAreaThreshold ?? 0) - (a.minimumAreaThreshold ?? 0)
       )
 
    const sortedAreas = areas.slice().sort((a, b) => a.length - b.length)
@@ -357,7 +375,7 @@ const getPaintColorsByAreaNumber = (
          }) || 0) / sortedAreas.length
 
       for (const color of sortedColors) {
-         if (areaProportion >= (color.minimumAreaThreshold || 0)) {
+         if (areaProportion >= (color.minimumAreaThreshold ?? 0)) {
             result.push({
                area: area,
                color: [color.color.r, color.color.g, color.color.b],
@@ -370,10 +388,7 @@ const getPaintColorsByAreaNumber = (
    return result
 }
 
-const colorImageWithAreas = async (
-   image: Image,
-   settings: ColoringSettings
-) => {
+const colorImageWithAreas = (image: Image, settings: ColoringSettings) => {
    const width = image.width
    const height = image.height
    const areas: Array<Array<[number, number]>> = []
@@ -391,14 +406,14 @@ const colorImageWithAreas = async (
 
    let allMappedPoints: Array<Array<boolean>> = []
    for (let i = 0; i < width; i++) {
-      allMappedPoints.push(Array(height).fill(false))
+      allMappedPoints.push(Array<boolean>(height).fill(false))
    }
 
    for (let x = 0; x < width; x++) {
       for (let y = 0; y < height; y++) {
          const pixel = image.getPixelXY(x, y)
 
-         const isMapped = allMappedPoints[x] && allMappedPoints[x][y]
+         const isMapped = allMappedPoints[x]?.[y]
 
          if (
             !isMapped &&
@@ -450,14 +465,17 @@ const colorImageWithAreas = async (
    }
 }
 
-const processImage = async (image: Image, settings: ColoringSettings) => {
+const processImage = (image: Image, settings: ColoringSettings) => {
    if (settings.colorByAreaNumber || settings.colorByAreaSize) {
-      await colorImageWithAreas(image, settings)
+      colorImageWithAreas(image, settings)
    } else {
-      await colorImageWithoutAreas(image, settings)
+      colorImageWithoutAreas(image, settings)
    }
 
-   return image
+   return new Promise<Image>((resolve, reject) => {
+      resolve(image)
+      reject(Error("Error processing image"))
+   })
 }
 
 export { processImage }

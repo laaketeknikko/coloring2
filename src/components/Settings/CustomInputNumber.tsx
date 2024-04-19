@@ -20,10 +20,7 @@ const CustomInputNumber = (props: CustomInputNumberProps) => {
          inputId={props.inputId}
          value={props.value}
          onValueChange={(event) => {
-            const value =
-               event.value === null || event.value === undefined
-                  ? 0
-                  : event.value
+            const value = event.value ?? 0
             props.onChange(value)
          }}
       />

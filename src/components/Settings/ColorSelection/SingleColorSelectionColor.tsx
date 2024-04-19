@@ -23,7 +23,7 @@ const SingleColorSelectionColor = ({
       // Change threshold from 0-100 to 0-1
       onThresholdChange({
          ...color,
-         minimumAreaThreshold: (threshold || 0) / 100,
+         minimumAreaThreshold: (threshold ?? 0) / 100,
       })
    }
 
@@ -32,7 +32,9 @@ const SingleColorSelectionColor = ({
          className="border-round-lg border-2 border-solid border-900"
          style={{
             aspectRatio: "1/1",
-            backgroundColor: `rgb(${color.color.r}, ${color.color.g}, ${color.color.b})`,
+            backgroundColor: `rgb(${String(color.color.r)}, ${String(
+               color.color.g
+            )}, ${String(color.color.b)})`,
          }}
       >
          <div
@@ -55,7 +57,9 @@ const SingleColorSelectionColor = ({
                   placeholder="Threshold %"
                   className="p-inputtext-sm w-full"
                   inputClassName="w-full"
-                  onChange={(e) => handleThresholdChange(e.value)}
+                  onChange={(e) => {
+                     handleThresholdChange(e.value)
+                  }}
                />
             </div>
          </div>

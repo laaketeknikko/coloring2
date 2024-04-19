@@ -12,6 +12,7 @@
   "dependencies": {
     "@uidotdev/usehooks": "^2.4.1",
     "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.1",
     "fflate": "^0.8.2",
     "image-js": "^0.35.5",
     "jotai": "^2.8.0",

@@ -11,7 +11,9 @@ const RemoveButton = ({ id = "", onRemove }: RemoveButtonProps) => {
       <Button
          className=""
          icon={`${PrimeIcons.TIMES} text-xl font-light`}
-         onClick={() => onRemove(id)}
+         onClick={() => {
+            onRemove(id)
+         }}
       ></Button>
    )
 }

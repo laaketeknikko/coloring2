@@ -34,7 +34,7 @@ const ImageViewer = () => {
 
          return {
             image: image,
-            isSelected: isSelected === undefined ? true : isSelected,
+            isSelected: Boolean(isSelected),
          }
       })
 
@@ -76,7 +76,7 @@ const ImageViewer = () => {
 
          return {
             image: image,
-            isSelected: isSelected === undefined ? true : isSelected,
+            isSelected: Boolean(isSelected),
          }
       })
 
@@ -137,7 +137,7 @@ const ImageViewer = () => {
          <div>
             <div>
                <Button
-                  onClick={() =>
+                  onClick={() => {
                      addImagesToQueue(
                         uploadedImages.map((image) => {
                            return {
@@ -146,12 +146,12 @@ const ImageViewer = () => {
                            }
                         })
                      )
-                  }
+                  }}
                >
                   Queue uploaded
                </Button>
                <Button
-                  onClick={() =>
+                  onClick={() => {
                      addImagesToQueue(
                         coloredImages.map((image) => {
                            return {
@@ -160,7 +160,7 @@ const ImageViewer = () => {
                            }
                         })
                      )
-                  }
+                  }}
                >
                   Queue colored
                </Button>
@@ -244,8 +244,10 @@ const ImageViewer = () => {
                <TabPanel header="Colored images" className="">
                   <div className="">
                      <Button
-                        onClick={() => setIsFullScreenGallery(true)}
-                        icon={`${PrimeIcons.WINDOW_MAXIMIZE}`}
+                        onClick={() => {
+                           setIsFullScreenGallery(true)
+                        }}
+                        icon={PrimeIcons.WINDOW_MAXIMIZE}
                      ></Button>
 
                      <Button
@@ -324,7 +326,9 @@ const ImageViewer = () => {
          <Sidebar
             visible={isFullScreenGallery}
             fullScreen={isFullScreenGallery}
-            onHide={() => setIsFullScreenGallery(false)}
+            onHide={() => {
+               setIsFullScreenGallery(false)
+            }}
             header="Colored images"
          >
             <CustomGalleria />

@@ -38,16 +38,16 @@ const ColorSelectionList = () => {
          .slice()
          .sort(
             (a, b) =>
-               (b.minimumAreaThreshold || 0) - (a.minimumAreaThreshold || 0)
+               (b.minimumAreaThreshold ?? 0) - (a.minimumAreaThreshold ?? 0)
          )
          .map((color) => {
             return (
                <div
-                  key={`${color.id}`}
+                  key={color.id}
                   className="col-12 sm:col-6 md:col-12 lg:col-6 xl:col-6"
                >
                   <SingleColorSelectionColor
-                     threshold={color.minimumAreaThreshold || 0}
+                     threshold={color.minimumAreaThreshold ?? 0}
                      color={color}
                      onRemove={handleColorRemove}
                      onThresholdChange={handleColorThresholdChange}

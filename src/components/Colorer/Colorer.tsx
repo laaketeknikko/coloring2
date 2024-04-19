@@ -12,7 +12,7 @@ const Colorer = () => {
    const globalSettings = useAtomValue(globalColoringSettingsAtom)
 
    const runColoring = (event: React.SyntheticEvent) => {
-      event?.preventDefault()
+      event.preventDefault()
 
       const newQueue = [...processingQueue, ...uploadedFiles].map((image) => {
          return { ...image, settings: globalSettings }
