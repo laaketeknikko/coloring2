@@ -8,7 +8,6 @@ import {
 } from "../../atoms/atoms"
 import { useEffect, useRef } from "react"
 import { imagesFromFiles } from "../../utils/imageUtils"
-import { ImageWithSettings } from "../../types/types"
 import { v4 } from "uuid"
 
 const FileInput = () => {
@@ -32,30 +31,30 @@ const FileInput = () => {
    }
 
    // TODO: Turn to non-await
-   const handleUpload = async () => {
-      const images = await imagesFromFiles(selectedFiles)
-
-      const imagesWithSettings: Array<ImageWithSettings> = images.map(
-         (image, index) => {
-            return {
-               imageData: {
-                  meta: {
-                     name: selectedFiles[index].name,
+   const handleUpload = () => {
+      imagesFromFiles(selectedFiles)
+         .then((images) => {
+            const imagesWithSettings = images.map((image, index) => {
+               return {
+                  imageData: {
+                     meta: {
+                        name: selectedFiles[index].name,
+                     },
+                     image,
+                     dataUrl: image.toDataURL(),
                   },
-                  image: image,
-                  dataUrl: image.toDataURL(),
-               },
-               settings: { ...globalColoringSettings },
-               id: v4(),
-            }
-         }
-      )
+                  settings: { ...globalColoringSettings },
+                  id: v4(),
+               }
+            })
 
-      console.log("setting the shit")
-
-      setUploadedFiles([...uploadedFiles, ...imagesWithSettings])
-      setProcessingQueue([...processingQueue, ...imagesWithSettings])
-      setSelectedFiles([])
+            setUploadedFiles(uploadedFiles.concat(imagesWithSettings))
+            setProcessingQueue(processingQueue.concat(imagesWithSettings))
+            setSelectedFiles([])
+         })
+         .catch((error: unknown) => {
+            console.log(error)
+         })
    }
 
    const fileUploadRef = useRef<FileUpload>(null)
@@ -72,14 +71,7 @@ const FileInput = () => {
             ref={fileUploadRef}
             accept="image/*"
             customUpload
-            uploadHandler={() => {
-               // eslint-disable-next-line no-extra-semi
-               ;() => {
-                  void (async () => {
-                     await handleUpload()
-                  })()
-               }
-            }}
+            uploadHandler={handleUpload}
             multiple
             mode="advanced"
             onSelect={handleFileChange}
