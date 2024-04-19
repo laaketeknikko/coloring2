@@ -1,5 +1,5 @@
 import { useAtom } from "jotai"
-import { Galleria } from "primereact/galleria"
+import { Galleria, GalleriaItemChangeEvent } from "primereact/galleria"
 import { coloredImagesAtom } from "../../atoms/atoms"
 import { useCallback, useMemo, useState } from "react"
 import { Button } from "primereact/button"
@@ -11,6 +11,7 @@ import { ImageWithSettings } from "../../types/types"
 import { ImageActionButtons } from "../utils/ImageActionButtons"
 import Image from "image-js"
 import { Skeleton } from "primereact/skeleton"
+import { primeFlexBreakPoints } from "../../config/config"
 
 const CustomGalleria = () => {
    const [processedImages, setProcessedImages] = useAtom(coloredImagesAtom)
@@ -121,13 +122,13 @@ const CustomGalleria = () => {
          }
 
          return (
-            <div>
+            <div style={{ height: "18vh" }}>
                <img
                   src={item.imageData.dataUrl}
                   alt={`${item.imageData.meta.name} thumbnail`}
-                  style={{ height: "18vh" }}
+                  style={{ aspectRatio: 1, width: "100%" }}
                />
-               <div className="grid justify-content-center">
+               <div className="grid justify-content-center p-0 m-0">
                   <div>
                      <ImageActionButtons
                         id={item.id}
@@ -141,6 +142,19 @@ const CustomGalleria = () => {
       },
       [handleImageDownload, handleImageRemove]
    )
+
+   const indicatorTemplate = (index: number) => {
+      return (
+         <Button
+            className="bg-yellow-100 border-round-sm flex-1 p-0 m-1 w-3rem text-center justify-content-center text-teal-900"
+            onClick={() => {
+               setActiveIndex(index)
+            }}
+         >
+            {index + 1}
+         </Button>
+      )
+   }
 
    const galleria = useMemo(() => {
       const placeHolder: Array<ImageWithSettings> = [
@@ -205,17 +219,55 @@ const CustomGalleria = () => {
 
       return (
          <Galleria
+            responsiveOptions={[
+               {
+                  breakpoint: String(primeFlexBreakPoints.sm),
+                  numVisible: 1,
+               },
+               {
+                  breakpoint: String(primeFlexBreakPoints.md),
+                  numVisible: 2,
+               },
+               {
+                  breakpoint: String(primeFlexBreakPoints.lg),
+                  numVisible: 3,
+               },
+               {
+                  breakpoint: String(primeFlexBreakPoints.xl),
+                  numVisible: 4,
+               },
+            ]}
             className="bg-teal-50"
             pt={{
                thumbnailContainer: {
                   style: { backgroundColor: "transparent" },
                },
+               indicators: {
+                  className: "w-full overflow-auto flex-wrap",
+               },
+               indicator: {
+                  className: "m-0 p-0",
+               },
+               item: {
+                  className: "max-w-screen",
+               },
+               previousThumbnailIcon: {
+                  className: "text-green-700 w-2rem h-2rem",
+               },
+               nextThumbnailIcon: {
+                  className: "text-green-700 w-2rem h-2rem",
+               },
+               previousItemIcon: {
+                  className: "text-green-700 w-2rem h-2rem",
+               },
+               nextItemIcon: {
+                  className: "text-green-700 w-2rem h-2rem",
+               },
             }}
-            showThumbnailNavigators={false}
+            showThumbnailNavigators={true}
+            showItemNavigators={true}
             showIndicatorsOnItem={false}
-            showItemNavigatorsOnHover={true}
             indicatorsPosition="top"
-            changeItemOnIndicatorHover={true}
             showIndicators={true}
             thumbnailsPosition="top"
             value={processedImages.length === 0 ? placeHolder : processedImages}
@@ -224,6 +276,7 @@ const CustomGalleria = () => {
                setActiveIndex(event.index)
             }}
             item={itemTemplate}
+            indicator={indicatorTemplate}
             thumbnail={thumbnailTemplate}
          />
       )

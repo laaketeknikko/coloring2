@@ -30,7 +30,6 @@ const FileInput = () => {
       setSelectedFiles(fileList)
    }
 
-   // TODO: Turn to non-await
    const handleUpload = () => {
       imagesFromFiles(selectedFiles)
          .then((images) => {
