@@ -9,6 +9,7 @@ export interface ImageListProps {
 
    onImageRemove?: (id: string) => void
    onImageSelect?: (id: string) => void
+
    onImageDownload?: (id: string) => void
 }
 

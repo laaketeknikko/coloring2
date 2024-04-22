@@ -17,6 +17,7 @@ import { zipImages } from "../../utils/zipping"
 import { PrimeIcons } from "primereact/api"
 import { Sidebar } from "primereact/sidebar"
 import { CustomGalleria } from "../Galleria/CustomGalleria"
+import { TriStateCheckbox } from "primereact/tristatecheckbox"
 
 const ImageViewer = () => {
    const [uploadedImages, setUploadedImages] = useAtom(uploadedImagesAtom)
@@ -25,6 +26,10 @@ const ImageViewer = () => {
          return { image: image, isSelected: true }
       }),
    ])
+
+   const [allUploadedImagesSelected, setAllUploadedImagesSelected] = useState<
+      boolean | null
+   >(null)
 
    useEffect(() => {
       const images = uploadedImages.map((image) => {
@@ -67,6 +72,10 @@ const ImageViewer = () => {
          return { image: image, isSelected: true }
       }),
    ])
+
+   const [allColoredImagesSelected, setAllColoredImagesSelected] = useState<
+      boolean | null
+   >(null)
 
    useEffect(() => {
       const images = coloredImages.map((image) => {
@@ -207,6 +216,43 @@ const ImageViewer = () => {
                   className="bg-teal-50 p-0 m-0"
                >
                   <div className="">
+                     <Button>
+                        <label>
+                           <TriStateCheckbox
+                              value={allUploadedImagesSelected}
+                              onChange={(e) => {
+                                 if (e.value === false) {
+                                    setAllUploadedImagesSelected(false)
+                                    setSelectedUploadedImages([
+                                       ...selectedUploadedImages.map(
+                                          (image) => {
+                                             return {
+                                                image: image.image,
+                                                isSelected: false,
+                                             }
+                                          }
+                                       ),
+                                    ])
+                                 } else if (e.value === true) {
+                                    setAllUploadedImagesSelected(true)
+                                    setSelectedUploadedImages([
+                                       ...selectedUploadedImages.map(
+                                          (image) => {
+                                             return {
+                                                image: image.image,
+                                                isSelected: true,
+                                             }
+                                          }
+                                       ),
+                                    ])
+                                 } else {
+                                    setAllUploadedImagesSelected(null)
+                                 }
+                              }}
+                           />
+                           Select all
+                        </label>
+                     </Button>
                      <Button
                         onClick={() => {
                            const notSelected = selectedUploadedImages.filter(
@@ -243,6 +289,39 @@ const ImageViewer = () => {
                {/** Colored images */}
                <TabPanel header="Colored images" className="">
                   <div className="">
+                     <Button>
+                        <label>
+                           <TriStateCheckbox
+                              value={allColoredImagesSelected}
+                              onChange={(e) => {
+                                 if (e.value === false) {
+                                    setAllColoredImagesSelected(false)
+                                    setSelectedColoredImages([
+                                       ...selectedColoredImages.map((image) => {
+                                          return {
+                                             image: image.image,
+                                             isSelected: false,
+                                          }
+                                       }),
+                                    ])
+                                 } else if (e.value === true) {
+                                    setAllColoredImagesSelected(true)
+                                    setSelectedColoredImages([
+                                       ...selectedColoredImages.map((image) => {
+                                          return {
+                                             image: image.image,
+                                             isSelected: true,
+                                          }
+                                       }),
+                                    ])
+                                 } else {
+                                    setAllColoredImagesSelected(null)
+                                 }
+                              }}
+                           />
+                           Select all
+                        </label>
+                     </Button>
                      <Button
                         onClick={() => {
                            setIsFullScreenGallery(true)

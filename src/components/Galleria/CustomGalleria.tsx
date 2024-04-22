@@ -1,5 +1,5 @@
 import { useAtom } from "jotai"
-import { Galleria, GalleriaItemChangeEvent } from "primereact/galleria"
+import { Galleria } from "primereact/galleria"
 import { coloredImagesAtom } from "../../atoms/atoms"
 import { useCallback, useMemo, useState } from "react"
 import { Button } from "primereact/button"
