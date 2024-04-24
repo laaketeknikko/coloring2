@@ -1,7 +1,6 @@
 import "primereact/resources/themes/saga-orange/theme.css"
 import { ImageProcessingPanel } from "./components/ImageProcessingPanel/ImageProcessingPanel"
 import { FileUploadPanel } from "./components/FileUploadPanel/FileUploadPanel"
-import { Settings } from "./components/Settings/Settings"
 
 import { PrimeIcons } from "primereact/api"
 import { useState } from "react"
@@ -120,7 +119,10 @@ function App() {
                <FileUploadPanel />
             </Sidebar>
 
-            <div className="grid m-0">
+            <div>
+               <ImageProcessingPanel />
+            </div>
+            {/*<div className="grid m-0">
                <div className="col-12 sm:col-12 md:col-6 lg:col-5 xl:col-4">
                   <Settings />
                </div>
@@ -128,6 +130,7 @@ function App() {
                   <ImageProcessingPanel />
                </div>
             </div>
+            */}
          </div>
       </div>
    )

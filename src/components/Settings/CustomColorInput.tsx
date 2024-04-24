@@ -44,8 +44,8 @@ const BorderColorInput = ({
 
    return (
       <div className="p-inputgroup">
-         <span className="p-inputgroup-addon ">Color</span>
-         <span className="p-inputgroup-addon p-0">
+         <span className="p-inputgroup-addon bg-teal-50">Color</span>
+         <span className="p-inputgroup-addon bg-teal-50 p-0">
             <Dropdown
                className="w-auto"
                tooltip="Area outline color in the image."

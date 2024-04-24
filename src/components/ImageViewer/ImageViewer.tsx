@@ -6,9 +6,8 @@ import {
    uploadedImagesAtom,
 } from "../../atoms/atoms"
 import { useAtom } from "jotai"
-import { ImageList } from "./ImageList"
 import { TabPanel, TabView } from "primereact/tabview"
-import { useMemo, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import { Button } from "primereact/button"
 
 import { ImageWithSettings } from "../../types/types"
@@ -16,21 +15,13 @@ import { v4 } from "uuid"
 import { Sidebar } from "primereact/sidebar"
 import { CustomGalleria } from "../Galleria/CustomGalleria"
 import { ImageListHandler } from "./ImageListHandler"
+import { Settings } from "../Settings/Settings"
 
 const ImageViewer = () => {
    const [uploadedImages] = useAtom(uploadedImagesAtom)
    const [coloredImages] = useAtom(coloredImagesAtom)
 
    const [processingQueue, setProcessingQueue] = useAtom(processingQueueAtom)
-   const queuedImages = useMemo(() => {
-      return processingQueue.map((image) => {
-         return { image: image, isSelected: false }
-      })
-   }, [processingQueue])
-
-   const handleQueuedImageRemoved = (id: string) => {
-      setProcessingQueue(processingQueue.filter((image) => image.id !== id))
-   }
 
    const addImagesToQueue = (
       images: Array<{ image: ImageWithSettings; isSelected: boolean }>
@@ -118,6 +109,11 @@ const ImageViewer = () => {
                   },
                }}
             >
+               {/** Settings */}
+               <TabPanel header="Settings" className="bg-teal-50 p-0 m-0">
+                  <Settings />
+               </TabPanel>
+
                {/** Uploaded images */}
                <TabPanel
                   header="Uploaded images"
@@ -137,12 +133,7 @@ const ImageViewer = () => {
 
                {/** Queued images */}
                <TabPanel header="Queued images">
-                  <div className="">
-                     <ImageList
-                        images={queuedImages}
-                        onImageRemove={handleQueuedImageRemoved}
-                     />
-                  </div>
+                  <ImageListHandler imageListAtom={processingQueueAtom} />
                </TabPanel>
             </TabView>
          </Panel>

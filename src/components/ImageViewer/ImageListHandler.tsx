@@ -91,105 +91,108 @@ const ImageListHandler = ({
    return (
       <div>
          <div className="">
-            <Button>
-               <label>
-                  <TriStateCheckbox
-                     value={allImagesSelected}
-                     onChange={(e) => {
-                        if (e.value === false) {
-                           setAllImagesSelected(false)
-                           setSelectedImages([
-                              ...selectedImages.map((image) => {
-                                 return {
-                                    image: image.image,
-                                    isSelected: false,
-                                 }
-                              }),
-                           ])
-                        } else if (e.value === true) {
-                           setAllImagesSelected(true)
-                           setSelectedImages([
-                              ...selectedImages.map((image) => {
-                                 return {
-                                    image: image.image,
-                                    isSelected: true,
-                                 }
-                              }),
-                           ])
-                        } else {
-                           setAllImagesSelected(null)
-                        }
-                     }}
-                  />
-                  Select all
-               </label>
-            </Button>
-
-            {enableColoredFullScreen && (
-               <Button
-                  onClick={() => {
-                     setIsFullScreenGallery(true)
-                  }}
-                  icon={PrimeIcons.WINDOW_MAXIMIZE}
-               ></Button>
-            )}
-
-            <Button
-               onClick={() => {
-                  const notSelected = selectedImages.filter((image) => {
-                     return !image.isSelected
-                  })
-
-                  setSelectedImages(notSelected)
-                  setImageList(
-                     notSelected.map((image) => {
-                        return image.image
-                     })
-                  )
-               }}
-            >
-               Delete selected
-            </Button>
-            <Button
-               onClick={() => {
-                  addImagesToQueue(selectedImages)
-               }}
-            >
-               Queue selected
-            </Button>
-
-            {enableDownload && (
-               <Button
-                  onClick={() => {
-                     zipImages(
-                        selectedImages
-                           .filter((image) => image.isSelected)
-                           .map((image) => {
-                              return image.image
-                           }),
-                        (error, data) => {
-                           if (error) {
-                              console.log(error)
-                              return
+            <div className="w-full">
+               <Button className="">
+                  <label>
+                     <TriStateCheckbox
+                        value={allImagesSelected}
+                        onChange={(e) => {
+                           if (e.value === false) {
+                              setAllImagesSelected(false)
+                              setSelectedImages([
+                                 ...selectedImages.map((image) => {
+                                    return {
+                                       image: image.image,
+                                       isSelected: false,
+                                    }
+                                 }),
+                              ])
+                           } else if (e.value === true) {
+                              setAllImagesSelected(true)
+                              setSelectedImages([
+                                 ...selectedImages.map((image) => {
+                                    return {
+                                       image: image.image,
+                                       isSelected: true,
+                                    }
+                                 }),
+                              ])
+                           } else {
+                              setAllImagesSelected(null)
                            }
+                        }}
+                     />
+                     Select all
+                  </label>
+               </Button>
 
-                           const blob = new Blob([data], {
-                              type: "application/zip",
-                           })
+               {enableColoredFullScreen && (
+                  <Button
+                     className=""
+                     onClick={() => {
+                        setIsFullScreenGallery(true)
+                     }}
+                     icon={PrimeIcons.WINDOW_MAXIMIZE}
+                  ></Button>
+               )}
 
-                           const a = document.createElement("a")
-                           a.href = URL.createObjectURL(blob)
-                           a.download = "colored_images.zip"
-                           a.click()
-                           URL.revokeObjectURL(a.href)
-                        }
+               <Button
+                  className=""
+                  onClick={() => {
+                     const notSelected = selectedImages.filter((image) => {
+                        return !image.isSelected
+                     })
+
+                     setSelectedImages(notSelected)
+                     setImageList(
+                        notSelected.map((image) => {
+                           return image.image
+                        })
                      )
                   }}
                >
-                  Download selected
+                  Delete selected
                </Button>
-            )}
+               <Button
+                  onClick={() => {
+                     addImagesToQueue(selectedImages)
+                  }}
+               >
+                  Queue selected
+               </Button>
 
+               {enableDownload && (
+                  <Button
+                     onClick={() => {
+                        zipImages(
+                           selectedImages
+                              .filter((image) => image.isSelected)
+                              .map((image) => {
+                                 return image.image
+                              }),
+                           (error, data) => {
+                              if (error) {
+                                 console.log(error)
+                                 return
+                              }
+
+                              const blob = new Blob([data], {
+                                 type: "application/zip",
+                              })
+
+                              const a = document.createElement("a")
+                              a.href = URL.createObjectURL(blob)
+                              a.download = "colored_images.zip"
+                              a.click()
+                              URL.revokeObjectURL(a.href)
+                           }
+                        )
+                     }}
+                  >
+                     Download selected
+                  </Button>
+               )}
+            </div>
             <ImageList
                onImageRemove={handleImageRemove}
                images={selectedImages}
