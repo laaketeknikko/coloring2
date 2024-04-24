@@ -47,7 +47,7 @@ function App() {
    }
 
    return (
-      <div className="bg-green-50">
+      <div className="bg-green-50 min-h-screen">
          <div style={{ maxWidth: "1600px", margin: "0 auto" }}>
             <Toolbar
                className="bg-teal-50 p-1"

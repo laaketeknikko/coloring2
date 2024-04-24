@@ -5,10 +5,10 @@ import { ColorSelection } from "./ColorSelection/ColorSelection"
 
 const Settings = () => {
    return (
-      <div className="grid justify-content-center">
-         <div className="col-12 sm:col-12 md:col-12 lg:col-12 xl:col-12 text-center">
-            <div className="shadow-1 bg-teal-50 grid">
-               <div className="col-6 shadow-1 bg-green-50">
+      <div className="grid justify-content-center border-round-lg shadow p-0 m-0">
+         <div className="border-round-2xl col-12 sm:col-12 md:col-12 lg:col-12 xl:col-12 text-center">
+            <div className="border-round-2xl shadow bg-teal-50 grid">
+               <div className="border-round-xl col-6 shadow bg-green-50 ">
                   <p>
                      Outline color settings{" "}
                      <HelpButton size="small">
@@ -32,12 +32,12 @@ const Settings = () => {
                   </p>
                   <OutlineSettings />
                </div>
-               <div className="col-6 shadow-1 bg-green-50">
+               <div className="border-round-xl col-6 shadow bg-green-50">
                   <AlgorithmOptions />
                </div>
             </div>
          </div>
-         <div className="col-12 sm:col-12 md:col-12 lg:col-12 xl:col-12">
+         <div className="shadow border-round-xl col-12 sm:col-12 md:col-12 lg:col-12 xl:col-12">
             <ColorSelection />
          </div>
       </div>

@@ -12,7 +12,7 @@ const OutlineSettings = () => {
             <div className="max-w-16rem m-auto">
                <BorderColorPicker />
                <div className="p-inputgroup">
-                  <span className="p-inputgroup-addon">Patching</span>
+                  <span className="p-inputgroup-addon p-1">Patching</span>
                   <CustomInputNumber
                      tooltipOptions={{ position: "right" }}
                      tooltip="The pixel distance from an outline pixel up to which a pixel is considered an outline pixel.

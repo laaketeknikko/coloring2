@@ -68,7 +68,7 @@ const FileInput = () => {
       <div>
          <FileUpload
             ref={fileUploadRef}
-            accept="image/*"
+            accept=".png,.jpg,.jpeg"
             customUpload
             uploadHandler={handleUpload}
             multiple

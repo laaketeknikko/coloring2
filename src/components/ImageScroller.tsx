@@ -25,7 +25,7 @@ const ImageScroller = ({
             return (
                <div
                   key={image.id}
-                  className="relative inline-block h-full mx-2 shadow-2"
+                  className="relative inline-block h-full mx-2 shadow"
                >
                   <div
                      className=""

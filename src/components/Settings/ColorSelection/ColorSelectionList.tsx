@@ -52,7 +52,7 @@ const ColorSelectionList = () => {
                   className={`col-12 sm:col-6 md:col-12 lg:col-6 xl:col-6
                   ${
                      color.id === selectedColor?.id
-                        ? "bg-yellow-100 shadow-4"
+                        ? "bg-yellow-100 shadow"
                         : ""
                   }`}
                >

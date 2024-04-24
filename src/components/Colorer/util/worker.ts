@@ -39,8 +39,6 @@ coloringWorker.onmessage = (event: MessageEvent<DataUrlWithSettings>) => {
 }
 
 const runColoring = (imageWithSettings: ImageWithSettings) => {
-   console.log("Running coloring with: ", imageWithSettings)
-
    const dataUrlWithSettings: DataUrlWithSettings = {
       data: {
          dataUrl: imageWithSettings.imageData.dataUrl,
