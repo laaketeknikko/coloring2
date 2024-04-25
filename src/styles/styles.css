@@ -10,10 +10,18 @@ p {
 
 .p-inputtext {
    padding: 2px !important;
+   background-color: var(--yellow-50);
 }
 
 .p-inputgroup-addon {
    padding: 2px;
+}
+
+.p-button {
+   margin-left: 1px;
+   margin-right: 1px;
+   margin-top: 1px;
+   margin-bottom: 1px;
 }
 
 /*
@@ -23,6 +31,10 @@ Prevent react-color-picker fields from expanding beyond the container
    grid-template-columns: repeat(auto-fit, 100%) !important;
 }
 
+.shadow {
+   box-shadow: 1px 1px 5px 0px rgba(255, 200, 7, 0.2) !important;
+}
+
 body {
    margin: 0;
    margin-left: 2px;
@@ -30,6 +42,8 @@ body {
    padding: 0;
 
    background-color: transparent;
+
+   color: var(--teal-800);
 }
 
 .p-tabview-nav-link {

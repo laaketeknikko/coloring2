@@ -44,16 +44,6 @@ const BorderColorPicker = () => {
 
    return (
       <>
-         <span
-            className="block"
-            style={{
-               height: "1rem",
-               backgroundColor: `rgb(${String(borderColor.r)},${String(
-                  borderColor.g
-               )},${String(borderColor.b)})`,
-            }}
-         ></span>
-
          {/* Color input*/}
          <BorderColorInput
             color={{ rgb: borderColor, hex: borderHexColor }}
@@ -62,7 +52,7 @@ const BorderColorPicker = () => {
 
          {/* Tolerance input */}
          <div className="p-inputgroup">
-            <span className="p-inputgroup-addon p-1">
+            <span className="p-inputgroup-addon p-1 bg-teal-50">
                <label htmlFor="border-color-tolerance-r">Tolerance</label>
             </span>
             <CustomInputNumber

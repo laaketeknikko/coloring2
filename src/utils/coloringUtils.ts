@@ -439,8 +439,6 @@ const colorImageWithAreas = (image: Image, settings: ColoringSettings) => {
 
             allMappedPoints = mappedPoints
 
-            console.log("got area: ", area)
-
             if (area.length > 0) {
                areas.push(area)
             }

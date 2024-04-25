@@ -34,7 +34,7 @@ const ImageList = ({
                className="col-12 sm:col-6 md:col-12 lg:col-4 xl:col-3
                border-round-lg p-1"
             >
-               <div className="grid bg-green-100 m-1 shadow-2 h-full">
+               <div className="grid bg-green-100 m-1 shadow h-full">
                   <div className="col-2 p-0 m-0">
                      {onImageSelect && (
                         <Checkbox
