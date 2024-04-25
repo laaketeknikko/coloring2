@@ -2,7 +2,7 @@ import {
    DataUrlWithSettings,
    isDataUrlWithSettings,
 } from "../../../types/types"
-import { processImage } from "../../../utils/coloringUtils"
+import { processImage } from "../../../utils/coloringUtils/coloringUtils"
 import Image from "image-js"
 
 onmessage = function (event: MessageEvent<DataUrlWithSettings>) {

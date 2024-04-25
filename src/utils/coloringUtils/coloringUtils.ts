@@ -1,5 +1,5 @@
 import { Image } from "image-js"
-import { ColoringSettings, ColoringSettingsColor } from "./ColoringSettings"
+import { ColoringSettings, ColoringSettingsColor } from "../ColoringSettings"
 
 const colorsAreEqual = (color1: Array<number>, color2: Array<number>) => {
    return (
@@ -388,6 +388,22 @@ const getPaintColorsByAreaNumber = (
    return result
 }
 
+const getRandomPaintColors = (areas: Array<Array<[number, number]>>) => {
+   const result: Array<{
+      area: Array<Array<number>>
+      color: Array<number>
+   }> = []
+
+   for (const area of areas) {
+      result.push({
+         area: area,
+         color: selectRandomPaintColor(),
+      })
+   }
+
+   return result
+}
+
 const colorImageWithAreas = (image: Image, settings: ColoringSettings) => {
    const width = image.width
    const height = image.height
@@ -463,12 +479,85 @@ const colorImageWithAreas = (image: Image, settings: ColoringSettings) => {
    }
 }
 
-const processImage = (image: Image, settings: ColoringSettings) => {
-   if (settings.colorByAreaNumber || settings.colorByAreaSize) {
-      colorImageWithAreas(image, settings)
-   } else {
-      colorImageWithoutAreas(image, settings)
+const colorImage = (image: Image, settings: ColoringSettings) => {
+   const width = image.width
+   const height = image.height
+   const areas: Array<Array<[number, number]>> = []
+
+   const borderColor = [
+      settings.borderColor.r,
+      settings.borderColor.g,
+      settings.borderColor.b,
+   ]
+   const borderTolerance = [
+      settings.borderColorTolerance.r,
+      settings.borderColorTolerance.g,
+      settings.borderColorTolerance.b,
+   ]
+
+   let allMappedPoints: Array<Array<boolean>> = []
+   for (let i = 0; i < width; i++) {
+      allMappedPoints.push(Array<boolean>(height).fill(false))
    }
+
+   for (let x = 0; x < width; x++) {
+      for (let y = 0; y < height; y++) {
+         const pixel = image.getPixelXY(x, y)
+
+         const isMapped = allMappedPoints[x]?.[y]
+
+         if (
+            !isMapped &&
+            !colorIsWithinTolerance(pixel, borderColor, borderTolerance) &&
+            !isBorderWithinRadius(
+               x,
+               y,
+               image,
+               borderColor,
+               settings.borderPatching
+            )
+         ) {
+            const { area, mappedPoints } = mapAreaFrom(
+               image,
+               x,
+               y,
+               allMappedPoints,
+               borderColor,
+               borderTolerance,
+               settings.borderPatching,
+               settings.algorithmDirection
+            )
+
+            allMappedPoints = mappedPoints
+
+            if (area.length > 0) {
+               areas.push(area)
+            }
+         }
+      }
+   }
+
+   const sortedAreas = sortAreasBySize(areas)
+
+   let areasAndColors: ReturnType<
+      typeof getPaintColorsByAreaNumber | typeof getPaintColorsByAreaSize
+   > = []
+
+   if (settings.colorByAreaNumber) {
+      areasAndColors = getPaintColorsByAreaNumber(sortedAreas, settings)
+   } else if (settings.colorByAreaSize) {
+      areasAndColors = getPaintColorsByAreaSize(sortedAreas, settings)
+   } else {
+      areasAndColors = getRandomPaintColors(sortedAreas)
+   }
+
+   for (const area of areasAndColors) {
+      paintPixels(image, area.area, area.color)
+   }
+}
+
+const processImage = (image: Image, settings: ColoringSettings) => {
+   colorImage(image, settings)
 
    return new Promise<Image>((resolve, reject) => {
       resolve(image)
