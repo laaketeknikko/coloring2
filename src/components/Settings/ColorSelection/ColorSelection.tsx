@@ -80,14 +80,14 @@ const ColorSelection = () => {
             </HelpButton>
          </div>
 
-         <div className="col-6 sm:col-4 md:col-5 lg:col-4 xl:col-4">
+         <div className="col-6 sm:col-4 md:col-4 lg:col-3 xl:col-2">
             <ColorerColorsPicker
                onColorAdded={handleColorAdded}
                onColorChange={handleColorChange}
                color={selectedColor}
             />
          </div>
-         <div className="col-6 sm:col-8 md:col-7 lg:col-8 xl:col-8">
+         <div className="col-6 sm:col-8 md:col-8 lg:col-9 xl:col-10">
             <ScrollPanel className="w-full h-full">
                <ColorSelectionList />
             </ScrollPanel>

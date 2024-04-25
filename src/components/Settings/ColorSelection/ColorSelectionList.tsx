@@ -49,7 +49,7 @@ const ColorSelectionList = () => {
             return (
                <div
                   key={color.id}
-                  className={`col-12 sm:col-6 md:col-12 lg:col-6 xl:col-6
+                  className={`col-12 sm:col-4 md:col-4 lg:col-3 xl:col-2
                   ${
                      color.id === selectedColor?.id
                         ? "bg-yellow-100 shadow"
