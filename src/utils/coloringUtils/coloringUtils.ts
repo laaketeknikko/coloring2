@@ -1,5 +1,5 @@
 import { Image } from "image-js"
-import { ColoringSettings, ColoringSettingsColor } from "../ColoringSettings"
+import { ColoringSettings } from "../ColoringSettings"
 
 const colorsAreEqual = (color1: Array<number>, color2: Array<number>) => {
    return (
@@ -48,19 +48,10 @@ const colorIsWithinTolerance = (
 
 const selectRandomPaintColor = () => {
    return [
-      Math.floor(Math.random() * 0.6 * 255 + 0.4 * 255),
-      Math.floor(Math.random() * 0.6 * 255 + 0.4 * 255),
-      Math.floor(Math.random() * 0.6 * 255 + 0.4 * 255),
+      Math.floor(Math.random() * 255),
+      Math.floor(Math.random() * 255),
+      Math.floor(Math.random() * 255),
    ]
-}
-
-const selectPaintColor = (list: Array<ColoringSettingsColor>) => {
-   if (list.length === 0) {
-      return null
-   }
-   const color = list[Math.floor(Math.random() * list.length)]
-
-   return [color.color.r, color.color.g, color.color.b]
 }
 
 const isBorderWithinRadius = (
@@ -96,140 +87,6 @@ const isBorderWithinRadius = (
 
    return false
 }
-
-const colorAreaFrom = (
-   image: Image,
-   x: number,
-   y: number,
-   paintColor: Array<number>,
-   borderColor: Array<number>,
-   borderTolerance: Array<number> = [0, 0, 0],
-   borderPatching: number,
-   algorithmDirection: "4" | "8" | "4-diagonal"
-) => {
-   const queue: Array<[number, number]> = [[x, y]]
-   const points: Array<Array<number>> = []
-
-   while (queue.length > 0) {
-      const coord = queue.shift()
-      let x = 0
-      let y = 0
-      if (coord) {
-         x = coord[0]
-         y = coord[1]
-      } else {
-         return points
-      }
-
-      if (x < 0 || y < 0 || x >= image.width || y >= image.height) {
-         continue
-      }
-
-      const pixel = image.getPixelXY(x, y)
-
-      if (
-         !colorsAreEqual(pixel, paintColor) &&
-         !colorIsWithinTolerance(pixel, borderColor, borderTolerance) &&
-         !isBorderWithinRadius(x, y, image, borderColor, borderPatching)
-      ) {
-         image.setPixelXY(x, y, paintColor)
-
-         points.push(pixel)
-         switch (algorithmDirection) {
-            case "8":
-               queue.push(
-                  [x - 1, y - 1],
-                  [x, y - 1],
-                  [x + 1, y - 1],
-                  [x - 1, y],
-                  [x + 1, y],
-                  [x - 1, y + 1],
-                  [x, y + 1],
-                  [x + 1, y + 1]
-               )
-               break
-            case "4":
-               queue.push([x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1])
-               break
-            case "4-diagonal":
-               queue.push(
-                  [x - 1, y - 1],
-                  [x + 1, y - 1],
-                  [x - 1, y + 1],
-                  [x + 1, y + 1]
-               )
-               break
-         }
-      }
-   }
-
-   return points
-}
-
-const colorImageWithoutAreas = (image: Image, settings: ColoringSettings) => {
-   const width = image.width
-   const height = image.height
-
-   const usedColors: Array<Array<number>> = []
-   const borderColor = [
-      settings.borderColor.r,
-      settings.borderColor.g,
-      settings.borderColor.b,
-   ]
-   const borderTolerance = [
-      settings.borderColorTolerance.r,
-      settings.borderColorTolerance.g,
-      settings.borderColorTolerance.b,
-   ]
-   const algorithmDirection = settings.algorithmDirection
-
-   for (let x = 0; x < width; x++) {
-      for (let y = 0; y < height; y++) {
-         const pixel = image.getPixelXY(x, y)
-
-         const paintColor =
-            selectPaintColor(settings.colorsToUse) ?? selectRandomPaintColor()
-
-         const painted = usedColors.find((color) => {
-            return colorsAreEqual(pixel, color)
-         })
-         if (
-            !painted &&
-            !colorIsWithinTolerance(pixel, borderColor, borderTolerance) &&
-            !isBorderWithinRadius(
-               x,
-               y,
-               image,
-               borderColor,
-               settings.borderPatching
-            )
-         ) {
-            usedColors.push(paintColor)
-            const area = colorAreaFrom(
-               image,
-               x,
-               y,
-               paintColor,
-               borderColor,
-               borderTolerance,
-               settings.borderPatching,
-               algorithmDirection
-            )
-
-            if (area.length > 0) {
-               //                  areas.push(area)
-            }
-            //borderPoints.push([x, y])
-         }
-      }
-   }
-}
-
-/**
- *
- *
- * Mapping algorithm
- */
 
 const mapAreaFrom = (
    image: Image,
@@ -404,81 +261,6 @@ const getRandomPaintColors = (areas: Array<Array<[number, number]>>) => {
    return result
 }
 
-const colorImageWithAreas = (image: Image, settings: ColoringSettings) => {
-   const width = image.width
-   const height = image.height
-   const areas: Array<Array<[number, number]>> = []
-
-   const borderColor = [
-      settings.borderColor.r,
-      settings.borderColor.g,
-      settings.borderColor.b,
-   ]
-   const borderTolerance = [
-      settings.borderColorTolerance.r,
-      settings.borderColorTolerance.g,
-      settings.borderColorTolerance.b,
-   ]
-
-   let allMappedPoints: Array<Array<boolean>> = []
-   for (let i = 0; i < width; i++) {
-      allMappedPoints.push(Array<boolean>(height).fill(false))
-   }
-
-   for (let x = 0; x < width; x++) {
-      for (let y = 0; y < height; y++) {
-         const pixel = image.getPixelXY(x, y)
-
-         const isMapped = allMappedPoints[x]?.[y]
-
-         if (
-            !isMapped &&
-            !colorIsWithinTolerance(pixel, borderColor, borderTolerance) &&
-            !isBorderWithinRadius(
-               x,
-               y,
-               image,
-               borderColor,
-               settings.borderPatching
-            )
-         ) {
-            const { area, mappedPoints } = mapAreaFrom(
-               image,
-               x,
-               y,
-               allMappedPoints,
-               borderColor,
-               borderTolerance,
-               settings.borderPatching,
-               settings.algorithmDirection
-            )
-
-            allMappedPoints = mappedPoints
-
-            if (area.length > 0) {
-               areas.push(area)
-            }
-         }
-      }
-   }
-
-   const sortedAreas = sortAreasBySize(areas)
-
-   let paintColors: ReturnType<
-      typeof getPaintColorsByAreaNumber | typeof getPaintColorsByAreaSize
-   > = []
-
-   if (settings.colorByAreaNumber) {
-      paintColors = getPaintColorsByAreaNumber(sortedAreas, settings)
-   } else if (settings.colorByAreaSize) {
-      paintColors = getPaintColorsByAreaSize(sortedAreas, settings)
-   }
-
-   for (const area of paintColors) {
-      paintPixels(image, area.area, area.color)
-   }
-}
-
 const colorImage = (image: Image, settings: ColoringSettings) => {
    const width = image.width
    const height = image.height
@@ -537,18 +319,20 @@ const colorImage = (image: Image, settings: ColoringSettings) => {
       }
    }
 
-   const sortedAreas = sortAreasBySize(areas)
-
    let areasAndColors: ReturnType<
       typeof getPaintColorsByAreaNumber | typeof getPaintColorsByAreaSize
    > = []
 
-   if (settings.colorByAreaNumber) {
-      areasAndColors = getPaintColorsByAreaNumber(sortedAreas, settings)
-   } else if (settings.colorByAreaSize) {
-      areasAndColors = getPaintColorsByAreaSize(sortedAreas, settings)
+   if (settings.colorByAreaNumber || settings.colorByAreaSize) {
+      const sortedAreas = sortAreasBySize(areas)
+
+      if (settings.colorByAreaNumber) {
+         areasAndColors = getPaintColorsByAreaNumber(sortedAreas, settings)
+      } else if (settings.colorByAreaSize) {
+         areasAndColors = getPaintColorsByAreaSize(sortedAreas, settings)
+      }
    } else {
-      areasAndColors = getRandomPaintColors(sortedAreas)
+      areasAndColors = getRandomPaintColors(areas)
    }
 
    for (const area of areasAndColors) {
