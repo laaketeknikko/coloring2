@@ -1,14 +1,6 @@
 import { Image } from "image-js"
 import { ColoringSettings } from "../ColoringSettings"
 
-const colorsAreEqual = (color1: Array<number>, color2: Array<number>) => {
-   return (
-      color1[0] === color2[0] &&
-      color1[1] === color2[1] &&
-      color1[2] === color2[2]
-   )
-}
-
 const colorIsSmallerOrEqual = (
    color1: Array<number>,
    color2: Array<number>
@@ -57,41 +49,6 @@ const selectRandomPaintColor = () => {
 const isBorderWithinRadius = (
    x: number,
    y: number,
-   image: Image,
-   borderColor: Array<number>,
-   radius: number
-) => {
-   if (radius <= 0) {
-      return false
-   }
-
-   const imageWidth = image.width
-   const imageHeight = image.height
-
-   const minX = Math.max(x - radius, 0)
-   const maxX = Math.min(x + radius, imageWidth - 1)
-   const minY = Math.max(y - radius, 0)
-   const maxY = Math.min(y + radius, imageHeight - 1)
-
-   for (let i = minX; i <= maxX; i++) {
-      for (let j = minY; j <= maxY; j++) {
-         if (i === x && j === y) {
-            continue
-         }
-
-         const pixel = image.getPixelXY(i, j)
-         if (colorsAreEqual(pixel, borderColor)) {
-            return true
-         }
-      }
-   }
-
-   return false
-}
-
-const isBorderWithinRadius2 = (
-   x: number,
-   y: number,
    imageBorders: Array<Array<boolean>>,
    radius: number
 ) => {
@@ -123,7 +80,8 @@ const isBorderWithinRadius2 = (
 }
 
 const mapAreaFrom = (
-   image: Image,
+   imageWidth: number,
+   imageHeight: number,
    startX: number,
    startY: number,
    mappedPoints: Array<Array<boolean>>,
@@ -145,7 +103,7 @@ const mapAreaFrom = (
          return { area, mappedPoints }
       }
 
-      if (x < 0 || y < 0 || x >= image.width || y >= image.height) {
+      if (x < 0 || y < 0 || x >= imageWidth || y >= imageHeight) {
          continue
       }
 
@@ -154,7 +112,7 @@ const mapAreaFrom = (
       if (
          !isMapped &&
          !imageBorders[x][y] &&
-         !isBorderWithinRadius2(x, y, imageBorders, borderPatching)
+         !isBorderWithinRadius(x, y, imageBorders, borderPatching)
       ) {
          mappedPoints[x][y] = true
          area.push([x, y])
@@ -332,12 +290,6 @@ const colorImage = (image: Image, settings: ColoringSettings) => {
    const height = image.height
    const areas: Array<Array<[number, number]>> = []
 
-   const borderColor = [
-      settings.borderColor.r,
-      settings.borderColor.g,
-      settings.borderColor.b,
-   ]
-
    const imageBorders = getBorders(image, settings)
 
    let allMappedPoints: Array<Array<boolean>> = []
@@ -352,16 +304,11 @@ const colorImage = (image: Image, settings: ColoringSettings) => {
          if (
             !isMapped &&
             !imageBorders[x][y] &&
-            !isBorderWithinRadius(
-               x,
-               y,
-               image,
-               borderColor,
-               settings.borderPatching
-            )
+            !isBorderWithinRadius(x, y, imageBorders, settings.borderPatching)
          ) {
             const { area, mappedPoints } = mapAreaFrom(
-               image,
+               image.width,
+               image.height,
                x,
                y,
                allMappedPoints,
