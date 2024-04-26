@@ -89,13 +89,45 @@ const isBorderWithinRadius = (
    return false
 }
 
+const isBorderWithinRadius2 = (
+   x: number,
+   y: number,
+   imageBorders: Array<Array<boolean>>,
+   radius: number
+) => {
+   if (radius <= 0) {
+      return false
+   }
+
+   const imageWidth = imageBorders.length
+   const imageHeight = imageBorders[0].length
+
+   const minX = Math.max(x - radius, 0)
+   const maxX = Math.min(x + radius, imageWidth - 1)
+   const minY = Math.max(y - radius, 0)
+   const maxY = Math.min(y + radius, imageHeight - 1)
+
+   for (let i = minX; i <= maxX; i++) {
+      for (let j = minY; j <= maxY; j++) {
+         if (i === x && j === y) {
+            continue
+         }
+
+         if (imageBorders[i][j]) {
+            return true
+         }
+      }
+   }
+
+   return false
+}
+
 const mapAreaFrom = (
    image: Image,
    startX: number,
    startY: number,
    mappedPoints: Array<Array<boolean>>,
-   borderColor: Array<number>,
-   borderTolerance: Array<number> = [0, 0, 0],
+   imageBorders: Array<Array<boolean>>,
    borderPatching: number,
    algorithmDirection: "4" | "8" | "4-diagonal"
 ) => {
@@ -117,13 +149,12 @@ const mapAreaFrom = (
          continue
       }
 
-      const pixel = image.getPixelXY(x, y)
       const isMapped = mappedPoints[x]?.[y]
 
       if (
          !isMapped &&
-         !colorIsWithinTolerance(pixel, borderColor, borderTolerance) &&
-         !isBorderWithinRadius(x, y, image, borderColor, borderPatching)
+         !imageBorders[x][y] &&
+         !isBorderWithinRadius2(x, y, imageBorders, borderPatching)
       ) {
          mappedPoints[x][y] = true
          area.push([x, y])
@@ -263,10 +294,9 @@ const getRandomPaintColors = (areas: Array<Array<[number, number]>>) => {
    return result
 }
 
-const colorImage = (image: Image, settings: ColoringSettings) => {
-   const width = image.width
-   const height = image.height
-   const areas: Array<Array<[number, number]>> = []
+const getBorders = (image: Image, settings: ColoringSettings) => {
+   const imageWidth = image.width
+   const imageHeight = image.height
 
    const borderColor = [
       settings.borderColor.r,
@@ -279,6 +309,37 @@ const colorImage = (image: Image, settings: ColoringSettings) => {
       settings.borderColorTolerance.b,
    ]
 
+   const borders: Array<Array<boolean>> = []
+   for (let i = 0; i < imageWidth; i++) {
+      borders.push(Array<boolean>(imageHeight).fill(false))
+   }
+
+   for (let x = 0; x < imageWidth; x++) {
+      for (let y = 0; y < imageHeight; y++) {
+         const pixel = image.getPixelXY(x, y)
+
+         if (colorIsWithinTolerance(pixel, borderColor, borderTolerance)) {
+            borders[x][y] = true
+         }
+      }
+   }
+
+   return borders
+}
+
+const colorImage = (image: Image, settings: ColoringSettings) => {
+   const width = image.width
+   const height = image.height
+   const areas: Array<Array<[number, number]>> = []
+
+   const borderColor = [
+      settings.borderColor.r,
+      settings.borderColor.g,
+      settings.borderColor.b,
+   ]
+
+   const imageBorders = getBorders(image, settings)
+
    let allMappedPoints: Array<Array<boolean>> = []
    for (let i = 0; i < width; i++) {
       allMappedPoints.push(Array<boolean>(height).fill(false))
@@ -286,13 +347,11 @@ const colorImage = (image: Image, settings: ColoringSettings) => {
 
    for (let x = 0; x < width; x++) {
       for (let y = 0; y < height; y++) {
-         const pixel = image.getPixelXY(x, y)
-
          const isMapped = allMappedPoints[x]?.[y]
 
          if (
             !isMapped &&
-            !colorIsWithinTolerance(pixel, borderColor, borderTolerance) &&
+            !imageBorders[x][y] &&
             !isBorderWithinRadius(
                x,
                y,
@@ -306,8 +365,7 @@ const colorImage = (image: Image, settings: ColoringSettings) => {
                x,
                y,
                allMappedPoints,
-               borderColor,
-               borderTolerance,
+               imageBorders,
                settings.borderPatching,
                settings.algorithmDirection
             )
