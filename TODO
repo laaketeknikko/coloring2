@@ -2,13 +2,9 @@ TODO: Comment the code?
 
 TODO: Testing?
 
-TODO: Fix galleria indicators.
-
 TODO: Allow defining multiple ignored colors.
 
 TODO: performance?
-
-TODO: Deleting item in fullscreen crashes.
 
 TODO: When having different colors with the same threshold
 and selecting a size-based coloring, the colors are not selected
