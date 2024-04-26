@@ -4,7 +4,6 @@ import { coloredImagesAtom } from "../../atoms/atoms"
 import { useCallback, useMemo, useState } from "react"
 import { Button } from "primereact/button"
 
-import { PrimeIcons } from "primereact/api"
 import { Sidebar } from "primereact/sidebar"
 import { ImageWithSettings } from "../../types/types"
 
@@ -19,72 +18,60 @@ const CustomGalleria = () => {
    const [activeIndex, setActiveIndex] = useState(0)
    const [fullScreenGallery, setFullScreenGallery] = useState(false)
 
-   const itemTemplate = useCallback(
-      (item: ImageWithSettings) => {
-         if (item.id.startsWith("placeholder")) {
-            return (
-               <div className="w-full">
-                  <Skeleton
-                     className="m-2 p-2 w-10rem"
-                     animation="none"
-                     borderRadius="30px"
-                     height="2rem"
-                  ></Skeleton>
-                  <Skeleton
-                     className="m-2 p-2 w-15rem"
-                     animation="none"
-                     borderRadius="30px"
-                     height="2rem"
-                  ></Skeleton>
-                  <Skeleton
-                     className="m-2 p-2 w-20rem"
-                     animation="none"
-                     borderRadius="30px"
-                     height="2rem"
-                  ></Skeleton>
-                  <Skeleton
-                     className="m-2 p-2 w-25rem"
-                     animation="none"
-                     borderRadius="30px"
-                     height="2rem"
-                  ></Skeleton>
-                  <Skeleton
-                     className="m-2 p-2 w-30rem"
-                     animation="none"
-                     borderRadius="30px"
-                     height="2rem"
-                  ></Skeleton>
-                  <Skeleton
-                     className="m-2 p-2"
-                     animation="none"
-                     borderRadius="30px"
-                     height="8rem"
-                  ></Skeleton>
-               </div>
-            )
-         }
-
+   const itemTemplate = useCallback((item: ImageWithSettings) => {
+      if (item.id.startsWith("placeholder")) {
          return (
-            <div style={{ maxWidth: "100%", position: "relative" }}>
-               {!fullScreenGallery && (
-                  <Button
-                     style={{ position: "absolute", top: 0, left: 0 }}
-                     icon={PrimeIcons.WINDOW_MAXIMIZE}
-                     onClick={() => {
-                        setFullScreenGallery(true)
-                     }}
-                  ></Button>
-               )}
-               <img
-                  src={item.imageData.dataUrl}
-                  alt={item.imageData.meta.name}
-                  style={{ maxWidth: "100%", aspectRatio: 1 }}
-               />
+            <div className="w-full">
+               <Skeleton
+                  className="m-2 p-2 w-10rem"
+                  animation="none"
+                  borderRadius="30px"
+                  height="2rem"
+               ></Skeleton>
+               <Skeleton
+                  className="m-2 p-2 w-15rem"
+                  animation="none"
+                  borderRadius="30px"
+                  height="2rem"
+               ></Skeleton>
+               <Skeleton
+                  className="m-2 p-2 w-20rem"
+                  animation="none"
+                  borderRadius="30px"
+                  height="2rem"
+               ></Skeleton>
+               <Skeleton
+                  className="m-2 p-2 w-25rem"
+                  animation="none"
+                  borderRadius="30px"
+                  height="2rem"
+               ></Skeleton>
+               <Skeleton
+                  className="m-2 p-2 w-30rem"
+                  animation="none"
+                  borderRadius="30px"
+                  height="2rem"
+               ></Skeleton>
+               <Skeleton
+                  className="m-2 p-2"
+                  animation="none"
+                  borderRadius="30px"
+                  height="8rem"
+               ></Skeleton>
             </div>
          )
-      },
-      [fullScreenGallery]
-   )
+      }
+
+      return (
+         <div style={{ maxWidth: "100%", position: "relative" }}>
+            <img
+               src={item.imageData.dataUrl}
+               alt={item.imageData.meta.name}
+               style={{ maxWidth: "100%", aspectRatio: 1 }}
+            />
+         </div>
+      )
+   }, [])
 
    const handleImageRemove = useCallback(
       (id: string) => {
