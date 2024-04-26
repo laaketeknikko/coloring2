@@ -65,22 +65,20 @@ const isBorderWithinRadius = (
       return false
    }
 
-   const minX = x - radius
-   const maxX = x + radius
-   const minY = y - radius
-   const maxY = y + radius
-
    const imageWidth = image.width
    const imageHeight = image.height
+
+   const minX = Math.max(x - radius, 0)
+   const maxX = Math.min(x + radius, imageWidth - 1)
+   const minY = Math.max(y - radius, 0)
+   const maxY = Math.min(y + radius, imageHeight - 1)
 
    for (let i = minX; i <= maxX; i++) {
       for (let j = minY; j <= maxY; j++) {
          if (i === x && j === y) {
             continue
          }
-         if (i < 0 || j < 0 || i >= imageWidth || j >= imageHeight) {
-            continue
-         }
+
          const pixel = image.getPixelXY(i, j)
          if (colorsAreEqual(pixel, borderColor)) {
             return true
