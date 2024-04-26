@@ -30,15 +30,15 @@ const colorIsWithinTolerance = (
    color2Tolerance: Array<number>
 ) => {
    const minBound = [
-      color2[0] - color2Tolerance[0],
-      color2[1] - color2Tolerance[1],
-      color2[2] - color2Tolerance[2],
-   ].map((value) => (value < 0 ? 0 : value))
+      Math.max(color2[0] - color2Tolerance[0], 0),
+      Math.max(color2[1] - color2Tolerance[1], 0),
+      Math.max(color2[2] - color2Tolerance[2], 0),
+   ]
    const maxBound = [
-      color2[0] + color2Tolerance[0],
-      color2[1] + color2Tolerance[1],
-      color2[2] + color2Tolerance[2],
-   ].map((value) => (value > 255 ? 255 : value))
+      Math.min(255, color2[0] + color2Tolerance[0]),
+      Math.min(255, color2[1] + color2Tolerance[1]),
+      Math.min(255, color2[2] + color2Tolerance[2]),
+   ]
 
    return (
       colorIsLargerOrEqual(color1, minBound) &&
@@ -70,12 +70,15 @@ const isBorderWithinRadius = (
    const minY = y - radius
    const maxY = y + radius
 
+   const imageWidth = image.width
+   const imageHeight = image.height
+
    for (let i = minX; i <= maxX; i++) {
       for (let j = minY; j <= maxY; j++) {
          if (i === x && j === y) {
             continue
          }
-         if (i < 0 || j < 0 || i >= image.width || j >= image.height) {
+         if (i < 0 || j < 0 || i >= imageWidth || j >= imageHeight) {
             continue
          }
          const pixel = image.getPixelXY(i, j)
@@ -179,7 +182,7 @@ const getPaintColorsByAreaSize = (
    area: Array<Array<number>>
    color: Array<number>
 }> => {
-   const sortedColors = colors.colorsToUse.sort(
+   const sortedSettings = colors.colorsToUse.sort(
       (a, b) => (a.minimumAreaThreshold ?? 0) - (b.minimumAreaThreshold ?? 0)
    )
 
@@ -190,13 +193,14 @@ const getPaintColorsByAreaSize = (
 
    const totalArea = areas.reduce((acc, area) => acc + area.length, 0)
 
-   for (const color of sortedColors) {
+   for (const setting of sortedSettings) {
+      const color = setting.color
       for (const area of areas) {
          const areaProportion = area.length / totalArea
-         if (areaProportion >= (color.minimumAreaThreshold ?? 0)) {
+         if (areaProportion >= (setting.minimumAreaThreshold ?? 0)) {
             result.push({
                area: area,
-               color: [color.color.r, color.color.g, color.color.b],
+               color: [color.r, color.g, color.b],
             })
          }
       }
