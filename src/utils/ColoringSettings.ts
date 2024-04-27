@@ -6,7 +6,7 @@ export interface ColoringSettingsColor {
    minimumAreaThreshold?: number
 }
 
-export type ColoringMode = "grayscale" | "bw"
+export type ShadingMode = "lightness" | "bw" | "transparency"
 
 export type ColoringSettingsAlgorithmDirection = "4" | "8" | "4-diagonal"
 
@@ -18,7 +18,7 @@ class ColoringSettings {
    colorByAreaNumber: boolean
    colorByAreaSize: boolean
    algorithmDirection: ColoringSettingsAlgorithmDirection
-   coloringMode: ColoringMode
+   coloringMode: ShadingMode
 
    constructor() {
       this.borderColor = { r: 0, g: 0, b: 0 }

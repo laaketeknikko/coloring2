@@ -1,29 +1,40 @@
 import { Checkbox } from "primereact/checkbox"
-import { globalColoringModeAtom } from "../../../atoms/atoms"
+import { globalShadingModeAtom } from "../../../atoms/atoms"
 import { useAtom } from "jotai"
 
 const ColoringMode = () => {
-   const [coloringMode, setColoringMode] = useAtom(globalColoringModeAtom)
+   const [coloringMode, setColoringMode] = useAtom(globalShadingModeAtom)
 
    return (
       <div>
-         <p>Color mode</p>
+         <p>Shading mode</p>
          <div className="flex flex-column align-items-end">
-            <label>
-               Grayscale
-               <Checkbox
-                  checked={coloringMode === "grayscale"}
-                  onChange={() => {
-                     setColoringMode("grayscale")
-                  }}
-               />
-            </label>
             <label>
                Black and white
                <Checkbox
                   checked={coloringMode === "bw"}
                   onChange={() => {
                      setColoringMode("bw")
+                  }}
+               />
+            </label>
+
+            <label>
+               Pixel lightness
+               <Checkbox
+                  checked={coloringMode === "lightness"}
+                  onChange={() => {
+                     setColoringMode("lightness")
+                  }}
+               />
+            </label>
+
+            <label>
+               Pixel transparency
+               <Checkbox
+                  checked={coloringMode === "transparency"}
+                  onChange={() => {
+                     setColoringMode("transparency")
                   }}
                />
             </label>

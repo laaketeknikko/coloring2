@@ -1,4 +1,4 @@
-import { Image } from "image-js"
+import { Image, ImageKind } from "image-js"
 import { ColoringSettings } from "../ColoringSettings"
 //import Color from "colorjs.io"
 import { ColorSpace, PlainColorObject, sRGB, set, to, HSV } from "colorjs.io/fn"
@@ -199,7 +199,7 @@ const paintPixelsGrayscale = (
 }
 */
 
-const paintPixelsGrayscaleProceduralApi = (
+const paintPixelsLightnessShading = (
    image: Image,
    area: Array<Array<number>>,
    color: Array<number>
@@ -207,12 +207,14 @@ const paintPixelsGrayscaleProceduralApi = (
    ColorSpace.register(sRGB)
    ColorSpace.register(HSV)
 
-   let hsvPaintColorProc: PlainColorObject = {
-      space: sRGB,
-      coords: [color[0] / 255, color[1] / 255, color[2] / 255],
-      alpha: 1,
-   }
-   hsvPaintColorProc = to(hsvPaintColorProc, "hsv")
+   const hsvPaintColorProc: PlainColorObject = to(
+      {
+         space: sRGB,
+         coords: [color[0] / 255, color[1] / 255, color[2] / 255],
+         alpha: 1,
+      },
+      "hsv"
+   )
 
    for (const point of area) {
       const pixel = image.getPixelXY(point[0], point[1])
@@ -222,8 +224,9 @@ const paintPixelsGrayscaleProceduralApi = (
          coords: [pixel[0] / 255, pixel[1] / 255, pixel[2] / 255],
          alpha: 1,
       }
-
       const hsvPixelColorProc = to(rgbPixelColorProc, "hsv")
+
+      console.log("hsvpixelcoords: ", hsvPixelColorProc.coords)
 
       set(hsvPaintColorProc, "v", hsvPixelColorProc.coords[2])
       const rgbPaintColorProc = to(hsvPaintColorProc, "srgb")
@@ -233,6 +236,35 @@ const paintPixelsGrayscaleProceduralApi = (
          Math.floor(rgbPaintColorProc.coords[1] * 255),
          Math.floor(rgbPaintColorProc.coords[2] * 255),
       ])
+   }
+}
+
+const paintPixelsTransparencyShading = (
+   image: Image,
+   area: Array<Array<number>>,
+   color: Array<number>
+) => {
+   ColorSpace.register(sRGB)
+   ColorSpace.register(HSV)
+
+   const paintColor = [color[0], color[1], color[2], color[3] ?? 255]
+
+   for (const point of area) {
+      const pixel = image.getPixelXY(point[0], point[1])
+
+      const plainColor: PlainColorObject = {
+         space: sRGB,
+         coords: [pixel[0] / 255, pixel[1] / 255, pixel[2] / 255],
+         alpha: 1,
+      }
+      const hsvPixelColor = to(plainColor, "hsv")
+
+      /**
+       * value is from 0 to 100
+       */
+      paintColor[3] = 255 - Math.floor(hsvPixelColor.coords[2] * 2.55)
+
+      image.setPixelXY(point[0], point[1], paintColor)
    }
 }
 
@@ -416,11 +448,16 @@ const colorImage = (image: Image, settings: ColoringSettings) => {
       areasAndColors = getRandomPaintColors(areas)
    }
 
-   const result: Image = image
+   let result: Image = image
 
-   if (settings.coloringMode === "grayscale") {
+   if (settings.coloringMode === "lightness") {
       for (const area of areasAndColors) {
-         paintPixelsGrayscaleProceduralApi(result, area.area, area.color)
+         paintPixelsLightnessShading(result, area.area, area.color)
+      }
+   } else if (settings.coloringMode === "transparency") {
+      result = image.rgba8()
+      for (const area of areasAndColors) {
+         paintPixelsTransparencyShading(result, area.area, area.color)
       }
    } else {
       for (const area of areasAndColors) {
