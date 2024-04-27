@@ -199,7 +199,7 @@ const paintPixelsGrayscale = (
 }
 */
 
-const paintPixelsGrayscaleProcedurcalApi = (
+const paintPixelsGrayscaleProceduralApi = (
    image: Image,
    area: Array<Array<number>>,
    color: Array<number>
@@ -212,6 +212,7 @@ const paintPixelsGrayscaleProcedurcalApi = (
       coords: [color[0] / 255, color[1] / 255, color[2] / 255],
       alpha: 1,
    }
+   hsvPaintColorProc = to(hsvPaintColorProc, "hsv")
 
    for (const point of area) {
       const pixel = image.getPixelXY(point[0], point[1])
@@ -224,7 +225,6 @@ const paintPixelsGrayscaleProcedurcalApi = (
 
       const hsvPixelColorProc = to(rgbPixelColorProc, "hsv")
 
-      hsvPaintColorProc = to(hsvPaintColorProc, "hsv")
       set(hsvPaintColorProc, "v", hsvPixelColorProc.coords[2])
       const rgbPaintColorProc = to(hsvPaintColorProc, "srgb")
 
@@ -416,22 +416,26 @@ const colorImage = (image: Image, settings: ColoringSettings) => {
       areasAndColors = getRandomPaintColors(areas)
    }
 
+   const result: Image = image
+
    if (settings.coloringMode === "grayscale") {
       for (const area of areasAndColors) {
-         paintPixelsGrayscaleProcedurcalApi(image, area.area, area.color)
+         paintPixelsGrayscaleProceduralApi(result, area.area, area.color)
       }
    } else {
       for (const area of areasAndColors) {
-         paintPixelsBlackAndWhite(image, area.area, area.color)
+         paintPixelsBlackAndWhite(result, area.area, area.color)
       }
    }
+
+   return result
 }
 
 const processImage = (image: Image, settings: ColoringSettings) => {
-   colorImage(image, settings)
+   const result = colorImage(image, settings)
 
    return new Promise<Image>((resolve, reject) => {
-      resolve(image)
+      resolve(result)
       reject(Error("Error processing image"))
    })
 }
