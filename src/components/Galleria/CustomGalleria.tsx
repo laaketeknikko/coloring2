@@ -162,6 +162,7 @@ const CustomGalleria = () => {
                colorByAreaSize: false,
                colorsToUse: [],
                algorithmDirection: "8",
+               coloringMode: "bw",
             },
          },
          {
@@ -181,6 +182,7 @@ const CustomGalleria = () => {
                colorByAreaSize: false,
                colorsToUse: [],
                algorithmDirection: "8",
+               coloringMode: "bw",
             },
          },
          {
@@ -200,6 +202,7 @@ const CustomGalleria = () => {
                colorByAreaSize: false,
                colorsToUse: [],
                algorithmDirection: "8",
+               coloringMode: "bw",
             },
          },
       ]
