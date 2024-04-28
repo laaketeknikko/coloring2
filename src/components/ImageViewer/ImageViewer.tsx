@@ -110,7 +110,7 @@ const ImageViewer = () => {
                }}
             >
                {/** Settings */}
-               <TabPanel header="Settings" className="bg-teal-50 p-0 m-0">
+               <TabPanel leftIcon="pi pi-cog" className="bg-teal-50 p-0 m-0">
                   <Settings />
                </TabPanel>
 
@@ -123,7 +123,11 @@ const ImageViewer = () => {
                </TabPanel>
 
                {/** Colored images */}
-               <TabPanel header="Colored images" className="">
+               <TabPanel
+                  leftIcon="pi pi-palette"
+                  header={<span className="ml-1">Colored images</span>}
+                  className=""
+               >
                   <ImageListHandler
                      imageListAtom={coloredImagesAtom}
                      enableDownload={true}

@@ -91,7 +91,7 @@ const AlgorithmOptions = () => {
          <Divider className="m-1" />
          <div>
             <p>
-               Algorithm mapping
+               Area mapping
                <HelpButton size={"small"}>
                   <div className="">
                      <p>Choose how areas are mapped</p>

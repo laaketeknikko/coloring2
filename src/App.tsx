@@ -17,7 +17,7 @@ import {
 import { useAtom } from "jotai"
 import { zipImages } from "./utils/zipping"
 import { FlateCallback } from "fflate"
-import { HelpButton } from "./utils/HelpButton"
+import { MainHelp } from "./Help/MainHelp"
 
 function App() {
    const [showUploadPanel, setShowUploadPanel] = useState(false)
@@ -44,6 +44,8 @@ function App() {
       a.click()
       URL.revokeObjectURL(a.href)
    }
+
+   const [displayHelp, setDisplayHelp] = useState(false)
 
    return (
       <div className="bg-green-50 min-h-screen">
@@ -103,9 +105,21 @@ function App() {
                   </>
                }
                end={
-                  <HelpButton size="large" iconSize="text-4xl" height="2.5rem">
-                     Help me!
-                  </HelpButton>
+                  <>
+                     <Button
+                        onClick={() => {
+                           setDisplayHelp(true)
+                        }}
+                        style={{
+                           aspectRatio: 1,
+                           height: "2.5rem",
+                           width: "2.5rem",
+                        }}
+                        size={"large"}
+                        className={`border-circle bg-blue-200 border-0 p-1`}
+                        icon={`${PrimeIcons.INFO_CIRCLE} text-4xl text-white`}
+                     ></Button>
+                  </>
                }
             ></Toolbar>
 
@@ -122,15 +136,19 @@ function App() {
             <div>
                <ImageProcessingPanel />
             </div>
-            {/*<div className="grid m-0">
-               <div className="col-12 sm:col-12 md:col-6 lg:col-5 xl:col-4">
-                  <Settings />
+
+            <Sidebar
+               className="bg-yellow-50 h-screen"
+               visible={displayHelp}
+               fullScreen={true}
+               onHide={() => {
+                  setDisplayHelp(false)
+               }}
+            >
+               <div className=" h-screen">
+                  <MainHelp />
                </div>
-               <div className="col-12 sm:col-12 md:col-6 lg:col-7 xl:col-8">
-                  <ImageProcessingPanel />
-               </div>
-            </div>
-            */}
+            </Sidebar>
          </div>
       </div>
    )
