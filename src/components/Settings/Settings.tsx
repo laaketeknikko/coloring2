@@ -14,19 +14,21 @@ const Settings = () => {
                      Outline color settings{" "}
                      <HelpButton size="small">
                         <p>Settings used when defining the areas to color.</p>
-                        <p>Color: Color of the area outlines.</p>
                         <p>
-                           Tolerance: Color difference tolerance of the
-                           outlines. These values are added to and subtracted
-                           from the outline color to create minimum and maximum
-                           boundaries. If a color is within this tolerance, it
-                           is considered a border color.
+                           <strong>Color</strong>: Color of the area outlines.
                         </p>
                         <p>
-                           Patching: The distance in pixels from an outline
-                           pixel up to which a pixel is considered an outline
-                           pixel. This can be used to &apos;patch&apos; small
-                           holes in broken outlines. Note that using this also
+                           <strong>Tolerance</strong>: Color difference
+                           tolerance of the outlines. These values are added to
+                           and subtracted from the outline color to create
+                           minimum and maximum boundaries. If a color is within
+                           this tolerance, it is considered a border color.
+                        </p>
+                        <p>
+                           <strong>Margin</strong>: The distance to leave
+                           between an outline and the coloring. This can also be
+                           used to &apos;patch&apos; small holes in broken
+                           outlines. Note that using this also
                            &apos;ndents&apos; the coloring by the same amount.
                         </p>
                      </HelpButton>

@@ -13,7 +13,7 @@ const OutlineSettings = () => {
                <OutlineColorPicker />
                <div className="p-inputgroup">
                   <span className="p-inputgroup-addon p-1 bg-teal-50">
-                     Patching
+                     Margin
                   </span>
                   <CustomInputNumber
                      value={borderPatching}
