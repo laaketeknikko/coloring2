@@ -1,13 +1,7 @@
 import { Image } from "image-js"
 import { ColoringSettings } from "../ColoringSettings"
-
-const colorsAreEqual = (color1: Array<number>, color2: Array<number>) => {
-   return (
-      color1[0] === color2[0] &&
-      color1[1] === color2[1] &&
-      color1[2] === color2[2]
-   )
-}
+//import Color from "colorjs.io"
+import { ColorSpace, PlainColorObject, sRGB, set, to, HSV } from "colorjs.io/fn"
 
 const colorIsSmallerOrEqual = (
    color1: Array<number>,
@@ -57,41 +51,6 @@ const selectRandomPaintColor = () => {
 const isBorderWithinRadius = (
    x: number,
    y: number,
-   image: Image,
-   borderColor: Array<number>,
-   radius: number
-) => {
-   if (radius <= 0) {
-      return false
-   }
-
-   const imageWidth = image.width
-   const imageHeight = image.height
-
-   const minX = Math.max(x - radius, 0)
-   const maxX = Math.min(x + radius, imageWidth - 1)
-   const minY = Math.max(y - radius, 0)
-   const maxY = Math.min(y + radius, imageHeight - 1)
-
-   for (let i = minX; i <= maxX; i++) {
-      for (let j = minY; j <= maxY; j++) {
-         if (i === x && j === y) {
-            continue
-         }
-
-         const pixel = image.getPixelXY(i, j)
-         if (colorsAreEqual(pixel, borderColor)) {
-            return true
-         }
-      }
-   }
-
-   return false
-}
-
-const isBorderWithinRadius2 = (
-   x: number,
-   y: number,
    imageBorders: Array<Array<boolean>>,
    radius: number
 ) => {
@@ -123,7 +82,8 @@ const isBorderWithinRadius2 = (
 }
 
 const mapAreaFrom = (
-   image: Image,
+   imageWidth: number,
+   imageHeight: number,
    startX: number,
    startY: number,
    mappedPoints: Array<Array<boolean>>,
@@ -145,7 +105,7 @@ const mapAreaFrom = (
          return { area, mappedPoints }
       }
 
-      if (x < 0 || y < 0 || x >= image.width || y >= image.height) {
+      if (x < 0 || y < 0 || x >= imageWidth || y >= imageHeight) {
          continue
       }
 
@@ -154,7 +114,7 @@ const mapAreaFrom = (
       if (
          !isMapped &&
          !imageBorders[x][y] &&
-         !isBorderWithinRadius2(x, y, imageBorders, borderPatching)
+         !isBorderWithinRadius(x, y, imageBorders, borderPatching)
       ) {
          mappedPoints[x][y] = true
          area.push([x, y])
@@ -194,13 +154,117 @@ const sortAreasBySize = (areas: Array<Array<[number, number]>>) => {
    return areas.slice(0).sort((a, b) => b.length - a.length)
 }
 
-const paintPixels = (
+const paintPixelsBlackAndWhite = (
    image: Image,
    area: Array<Array<number>>,
    color: Array<number>
 ) => {
    for (const point of area) {
       image.setPixelXY(point[0], point[1], color)
+   }
+}
+
+/*
+Using the object-oriented API.
+The procedural API is more efficient.
+
+const paintPixelsGrayscale = (
+   image: Image,
+   area: Array<Array<number>>,
+   color: Array<number>,
+   settings: ColoringSettings
+) => {
+   const hsvPaintColor = new Color("sRGB", [
+      color[0] / 255,
+      color[1] / 255,
+      color[2] / 255,
+   ])
+
+   for (const point of area) {
+      const pixel = image.getPixelXY(point[0], point[1])
+
+      const hsvPixelColor = new Color("sRGB", [
+         pixel[0] / 255,
+         pixel[1] / 255,
+         pixel[2] / 255,
+      ])
+
+      hsvPaintColor.hsv.v = hsvPixelColor.hsv.v
+      image.setPixelXY(point[0], point[1], [
+         Math.floor(hsvPaintColor.srgb.r * 255),
+         Math.floor(hsvPaintColor.srgb.g * 255),
+         Math.floor(hsvPaintColor.srgb.b * 255),
+      ])
+   }
+}
+*/
+
+const paintPixelsLightnessShading = (
+   image: Image,
+   area: Array<Array<number>>,
+   color: Array<number>
+) => {
+   ColorSpace.register(sRGB)
+   ColorSpace.register(HSV)
+
+   const hsvPaintColorProc: PlainColorObject = to(
+      {
+         space: sRGB,
+         coords: [color[0] / 255, color[1] / 255, color[2] / 255],
+         alpha: 1,
+      },
+      "hsv"
+   )
+
+   for (const point of area) {
+      const pixel = image.getPixelXY(point[0], point[1])
+
+      const rgbPixelColorProc: PlainColorObject = {
+         space: sRGB,
+         coords: [pixel[0] / 255, pixel[1] / 255, pixel[2] / 255],
+         alpha: 1,
+      }
+      const hsvPixelColorProc = to(rgbPixelColorProc, "hsv")
+
+      console.log("hsvpixelcoords: ", hsvPixelColorProc.coords)
+
+      set(hsvPaintColorProc, "v", hsvPixelColorProc.coords[2])
+      const rgbPaintColorProc = to(hsvPaintColorProc, "srgb")
+
+      image.setPixelXY(point[0], point[1], [
+         Math.floor(rgbPaintColorProc.coords[0] * 255),
+         Math.floor(rgbPaintColorProc.coords[1] * 255),
+         Math.floor(rgbPaintColorProc.coords[2] * 255),
+      ])
+   }
+}
+
+const paintPixelsTransparencyShading = (
+   image: Image,
+   area: Array<Array<number>>,
+   color: Array<number>
+) => {
+   ColorSpace.register(sRGB)
+   ColorSpace.register(HSV)
+
+   const paintColor = [color[0], color[1], color[2], color[3] ?? 255]
+
+   for (const point of area) {
+      const pixel = image.getPixelXY(point[0], point[1])
+
+      const plainColor: PlainColorObject = {
+         space: sRGB,
+         coords: [pixel[0] / 255, pixel[1] / 255, pixel[2] / 255],
+         alpha: 1,
+      }
+      const hsvPixelColor = to(plainColor, "hsv")
+
+      /**
+       * HSV value is from 0 to 100.
+       */
+      paintColor[3] = 20 + (255 - Math.floor(hsvPixelColor.coords[2] * 2.35))
+
+      image.setPixelXY(point[0], point[1], paintColor)
    }
 }
 
@@ -332,12 +396,6 @@ const colorImage = (image: Image, settings: ColoringSettings) => {
    const height = image.height
    const areas: Array<Array<[number, number]>> = []
 
-   const borderColor = [
-      settings.borderColor.r,
-      settings.borderColor.g,
-      settings.borderColor.b,
-   ]
-
    const imageBorders = getBorders(image, settings)
 
    let allMappedPoints: Array<Array<boolean>> = []
@@ -352,16 +410,11 @@ const colorImage = (image: Image, settings: ColoringSettings) => {
          if (
             !isMapped &&
             !imageBorders[x][y] &&
-            !isBorderWithinRadius(
-               x,
-               y,
-               image,
-               borderColor,
-               settings.borderPatching
-            )
+            !isBorderWithinRadius(x, y, imageBorders, settings.borderPatching)
          ) {
             const { area, mappedPoints } = mapAreaFrom(
-               image,
+               image.width,
+               image.height,
                x,
                y,
                allMappedPoints,
@@ -395,16 +448,31 @@ const colorImage = (image: Image, settings: ColoringSettings) => {
       areasAndColors = getRandomPaintColors(areas)
    }
 
-   for (const area of areasAndColors) {
-      paintPixels(image, area.area, area.color)
+   let result: Image = image
+
+   if (settings.coloringMode === "lightness") {
+      for (const area of areasAndColors) {
+         paintPixelsLightnessShading(result, area.area, area.color)
+      }
+   } else if (settings.coloringMode === "transparency") {
+      result = image.rgba8()
+      for (const area of areasAndColors) {
+         paintPixelsTransparencyShading(result, area.area, area.color)
+      }
+   } else {
+      for (const area of areasAndColors) {
+         paintPixelsBlackAndWhite(result, area.area, area.color)
+      }
    }
+
+   return result
 }
 
 const processImage = (image: Image, settings: ColoringSettings) => {
-   colorImage(image, settings)
+   const result = colorImage(image, settings)
 
    return new Promise<Image>((resolve, reject) => {
-      resolve(image)
+      resolve(result)
       reject(Error("Error processing image"))
    })
 }

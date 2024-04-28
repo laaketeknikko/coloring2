@@ -6,6 +6,8 @@ export interface ColoringSettingsColor {
    minimumAreaThreshold?: number
 }
 
+export type ShadingMode = "lightness" | "bw" | "transparency"
+
 export type ColoringSettingsAlgorithmDirection = "4" | "8" | "4-diagonal"
 
 class ColoringSettings {
@@ -16,6 +18,7 @@ class ColoringSettings {
    colorByAreaNumber: boolean
    colorByAreaSize: boolean
    algorithmDirection: ColoringSettingsAlgorithmDirection
+   coloringMode: ShadingMode
 
    constructor() {
       this.borderColor = { r: 0, g: 0, b: 0 }
@@ -25,6 +28,7 @@ class ColoringSettings {
       this.colorByAreaNumber = false
       this.colorByAreaSize = false
       this.algorithmDirection = "8"
+      this.coloringMode = "bw"
    }
 
    static isColoringSettings(settings: unknown): settings is ColoringSettings {
@@ -34,7 +38,11 @@ class ColoringSettings {
          "borderColor" in settings &&
          "borderColorTolerance" in settings &&
          "borderPatching" in settings &&
-         "colorsToUse" in settings
+         "colorsToUse" in settings &&
+         "colorByAreaNumber" in settings &&
+         "colorByAreaSize" in settings &&
+         "algorithmDirection" in settings &&
+         "coloringMode" in settings
       ) {
          return true
       } else {

@@ -1,6 +1,7 @@
 import { atom } from "jotai"
 import { ImageWithSettings } from "../types/types"
 import {
+   ShadingMode,
    ColoringSettings,
    ColoringSettingsAlgorithmDirection,
    ColoringSettingsColor,
@@ -31,6 +32,7 @@ const globalColorByAreaSizeAtom = atom(false)
 const globalColorByAreaNumberAtom = atom(false)
 const globalAlgorithmDirectionAtom =
    atom<ColoringSettingsAlgorithmDirection>("8")
+const globalShadingModeAtom = atom<ShadingMode>("bw")
 
 const globalColoringSettingsAtom = atom<ColoringSettings>((get) => {
    const borderColor = get(globalBorderColorAtom)
@@ -40,6 +42,7 @@ const globalColoringSettingsAtom = atom<ColoringSettings>((get) => {
    const colorByAreaSize = get(globalColorByAreaSizeAtom)
    const colorByAreaNumber = get(globalColorByAreaNumberAtom)
    const algorithmDirection = get(globalAlgorithmDirectionAtom)
+   const shadingMode = get(globalShadingModeAtom)
 
    return {
       borderColor,
@@ -49,6 +52,7 @@ const globalColoringSettingsAtom = atom<ColoringSettings>((get) => {
       colorByAreaNumber: colorByAreaNumber,
       colorByAreaSize: colorByAreaSize,
       algorithmDirection: algorithmDirection,
+      coloringMode: shadingMode,
    }
 })
 
@@ -67,4 +71,5 @@ export {
    globalColorByAreaNumberAtom,
    isProcessingPausedAtom,
    globalAlgorithmDirectionAtom,
+   globalShadingModeAtom,
 }
