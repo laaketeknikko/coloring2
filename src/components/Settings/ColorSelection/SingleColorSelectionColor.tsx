@@ -52,7 +52,6 @@ const SingleColorSelectionColor = ({
             <div className="">
                <InputNumber
                   id={color.id}
-                  tooltip="Threshold from 0 to 100 %."
                   format={false}
                   min={0}
                   max={100}

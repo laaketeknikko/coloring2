@@ -48,7 +48,6 @@ const BorderColorInput = ({
          <span className="p-inputgroup-addon bg-teal-50 p-0">
             <Dropdown
                className="w-auto"
-               tooltip="Area outline color in the image."
                panelClassName="p-0 w-auto"
                pt={{
                   trigger: {
@@ -65,8 +64,6 @@ const BorderColorInput = ({
          </span>
          {selectedColorMode === "HEX" && (
             <InputText
-               tooltip="Hex value of the area outline color."
-               tooltipOptions={{ position: "right" }}
                value={selectedColor.hex}
                onChange={(event) => {
                   handleHexColorChange(event.target.value)
@@ -76,8 +73,6 @@ const BorderColorInput = ({
          {selectedColorMode === "RGB" && (
             <>
                <CustomInputNumber
-                  tooltip="Red value of the area outline color."
-                  tooltipOptions={{ position: "right" }}
                   inputId="r"
                   value={selectedColor.rgb.r}
                   onChange={(value) => {
@@ -90,8 +85,6 @@ const BorderColorInput = ({
                />
 
                <CustomInputNumber
-                  tooltip="Green value of the area outline color."
-                  tooltipOptions={{ position: "right" }}
                   inputId="g"
                   value={selectedColor.rgb.g}
                   onChange={(value) => {
@@ -104,8 +97,6 @@ const BorderColorInput = ({
                />
 
                <CustomInputNumber
-                  tooltip="Blue value of the area outline color."
-                  tooltipOptions={{ position: "right" }}
                   inputId="b"
                   value={selectedColor.rgb.b}
                   onChange={(value) => {

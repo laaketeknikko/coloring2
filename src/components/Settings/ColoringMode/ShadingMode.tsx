@@ -2,7 +2,7 @@ import { Checkbox } from "primereact/checkbox"
 import { globalShadingModeAtom } from "../../../atoms/atoms"
 import { useAtom } from "jotai"
 
-const ColoringMode = () => {
+const ShadingMode = () => {
    const [coloringMode, setColoringMode] = useAtom(globalShadingModeAtom)
 
    return (
@@ -43,4 +43,4 @@ const ColoringMode = () => {
    )
 }
 
-export { ColoringMode }
+export { ShadingMode }

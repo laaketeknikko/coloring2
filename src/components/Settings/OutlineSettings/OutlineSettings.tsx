@@ -1,7 +1,7 @@
 import { useAtom } from "jotai"
 import { globalBorderPatchingAtom } from "../../../atoms/atoms"
 import { CustomInputNumber } from "../CustomInputNumber"
-import { BorderColorPicker } from "./BorderColorPicker"
+import { OutlineColorPicker } from "./OutlineColorPicker"
 
 const OutlineSettings = () => {
    const [borderPatching, setBorderPatching] = useAtom(globalBorderPatchingAtom)
@@ -10,18 +10,12 @@ const OutlineSettings = () => {
       <>
          <div className="text-center justify-content-center">
             <div className="max-w-16rem m-auto">
-               <BorderColorPicker />
+               <OutlineColorPicker />
                <div className="p-inputgroup">
                   <span className="p-inputgroup-addon p-1 bg-teal-50">
                      Patching
                   </span>
                   <CustomInputNumber
-                     tooltipOptions={{ position: "right" }}
-                     tooltip="The pixel distance from an outline pixel up to which a pixel is considered an outline pixel.
-            
-            This can be used to 'patch' small holes in broken outlines.
-            
-            Note: These pixels are not colored."
                      value={borderPatching}
                      inputId="border-color-patching"
                      onChange={(event) => {

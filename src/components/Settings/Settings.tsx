@@ -1,8 +1,8 @@
 import { HelpButton } from "../../utils/HelpButton"
 import { AlgorithmOptions } from "./AlgorithmSelection/AlgorithmOptions"
-import { OutlineSettings } from "./BorderSettings/BorderSettings"
+import { OutlineSettings } from "./OutlineSettings/OutlineSettings"
 import { ColorSelection } from "./ColorSelection/ColorSelection"
-import { ColoringMode } from "./ColoringMode/ColoringMode"
+import { ShadingMode } from "./ColoringMode/ShadingMode"
 
 const Settings = () => {
    return (
@@ -32,7 +32,7 @@ const Settings = () => {
                      </HelpButton>
                   </p>
                   <OutlineSettings />
-                  <ColoringMode />
+                  <ShadingMode />
                </div>
                <div className="border-round-xl col-6 sm:col-5 md:col-4 lg:col-3 xl:col-2 shadow bg-green-50">
                   <AlgorithmOptions />
