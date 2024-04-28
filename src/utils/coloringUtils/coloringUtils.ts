@@ -1,4 +1,4 @@
-import { Image, ImageKind } from "image-js"
+import { Image } from "image-js"
 import { ColoringSettings } from "../ColoringSettings"
 //import Color from "colorjs.io"
 import { ColorSpace, PlainColorObject, sRGB, set, to, HSV } from "colorjs.io/fn"
@@ -260,9 +260,9 @@ const paintPixelsTransparencyShading = (
       const hsvPixelColor = to(plainColor, "hsv")
 
       /**
-       * value is from 0 to 100
+       * HSV value is from 0 to 100.
        */
-      paintColor[3] = 255 - Math.floor(hsvPixelColor.coords[2] * 2.55)
+      paintColor[3] = 20 + (255 - Math.floor(hsvPixelColor.coords[2] * 2.35))
 
       image.setPixelXY(point[0], point[1], paintColor)
    }
