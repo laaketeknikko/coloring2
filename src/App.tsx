@@ -145,7 +145,7 @@ function App() {
                   setDisplayHelp(false)
                }}
             >
-               <div className=" h-screen">
+               <div className="">
                   <MainHelp />
                </div>
             </Sidebar>
