@@ -226,8 +226,6 @@ const paintPixelsLightnessShading = (
       }
       const hsvPixelColorProc = to(rgbPixelColorProc, "hsv")
 
-      console.log("hsvpixelcoords: ", hsvPixelColorProc.coords)
-
       set(hsvPaintColorProc, "v", hsvPixelColorProc.coords[2])
       const rgbPaintColorProc = to(hsvPaintColorProc, "srgb")
 

@@ -18,7 +18,8 @@ const getFileName = (
 
    const split = keys[fileIndex].filename.split(".")
    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-   const ext = "." + (split.pop() ?? "")
+   split.pop()
+   //const ext = "." + (split.pop() ?? "")
 
    // TODO: Fix image loading so that image is either jpg or png
    // depending on the original extension.
