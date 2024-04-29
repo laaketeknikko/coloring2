@@ -2,15 +2,10 @@ TODO: Comment the code?
 
 TODO: Testing?
 
-TODO: Allow defining multiple ignored colors.
+-  sure, but how?
 
-TODO: performance?
+TODO: Allow defining multiple ignored colors.
 
 TODO: When having different colors with the same threshold
 and selecting a size-based coloring, the colors are not selected
 randomly.
-
-TODO: When processing images, every 17th item gives "maximum update depth exceeded"
-warning. This sounds very strange, and probably caused by some other action.
-
-TODO: Use grayscale as alpha map for coloring.
